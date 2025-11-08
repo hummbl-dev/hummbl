@@ -11,6 +11,7 @@ import AgentManagement from './pages/AgentManagement';
 import Templates from './pages/Templates';
 import Settings from './pages/Settings';
 import Analytics from './pages/Analytics';
+import TokenUsage from './pages/TokenUsage';
 import NotFound from './pages/NotFound';
 import { useWorkflowStore } from './store/workflowStore';
 import { workflowTemplates } from './data/templates';
@@ -40,6 +41,7 @@ const AppContent: React.FC = () => {
         <Route path="/agents" element={<AgentManagement />} />
         <Route path="/templates" element={<Templates />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/analytics/tokens" element={<TokenUsage />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
