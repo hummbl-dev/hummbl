@@ -9,6 +9,7 @@ import { cors } from 'hono/cors';
 import type { Env } from './types';
 import workflows from './routes/workflows';
 import executions from './routes/executions';
+import telemetry from './routes/telemetry';
 
 // Create Hono app with environment bindings
 const app = new Hono<{ Bindings: Env }>();
@@ -36,6 +37,7 @@ app.get('/', (c) => {
 // API routes
 app.route('/api/workflows', workflows);
 app.route('/api/executions', executions);
+app.route('/api/telemetry', telemetry);
 
 // 404 handler
 app.notFound((c) => {

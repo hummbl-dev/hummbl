@@ -3113,6 +3113,225 @@ function formatTaskResult(tr) {
 __name(formatTaskResult, "formatTaskResult");
 var executions_default = executions;
 
+// src/routes/telemetry.ts
+var telemetry = new Hono2();
+telemetry.post("/track", async (c) => {
+  try {
+    const event = await c.req.json();
+    const now = event.timestamp || Date.now();
+    const eventId = crypto.randomUUID();
+    await c.env.DB.prepare(`
+      INSERT INTO user_actions (id, user_id, session_id, action_type, component_id, payload, timestamp)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      eventId,
+      event.userId || null,
+      event.sessionId,
+      event.action,
+      event.component,
+      JSON.stringify(event.properties || {}),
+      Math.floor(now / 1e3)
+    ).run();
+    const cacheKey = `event:${event.sessionId}:${now}`;
+    await c.env.CACHE.put(
+      cacheKey,
+      JSON.stringify(event),
+      { expirationTtl: 3600 }
+    );
+    return c.json({ success: true, eventId });
+  } catch (error3) {
+    console.error("Track error:", error3);
+    return c.json(
+      { error: error3 instanceof Error ? error3.message : "Failed to track event" },
+      500
+    );
+  }
+});
+telemetry.post("/metric", async (c) => {
+  try {
+    const metric = await c.req.json();
+    const metricId = crypto.randomUUID();
+    const now = Date.now();
+    await c.env.DB.prepare(`
+      INSERT INTO component_metrics (id, component_id, metric_name, value, metadata, user_id, session_id, timestamp)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      metricId,
+      metric.component,
+      metric.name,
+      metric.value,
+      JSON.stringify(metric.metadata || {}),
+      metric.userId || null,
+      metric.sessionId || null,
+      Math.floor(now / 1e3)
+    ).run();
+    return c.json({ success: true, metricId });
+  } catch (error3) {
+    console.error("Metric error:", error3);
+    return c.json(
+      { error: error3 instanceof Error ? error3.message : "Failed to record metric" },
+      500
+    );
+  }
+});
+telemetry.get("/metrics/:componentId", async (c) => {
+  try {
+    const componentId = c.req.param("componentId");
+    const since = Number(c.req.query("since")) || Math.floor((Date.now() - 864e5) / 1e3);
+    const limit = Number(c.req.query("limit")) || 1e3;
+    const results = await c.env.DB.prepare(`
+      SELECT metric_name, value, metadata, timestamp
+      FROM component_metrics
+      WHERE component_id = ? AND timestamp > ?
+      ORDER BY timestamp DESC
+      LIMIT ?
+    `).bind(componentId, since, limit).all();
+    return c.json({
+      component: componentId,
+      metrics: results.results,
+      count: results.results.length
+    });
+  } catch (error3) {
+    console.error("Get metrics error:", error3);
+    return c.json(
+      { error: error3 instanceof Error ? error3.message : "Failed to fetch metrics" },
+      500
+    );
+  }
+});
+telemetry.get("/actions", async (c) => {
+  try {
+    const userId = c.req.query("userId");
+    const componentId = c.req.query("componentId");
+    const since = Number(c.req.query("since")) || Math.floor((Date.now() - 864e5) / 1e3);
+    const limit = Number(c.req.query("limit")) || 100;
+    let query = `
+      SELECT id, user_id, action_type, component_id, payload, timestamp
+      FROM user_actions
+      WHERE timestamp > ?
+    `;
+    const params = [since];
+    if (userId) {
+      query += " AND user_id = ?";
+      params.push(userId);
+    }
+    if (componentId) {
+      query += " AND component_id = ?";
+      params.push(componentId);
+    }
+    query += " ORDER BY timestamp DESC LIMIT ?";
+    params.push(limit);
+    const results = await c.env.DB.prepare(query).bind(...params).all();
+    return c.json({
+      actions: results.results,
+      count: results.results.length
+    });
+  } catch (error3) {
+    console.error("Get actions error:", error3);
+    return c.json(
+      { error: error3 instanceof Error ? error3.message : "Failed to fetch actions" },
+      500
+    );
+  }
+});
+telemetry.get("/summary", async (c) => {
+  try {
+    const since = Number(c.req.query("since")) || Math.floor((Date.now() - 6048e5) / 1e3);
+    const stats = await c.env.DB.prepare(`
+      SELECT 
+        COUNT(DISTINCT user_id) as total_users,
+        COUNT(DISTINCT session_id) as total_sessions,
+        COUNT(*) as total_actions,
+        COUNT(CASE WHEN action_type = 'page_view' THEN 1 END) as page_views
+      FROM user_actions
+      WHERE timestamp > ?
+    `).bind(since).first();
+    const topComponents = await c.env.DB.prepare(`
+      SELECT 
+        component_id,
+        COUNT(*) as action_count,
+        COUNT(DISTINCT user_id) as unique_users
+      FROM user_actions
+      WHERE timestamp > ?
+      GROUP BY component_id
+      ORDER BY action_count DESC
+      LIMIT 10
+    `).bind(since).all();
+    const avgLoadTime = await c.env.DB.prepare(`
+      SELECT AVG(value) as avg_load_time
+      FROM component_metrics
+      WHERE metric_name = 'page_load_time' AND timestamp > ?
+    `).bind(since).first();
+    return c.json({
+      period: {
+        since: since * 1e3,
+        until: Date.now()
+      },
+      summary: stats,
+      topComponents: topComponents.results,
+      performance: {
+        avgLoadTime: avgLoadTime?.avg_load_time || 0
+      }
+    });
+  } catch (error3) {
+    console.error("Summary error:", error3);
+    return c.json(
+      { error: error3 instanceof Error ? error3.message : "Failed to generate summary" },
+      500
+    );
+  }
+});
+telemetry.post("/register-component", async (c) => {
+  try {
+    const component = await c.req.json();
+    const now = Math.floor(Date.now() / 1e3);
+    await c.env.DB.prepare(`
+      INSERT OR REPLACE INTO basen_components (id, name, domain, route, transformations, version, enabled, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, true, ?, ?)
+    `).bind(
+      component.id,
+      component.name,
+      component.domain,
+      component.route,
+      JSON.stringify(component.transformations),
+      component.version || "1.0.0",
+      now,
+      now
+    ).run();
+    return c.json({ success: true, componentId: component.id });
+  } catch (error3) {
+    console.error("Register component error:", error3);
+    return c.json(
+      { error: error3 instanceof Error ? error3.message : "Failed to register component" },
+      500
+    );
+  }
+});
+telemetry.get("/components", async (c) => {
+  try {
+    const results = await c.env.DB.prepare(`
+      SELECT id, name, domain, route, transformations, version, enabled
+      FROM basen_components
+      WHERE enabled = true
+      ORDER BY domain, name
+    `).all();
+    return c.json({
+      components: results.results.map((c2) => ({
+        ...c2,
+        transformations: JSON.parse(c2.transformations)
+      })),
+      count: results.results.length
+    });
+  } catch (error3) {
+    console.error("Get components error:", error3);
+    return c.json(
+      { error: error3 instanceof Error ? error3.message : "Failed to fetch components" },
+      500
+    );
+  }
+});
+var telemetry_default = telemetry;
+
 // src/index.ts
 var app = new Hono2();
 app.use("/*", cors({
@@ -3133,6 +3352,7 @@ app.get("/", (c) => {
 });
 app.route("/api/workflows", workflows_default);
 app.route("/api/executions", executions_default);
+app.route("/api/telemetry", telemetry_default);
 app.notFound((c) => {
   return c.json({ error: "Not found" }, 404);
 });

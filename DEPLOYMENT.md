@@ -7,6 +7,7 @@ HUMMBL is configured to deploy to Vercel at **hummbl.io**.
 ### Initial Setup
 
 1. **Install Vercel CLI** (optional, for local testing):
+
    ```bash
    npm install -g vercel
    ```
@@ -29,12 +30,14 @@ HUMMBL is configured to deploy to Vercel at **hummbl.io**.
 ### Automatic Deployments
 
 Vercel automatically deploys:
+
 - **Production**: Every push to `main` branch → hummbl.io
 - **Preview**: Every pull request → unique preview URL
 
 ### Environment Variables
 
 Currently no environment variables required. Future additions:
+
 - API keys (if backend integration added)
 - Feature flags
 - Analytics tokens
@@ -42,6 +45,7 @@ Currently no environment variables required. Future additions:
 ### Build Configuration
 
 The project includes:
+
 - ✅ `package-lock.json` for reproducible builds
 - ✅ TypeScript strict mode
 - ✅ Vercel Analytics integration
@@ -50,6 +54,7 @@ The project includes:
 ### GitHub Actions CI
 
 The `.github/workflows/ci.yml` workflow runs on all pushes and PRs:
+
 - ESLint checks
 - TypeScript type checking
 - Build verification
@@ -58,6 +63,7 @@ The `.github/workflows/ci.yml` workflow runs on all pushes and PRs:
 ### Deployment Checklist
 
 Before deploying to production:
+
 - [ ] All CI checks pass
 - [ ] No TypeScript errors
 - [ ] No ESLint warnings
@@ -68,6 +74,7 @@ Before deploying to production:
 ### Local Preview
 
 Test production build locally:
+
 ```bash
 npm run build
 npm run preview
@@ -75,9 +82,44 @@ npm run preview
 
 Visit `http://localhost:4173` to test the production build.
 
+### Automated Testing Agents
+
+HUMMBL includes automated agents for production testing:
+
+**Production Build Test Agent:**
+
+```bash
+npm run test:production
+```
+
+Automatically tests:
+
+- Build completion
+- Bundle sizes
+- File structure
+- HTML artifacts
+- Generates SITREP report
+
+**Visual Test Agent:**
+
+```bash
+npm run test:visual
+```
+
+Starts preview server with structured testing checklist.
+
+**Full Test Suite:**
+
+```bash
+npm run test:all
+```
+
+See **[TESTING_AGENTS.md](./TESTING_AGENTS.md)** for complete documentation.
+
 ### Rollback Procedure
 
 If a deployment has issues:
+
 1. Go to Vercel dashboard → Deployments
 2. Find the last stable deployment
 3. Click "Promote to Production"
@@ -85,6 +127,7 @@ If a deployment has issues:
 ### Performance Optimization
 
 Current optimizations:
+
 - Vite code splitting
 - Tree shaking
 - CSS minification
@@ -99,6 +142,7 @@ Current optimizations:
 ### Future Enhancements
 
 Planned infrastructure additions:
+
 - Cloudflare Workers for API backend
 - D1 database for mental model data
 - KV storage for caching
