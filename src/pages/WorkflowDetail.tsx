@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useWorkflowStore } from '../store/workflowStore';
-import { executeWorkflow, pollExecutionStatus } from '../services/api';
+// Phase 2: import { executeWorkflow, pollExecutionStatus } from '../services/api';
 import {
   ArrowLeft,
   Play,
@@ -42,9 +42,9 @@ export default function WorkflowDetail() {
   const logs = id ? getWorkflowLogs(id) : [];
 
   // Execution state
-  const [execution, setExecution] = useState<ExecutionState | null>(null);
-  const [isRunning, setIsRunning] = useState(false);
-  const [executionError, setExecutionError] = useState<string | null>(null);
+  const [execution] = useState<ExecutionState | null>(null);
+  // Phase 2: const [isRunning, setIsRunning] = useState(false);
+  // Phase 2: const [executionError, setExecutionError] = useState<string | null>(null);
 
   if (!workflow) {
     return (
@@ -105,12 +105,6 @@ export default function WorkflowDetail() {
               Workflow execution requires backend API (Phase 2 feature). Currently, you can create, edit, and save workflows.
             </div>
           </div>
-          {isRunning && (
-            <div className="flex items-center space-x-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span className="text-sm font-medium">Running...</span>
-            </div>
-          )}
           <Link
             to={`/workflows/${workflow.id}/edit`}
             className="btn-secondary flex items-center space-x-2"
