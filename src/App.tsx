@@ -10,7 +10,7 @@ import Templates from './pages/Templates';
 import { useWorkflowStore } from './store/workflowStore';
 import { workflowTemplates } from './data/templates';
 
-function App() {
+export const App: React.FC = () => {
   const addTemplate = useWorkflowStore((state) => state.addTemplate);
 
   useEffect(() => {
@@ -35,6 +35,4 @@ function App() {
       </Layout>
     </Router>
   );
-}
-
-export default App;
+};
