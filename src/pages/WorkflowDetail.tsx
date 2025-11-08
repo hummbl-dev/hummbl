@@ -122,19 +122,6 @@ export default function WorkflowDetail() {
         </div>
       </div>
 
-      {/* Execution Error */}
-      {executionError && (
-        <div className="card bg-red-50 border-red-200">
-          <div className="flex items-start space-x-3">
-            <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
-            <div>
-              <h3 className="font-medium text-red-900">Execution Error</h3>
-              <p className="text-sm text-red-800 mt-1">{executionError}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Status and Progress */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="card">
