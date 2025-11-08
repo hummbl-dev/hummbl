@@ -136,21 +136,19 @@ export default function WorkflowDetail() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          {workflow.status !== 'running' && (
-            <div className="relative group">
-              <button
-                disabled={true}
-                className="btn-secondary flex items-center space-x-2 opacity-50 cursor-not-allowed"
-                title="Workflow execution requires backend API (Phase 2 - Coming Soon)"
-              >
-                <Play className="h-4 w-4" />
-                <span>Run Workflow (Phase 2)</span>
-              </button>
-              <div className="absolute hidden group-hover:block bottom-full mb-2 w-64 p-2 bg-gray-900 text-white text-xs rounded shadow-lg">
-                Workflow execution requires backend API (Phase 2 feature). Currently, you can create, edit, and save workflows.
-              </div>
+          <div className="relative group">
+            <button
+              disabled={true}
+              className="btn-secondary flex items-center space-x-2 opacity-50 cursor-not-allowed"
+              title="Workflow execution requires backend API (Phase 2 - Coming Soon)"
+            >
+              <Play className="h-4 w-4" />
+              <span>Run Workflow (Phase 2)</span>
+            </button>
+            <div className="absolute hidden group-hover:block bottom-full mb-2 w-64 p-2 bg-gray-900 text-white text-xs rounded shadow-lg">
+              Workflow execution requires backend API (Phase 2 feature). Currently, you can create, edit, and save workflows.
             </div>
-          )}
+          </div>
           {isRunning && (
             <div className="flex items-center space-x-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg">
               <Loader2 className="h-4 w-4 animate-spin" />
