@@ -33,8 +33,8 @@ const AppContent: React.FC = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/mental-models" element={<MentalModels />} />
         <Route path="/workflows" element={<WorkflowList />} />
-        <Route path="/workflows/:id" element={<WorkflowDetail />} />
         <Route path="/workflows/new" element={<WorkflowEditorFull />} />
+        <Route path="/workflows/:id" element={<WorkflowDetail />} />
         <Route path="/workflows/:id/edit" element={<WorkflowEditorFull />} />
         <Route path="/agents" element={<AgentManagement />} />
         <Route path="/templates" element={<Templates />} />
