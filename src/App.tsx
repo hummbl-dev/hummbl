@@ -3,13 +3,14 @@ import { useEffect } from 'react';
 import Layout from './components/Layout/Layout';
 import ErrorBoundary from './components/ErrorBoundary';
 import Dashboard from './pages/Dashboard';
+import MentalModels from './pages/MentalModels';
 import WorkflowList from './pages/WorkflowList';
 import WorkflowDetail from './pages/WorkflowDetail';
 import WorkflowEditorFull from './pages/WorkflowEditorFull';
 import AgentManagement from './pages/AgentManagement';
 import Templates from './pages/Templates';
-import MentalModels from './pages/MentalModels';
 import Settings from './pages/Settings';
+import Analytics from './pages/Analytics';
 import NotFound from './pages/NotFound';
 import { useWorkflowStore } from './store/workflowStore';
 import { workflowTemplates } from './data/templates';
@@ -38,6 +39,7 @@ const AppContent: React.FC = () => {
         <Route path="/workflows/:id/edit" element={<WorkflowEditorFull />} />
         <Route path="/agents" element={<AgentManagement />} />
         <Route path="/templates" element={<Templates />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
