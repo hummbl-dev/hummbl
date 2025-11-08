@@ -211,6 +211,26 @@ The application uses Tailwind CSS. Custom styles are defined in:
 - `src/index.css`: Global styles and custom components
 - `tailwind.config.js`: Theme configuration
 
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment.
+
+### Workflows
+
+- **CI** (`ci.yml`): Runs on all pushes and PRs, tests across Node.js 18, 20, and 22
+- **Azure Deploy** (`azure-deploy.yml`): Deploys to Azure Web Apps on main branch updates
+
+### Fixing Old Workflow Failures
+
+If you see failing workflows for Grunt or other legacy build systems:
+
+1. Go to your repository on GitHub
+2. Navigate to **Settings** → **Actions** → **General**
+3. Scroll to **Workflow permissions** and disable unwanted workflows
+4. Or go to **Actions** tab, select the failing workflow, and disable it
+
+The proper workflows are now configured in `.github/workflows/` for the Vite build system.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
