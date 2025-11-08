@@ -64,52 +64,8 @@ export default function WorkflowDetail() {
     }
   };
 
-  const handleRun = async () => {
-    if (!workflow || isRunning) return;
-
-    setIsRunning(true);
-    setExecutionError(null);
-
-    try {
-      // Get API keys from localStorage (from Settings page)
-      const anthropicKey = localStorage.getItem('anthropic_api_key') || '';
-      const openaiKey = localStorage.getItem('openai_api_key') || '';
-
-      // Execute workflow via backend API
-      const { executionId } = await executeWorkflow(
-        workflow,
-        {
-          anthropic: anthropicKey,
-          openai: openaiKey,
-        }
-      );
-
-      // Start polling for status updates
-      const stopPolling = pollExecutionStatus(executionId, (status) => {
-        setExecution({
-          id: status.id,
-          status: status.status,
-          progress: status.progress,
-          taskResults: status.taskResults,
-          error: status.error,
-        });
-
-        // Stop running state when complete
-        if (status.status === 'completed' || status.status === 'failed') {
-          setIsRunning(false);
-          if (status.error) {
-            setExecutionError(status.error);
-          }
-        }
-      });
-
-      // Clean up polling on unmount
-      return () => stopPolling();
-    } catch (error) {
-      setExecutionError(error instanceof Error ? error.message : 'Unknown error');
-      setIsRunning(false);
-    }
-  };
+  // Phase 2: Workflow execution disabled (backend API required)
+  // handleRun function removed - execution requires Cloudflare Workers backend
 
   // Calculate progress from execution or workflow state
   const progress = execution ? execution.progress : 0;
