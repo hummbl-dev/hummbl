@@ -16,6 +16,7 @@ import ExecutionMonitor from './pages/ExecutionMonitor';
 import ErrorLogs from './pages/ErrorLogs';
 import TeamMembers from './pages/TeamMembers';
 import APIKeys from './pages/APIKeys';
+import Notifications from './pages/Notifications';
 import NotFound from './pages/NotFound';
 import { useWorkflowStore } from './store/workflowStore';
 import { workflowTemplates } from './data/templates';
@@ -50,6 +51,7 @@ const AppContent: React.FC = () => {
         <Route path="/logs/errors" element={<ErrorLogs />} />
         <Route path="/team" element={<TeamMembers />} />
         <Route path="/settings/api-keys" element={<APIKeys />} />
+        <Route path="/notifications" element={<Notifications />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
