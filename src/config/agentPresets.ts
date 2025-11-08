@@ -4,11 +4,15 @@
  * Smart defaults for common agent roles to reduce friction in workflow creation.
  * Each preset includes optimized model selection, temperature, and capabilities.
  * 
+ * Users can override the default model with any model their API key supports.
+ * See aiModels.ts for full catalog.
+ * 
  * @module AgentPresets
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 import { AgentRole } from '../types/workflow';
+import { DEFAULT_MODELS } from './aiModels';
 
 export interface AgentPreset {
   role: AgentRole;
@@ -24,11 +28,14 @@ export interface AgentPreset {
 /**
  * Agent role presets with intelligent defaults
  * 
- * Model Selection Strategy:
- * - Researcher: Haiku (fast, cost-effective for info gathering)
- * - Analyst: Sonnet (balanced reasoning for analysis)
- * - Executor: Haiku (quick task execution)
- * - Reviewer: Sonnet (thorough review and critique)
+ * Model Selection Strategy (v2.0):
+ * - Researcher: Fast model (Haiku 4) for quick info gathering
+ * - Analyst: Balanced model (Sonnet 4) for deep reasoning
+ * - Executor: Fast model (Haiku 4) for quick generation
+ * - Reviewer: Balanced model (Sonnet 4) for thorough review
+ * - Custom: Fast model (Haiku 4) as flexible default
+ * 
+ * Users can override with any model from aiModels.ts catalog.
  */
 export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
   researcher: {
@@ -36,7 +43,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
     displayName: 'Researcher',
     icon: '🔍',
     description: 'Gathers information, conducts research, summarizes findings',
-    model: 'claude-3-haiku-20240307',
+    model: DEFAULT_MODELS.fast, // claude-4-haiku
     temperature: 0.3,
     capabilities: [
       'Web research',
@@ -51,7 +58,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
     displayName: 'Analyst',
     icon: '📊',
     description: 'Analyzes data, identifies patterns, provides insights',
-    model: 'claude-3-haiku-20240307',
+    model: DEFAULT_MODELS.general, // claude-4-sonnet
     temperature: 0.5,
     capabilities: [
       'Data analysis',
@@ -66,7 +73,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
     displayName: 'Executor',
     icon: '⚡',
     description: 'Executes tasks, performs actions, generates outputs',
-    model: 'claude-3-haiku-20240307',
+    model: DEFAULT_MODELS.fast, // claude-4-haiku
     temperature: 0.7,
     capabilities: [
       'Content generation',
@@ -81,7 +88,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
     displayName: 'Reviewer',
     icon: '✅',
     description: 'Reviews work, provides feedback, ensures quality',
-    model: 'claude-3-haiku-20240307',
+    model: DEFAULT_MODELS.general, // claude-4-sonnet
     temperature: 0.4,
     capabilities: [
       'Quality assurance',
@@ -96,7 +103,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
     displayName: 'Custom',
     icon: '🎨',
     description: 'Fully customizable agent for specialized tasks',
-    model: 'claude-3-haiku-20240307',
+    model: DEFAULT_MODELS.fast, // claude-4-haiku
     temperature: 0.7,
     capabilities: [],
     promptGuidance: 'Best for: Specialized tasks that don\'t fit standard roles',
