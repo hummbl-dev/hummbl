@@ -13,6 +13,7 @@ import Settings from './pages/Settings';
 import Analytics from './pages/Analytics';
 import TokenUsage from './pages/TokenUsage';
 import ExecutionMonitor from './pages/ExecutionMonitor';
+import ErrorLogs from './pages/ErrorLogs';
 import NotFound from './pages/NotFound';
 import { useWorkflowStore } from './store/workflowStore';
 import { workflowTemplates } from './data/templates';
@@ -44,6 +45,7 @@ const AppContent: React.FC = () => {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/analytics/tokens" element={<TokenUsage />} />
         <Route path="/monitor" element={<ExecutionMonitor />} />
+        <Route path="/logs/errors" element={<ErrorLogs />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
