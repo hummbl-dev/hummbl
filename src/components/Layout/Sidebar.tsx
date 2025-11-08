@@ -4,14 +4,18 @@ import {
   Workflow,
   Bot,
   FileText,
-  Activity
+  Activity,
+  Brain,
+  Settings as SettingsIcon
 } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'Mental Models', href: '/mental-models', icon: Brain },
   { name: 'Workflows', href: '/workflows', icon: Workflow },
   { name: 'Agents', href: '/agents', icon: Bot },
   { name: 'Templates', href: '/templates', icon: FileText },
+  { name: 'Settings', href: '/settings', icon: SettingsIcon },
 ];
 
 export default function Sidebar() {

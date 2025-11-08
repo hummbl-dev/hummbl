@@ -224,6 +224,7 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
     const template = get().templates.find((t) => t.id === templateId);
     if (!template) return;
 
+    // Create agents with new IDs
     const agents: Agent[] = template.agents.map((a) => ({
       ...a,
       id: uuidv4(),
@@ -231,12 +232,32 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
       updatedAt: new Date(),
     }));
 
-    const tasks: Task[] = template.tasks.map((t) => ({
-      ...t,
-      id: uuidv4(),
-      status: 'pending',
-      retryCount: 0,
-    }));
+    // Create tasks with new IDs and assign agents by index
+    const tasks: Task[] = template.tasks.map((t, index) => {
+      const taskId = uuidv4();
+      // Assign agent by index (first task gets first agent, etc.)
+      const agentId = agents[index % agents.length]?.id || agents[0]?.id || '';
+      
+      return {
+        ...t,
+        id: taskId,
+        agentId, // Assign the agent
+        status: 'pending',
+        retryCount: 0,
+        dependencies: [], // Will update below
+      };
+    });
+
+    // Update task dependencies from indices to actual task IDs
+    tasks.forEach((task, index) => {
+      const templateTask = template.tasks[index];
+      if (templateTask.dependencies && templateTask.dependencies.length > 0) {
+        task.dependencies = templateTask.dependencies.map((depIndex) => {
+          const depIndexNum = parseInt(depIndex, 10);
+          return tasks[depIndexNum]?.id || depIndex;
+        });
+      }
+    });
 
     get().addWorkflow({
       name,
