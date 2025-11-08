@@ -1,0 +1,19 @@
+name = "hummbl-backend"
+main = "src/index.ts"
+compatibility_date = "2025-11-08"
+compatibility_flags = ["nodejs_compat"]
+
+account_id = "9e594f1cde6d3f71abb954efa5c717b4"
+
+[vars]
+ENV = "production"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "hummbl-workflows"
+database_id = "870ee612-4d12-4d1f-9ffe-58858cba51d3"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "ef29c21b2cbc46ed9ea3eddd6c5488d1"
+preview_id = "dfa52c3315684af8b928aeee4de76290"

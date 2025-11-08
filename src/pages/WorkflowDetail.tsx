@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useWorkflowStore } from '../store/workflowStore';
-// Phase 2: import { executeWorkflow, pollExecutionStatus } from '../services/api';
+import { executeWorkflow, pollExecutionStatus } from '../services/api';
 import {
   ArrowLeft,
   Play,
@@ -42,9 +42,9 @@ export default function WorkflowDetail() {
   const logs = id ? getWorkflowLogs(id) : [];
 
   // Execution state
-  const [execution] = useState<ExecutionState | null>(null);
-  // Phase 2: const [isRunning, setIsRunning] = useState(false);
-  // Phase 2: const [executionError, setExecutionError] = useState<string | null>(null);
+  const [execution, setExecution] = useState<ExecutionState | null>(null);
+  const [isRunning, setIsRunning] = useState(false);
+  const [executionError, setExecutionError] = useState<string | null>(null);
 
   if (!workflow) {
     return (
@@ -64,8 +64,53 @@ export default function WorkflowDetail() {
     }
   };
 
-  // Phase 2: Workflow execution disabled (backend API required)
-  // handleRun function removed - execution requires Cloudflare Workers backend
+  // Execute workflow via backend API
+  const handleRun = async () => {
+    if (!workflow || isRunning) return;
+
+    setIsRunning(true);
+    setExecutionError(null);
+
+    try {
+      // Get API keys from localStorage (from Settings page)
+      const anthropicKey = localStorage.getItem('anthropic_api_key') || '';
+      const openaiKey = localStorage.getItem('openai_api_key') || '';
+
+      // Execute workflow via backend API (NO MORE CORS!)
+      const { executionId } = await executeWorkflow(
+        workflow,
+        {
+          anthropic: anthropicKey,
+          openai: openaiKey,
+        }
+      );
+
+      // Start polling for status updates
+      const stopPolling = pollExecutionStatus(executionId, (status) => {
+        setExecution({
+          id: status.id,
+          status: status.status,
+          progress: status.progress,
+          taskResults: status.taskResults,
+          error: status.error,
+        });
+
+        // Stop running state when complete
+        if (status.status === 'completed' || status.status === 'failed') {
+          setIsRunning(false);
+          if (status.error) {
+            setExecutionError(status.error);
+          }
+        }
+      });
+
+      // Clean up polling on unmount
+      return () => stopPolling();
+    } catch (error) {
+      setExecutionError(error instanceof Error ? error.message : 'Unknown error');
+      setIsRunning(false);
+    }
+  };
 
   // Calculate progress from execution or workflow state
   const progress = execution ? execution.progress : 0;
@@ -92,19 +137,23 @@ export default function WorkflowDetail() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="relative group">
-            <button
-              disabled={true}
-              className="btn-secondary flex items-center space-x-2 opacity-50 cursor-not-allowed"
-              title="Workflow execution requires backend API (Phase 2 - Coming Soon)"
-            >
-              <Play className="h-4 w-4" />
-              <span>Run Workflow (Phase 2)</span>
-            </button>
-            <div className="absolute hidden group-hover:block bottom-full mb-2 w-64 p-2 bg-gray-900 text-white text-xs rounded shadow-lg">
-              Workflow execution requires backend API (Phase 2 feature). Currently, you can create, edit, and save workflows.
-            </div>
-          </div>
+          <button
+            onClick={handleRun}
+            disabled={isRunning}
+            className="btn-success flex items-center space-x-2"
+          >
+            {isRunning ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Running...</span>
+              </>
+            ) : (
+              <>
+                <Play className="h-4 w-4" />
+                <span>Run Workflow</span>
+              </>
+            )}
+          </button>
           <Link
             to={`/workflows/${workflow.id}/edit`}
             className="btn-secondary flex items-center space-x-2"
@@ -121,6 +170,19 @@ export default function WorkflowDetail() {
           </button>
         </div>
       </div>
+
+      {/* Execution Error */}
+      {executionError && (
+        <div className="card bg-red-50 border-red-200">
+          <div className="flex items-start space-x-3">
+            <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
+            <div>
+              <h3 className="font-medium text-red-900">Execution Error</h3>
+              <p className="text-sm text-red-800 mt-1">{executionError}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Status and Progress */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
