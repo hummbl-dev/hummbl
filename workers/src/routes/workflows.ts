@@ -74,7 +74,7 @@ workflows.post('/:id/execute', async (c) => {
  * Execute workflow logic (runs async in background)
  * Uses topological sort for dependency resolution (T3: Decision)
  */
-async function executeWorkflow(
+export async function executeWorkflow(
   env: Env,
   executionId: string,
   workflowData: { id: string; tasks: Task[]; agents: Agent[] },
@@ -161,7 +161,7 @@ async function executeWorkflow(
 /**
  * Execute a single task
  */
-async function executeTask(
+export async function executeTask(
   env: Env,
   executionId: string,
   task: Task,

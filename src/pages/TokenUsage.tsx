@@ -11,6 +11,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { telemetry } from '../services/telemetry-enhanced';
+import { getTokenUsage, type TokenStats } from '../services/api';
 import {
   DollarSign,
   Zap,
@@ -19,28 +20,10 @@ import {
   Download,
   ArrowLeft,
   Lightbulb,
+  Activity,
+  AlertCircle,
 } from 'lucide-react';
 
-interface TokenStats {
-  totalTokens: number;
-  totalCost: number;
-  byModel: Array<{
-    model: string;
-    tokens: number;
-    cost: number;
-    percentage: number;
-  }>;
-  byAgent: Array<{
-    agent: string;
-    tokens: number;
-    cost: number;
-    executions: number;
-  }>;
-  trend: {
-    tokensChange: number;
-    costChange: number;
-  };
-}
 
 const MODEL_COSTS = {
   'claude-4-haiku': { input: 0.25, output: 1.25 },
@@ -54,6 +37,7 @@ const MODEL_COSTS = {
 export default function TokenUsage() {
   const [stats, setStats] = useState<TokenStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
 
   // Track page view
@@ -61,35 +45,17 @@ export default function TokenUsage() {
     telemetry.pageView('token-usage', { timeRange });
   }, [timeRange]);
 
-  // Fetch token usage data
+  // Fetch token usage data from REAL API
   useEffect(() => {
     const fetchTokenData = async () => {
       setLoading(true);
+      setError(null);
       try {
-        // Mock data for now - will be real once executions happen
-        const mockStats: TokenStats = {
-          totalTokens: 1245780,
-          totalCost: 18.42,
-          byModel: [
-            { model: 'claude-4-haiku', tokens: 620000, cost: 0.78, percentage: 50 },
-            { model: 'claude-4-sonnet', tokens: 425000, cost: 12.75, percentage: 34 },
-            { model: 'gpt-4o-mini', tokens: 200780, cost: 0.30, percentage: 16 },
-          ],
-          byAgent: [
-            { agent: 'Researcher', tokens: 450000, cost: 5.63, executions: 45 },
-            { agent: 'Analyst', tokens: 395000, cost: 11.85, executions: 32 },
-            { agent: 'Executor', tokens: 300780, cost: 0.38, executions: 58 },
-            { agent: 'Reviewer', tokens: 100000, cost: 0.56, executions: 12 },
-          ],
-          trend: {
-            tokensChange: -12,
-            costChange: -15,
-          },
-        };
-
-        setStats(mockStats);
-      } catch (error) {
-        console.error('Failed to fetch token data:', error);
+        const data = await getTokenUsage(timeRange);
+        setStats(data);
+      } catch (err) {
+        console.error('Failed to fetch token data:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load token usage');
       } finally {
         setLoading(false);
       }
@@ -98,12 +64,45 @@ export default function TokenUsage() {
     fetchTokenData();
   }, [timeRange]);
 
-  if (loading || !stats) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <Zap className="h-8 w-8 animate-pulse text-primary-600 mx-auto mb-2" />
+          <Activity className="h-8 w-8 animate-spin text-primary-600 mx-auto mb-2" />
           <p className="text-gray-600">Loading token usage...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Token Usage</h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="btn-primary"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <Zap className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Token Usage Data</h3>
+          <p className="text-gray-600 mb-4">Execute some workflows to start tracking token usage</p>
+          <Link to="/workflows" className="btn-primary">
+            View Workflows
+          </Link>
         </div>
       </div>
     );

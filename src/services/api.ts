@@ -192,3 +192,46 @@ export async function getTopComponents(
   const data = await response.json();
   return data.components || [];
 }
+
+// ============================================
+// TOKEN USAGE API (Phase 2.1)
+// ============================================
+
+export interface TokenStats {
+  totalTokens: number;
+  totalCost: number;
+  byModel: Array<{
+    model: string;
+    tokens: number;
+    cost: number;
+    percentage: number;
+  }>;
+  byAgent: Array<{
+    agent: string;
+    tokens: number;
+    cost: number;
+    executions: number;
+  }>;
+  trend: {
+    tokensChange: number;
+    costChange: number;
+  };
+  period: string;
+}
+
+/**
+ * Get token usage summary
+ * @param range - Time range (7d, 30d, 90d)
+ */
+export async function getTokenUsage(
+  range: string = '30d'
+): Promise<TokenStats> {
+  const response = await fetch(`${API_URL}/api/tokens/usage?range=${range}`);
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch token usage' }));
+    throw new Error(error.error || 'Failed to fetch token usage');
+  }
+  
+  return response.json();
+}

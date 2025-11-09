@@ -10,6 +10,7 @@ import type { Env } from './types';
 import workflows from './routes/workflows';
 import executions from './routes/executions';
 import telemetry from './routes/telemetry';
+import tokens from './routes/tokens';
 
 // Create Hono app with environment bindings
 const app = new Hono<{ Bindings: Env }>();
@@ -38,6 +39,7 @@ app.get('/', (c) => {
 app.route('/api/workflows', workflows);
 app.route('/api/executions', executions);
 app.route('/api/telemetry', telemetry);
+app.route('/api/tokens', tokens);
 
 // 404 handler
 app.notFound((c) => {
