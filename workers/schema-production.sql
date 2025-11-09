@@ -15,8 +15,10 @@ CREATE TABLE IF NOT EXISTS workflows (
   agents TEXT NOT NULL,
   tasks TEXT NOT NULL,
   status TEXT DEFAULT 'draft',
+  created_by TEXT, -- Added for team management
   created_at INTEGER NOT NULL,
-  updated_at INTEGER NOT NULL
+  updated_at INTEGER NOT NULL,
+  FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
 -- executions table (existing)
@@ -163,6 +165,19 @@ CREATE TABLE IF NOT EXISTS users (
   created_at INTEGER NOT NULL
 );
 
+-- WORKFLOW SHARING
+CREATE TABLE IF NOT EXISTS workflow_sharing (
+  id TEXT PRIMARY KEY,
+  workflow_id TEXT NOT NULL,
+  shared_with_user_id TEXT NOT NULL,
+  shared_by_user_id TEXT NOT NULL,
+  permission_level TEXT DEFAULT 'view',
+  created_at INTEGER NOT NULL,
+  FOREIGN KEY (workflow_id) REFERENCES workflows(id),
+  FOREIGN KEY (shared_with_user_id) REFERENCES users(id),
+  FOREIGN KEY (shared_by_user_id) REFERENCES users(id)
+);
+
 -- INVITES
 CREATE TABLE IF NOT EXISTS invites (
   id TEXT PRIMARY KEY,
@@ -239,6 +254,11 @@ CREATE INDEX IF NOT EXISTS idx_users_status ON users(status);
 CREATE INDEX IF NOT EXISTS idx_invites_email ON invites(email);
 CREATE INDEX IF NOT EXISTS idx_invites_token ON invites(token);
 CREATE INDEX IF NOT EXISTS idx_invites_accepted ON invites(accepted);
+
+-- New indexes for workflow_sharing
+CREATE INDEX IF NOT EXISTS idx_sharing_workflow ON workflow_sharing(workflow_id);
+CREATE INDEX IF NOT EXISTS idx_sharing_shared_with ON workflow_sharing(shared_with_user_id);
+CREATE INDEX IF NOT EXISTS idx_sharing_shared_by ON workflow_sharing(shared_by_user_id);
 
 -- New indexes for sessions
 CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
