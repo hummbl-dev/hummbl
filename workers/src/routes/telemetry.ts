@@ -216,10 +216,10 @@ telemetry.get('/summary', async (c) => {
 
     // Get average response time from metrics
     const avgResponseTime = await c.env.DB.prepare(`
-      SELECT AVG(value) as avg_time
+      SELECT COALESCE(AVG(value), 0) as avg_time
       FROM component_metrics
-      WHERE metric_type = 'response_time' AND timestamp > ?
-    `).bind(since).first();
+      WHERE metric_type = ? AND timestamp > ?
+    `).bind('response_time', since).first();
 
     return c.json({
       totalActions: (stats?.total_actions as number) || 0,
@@ -252,17 +252,17 @@ telemetry.get('/components/top', async (c) => {
         bc.id,
         bc.code,
         bc.name,
-        COUNT(CASE WHEN ua.action = 'page_view' THEN 1 END) as views,
-        COUNT(*) as actions,
-        AVG(CASE WHEN cm.metric_type = 'duration' THEN cm.value ELSE NULL END) as avg_duration
+        COALESCE(COUNT(CASE WHEN ua.action = 'page_view' THEN 1 END), 0) as views,
+        COALESCE(COUNT(ua.id), 0) as actions,
+        COALESCE(AVG(CASE WHEN cm.metric_type IS NOT NULL AND cm.metric_type = ? THEN cm.value ELSE NULL END), 0) as avg_duration
       FROM basen_components bc
       LEFT JOIN user_actions ua ON bc.id = ua.component_id AND ua.timestamp > ?
       LEFT JOIN component_metrics cm ON bc.id = cm.component_id AND cm.timestamp > ?
-      WHERE bc.id IN (SELECT DISTINCT component_id FROM user_actions WHERE timestamp > ?)
       GROUP BY bc.id, bc.code, bc.name
+      HAVING actions > 0
       ORDER BY actions DESC
       LIMIT ?
-    `).bind(since, since, since, limit).all();
+    `).bind('duration', since, since, limit).all();
 
     return c.json({
       components: topComponents.results.map(c => ({

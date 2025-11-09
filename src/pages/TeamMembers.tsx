@@ -10,13 +10,14 @@
 
 import { useState, useEffect } from 'react';
 import { telemetry } from '../services/telemetry-enhanced';
+import { getUsers, getUserStats, getInvites, createInvite, deleteInvite, type User, type UserStats, type Invite } from '../services/api';
 import {
   Users,
   UserPlus,
   Mail,
   Shield,
   Crown,
-  User,
+  User as UserIcon,
   MoreVertical,
   Search,
   CheckCircle,
@@ -24,25 +25,22 @@ import {
   XCircle,
 } from 'lucide-react';
 
-interface TeamMember {
-  id: string;
-  name: string;
-  email: string;
-  role: 'owner' | 'admin' | 'member' | 'viewer';
-  status: 'active' | 'invited' | 'suspended';
-  joinedAt: number;
-  lastActive?: number;
-  workflowsCreated: number;
-  executionsRun: number;
-  avatar?: string;
-}
-
 type RoleFilter = 'all' | 'owner' | 'admin' | 'member' | 'viewer';
 type StatusFilter = 'all' | 'active' | 'invited' | 'suspended';
 
 export default function TeamMembers() {
-  const [members, setMembers] = useState<TeamMember[]>([]);
+  const [members, setMembers] = useState<User[]>([]);
+  const [invites, setInvites] = useState<Invite[]>([]);
+  const [stats, setStats] = useState<UserStats>({
+    totalUsers: 0,
+    activeUsers: 0,
+    owners: 0,
+    admins: 0,
+    members: 0,
+    viewers: 0,
+  });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [roleFilter, setRoleFilter] = useState<RoleFilter>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,78 +51,31 @@ export default function TeamMembers() {
     telemetry.pageView('team-members', { roleFilter, statusFilter });
   }, [roleFilter, statusFilter]);
 
-  // Fetch team members
-  useEffect(() => {
-    const fetchMembers = async () => {
+  // Load team data
+  const loadData = async () => {
+    try {
       setLoading(true);
-      try {
-        // Mock data for now - will be real once backend API is called
-        const mockMembers: TeamMember[] = [
-          {
-            id: 'user-001',
-            name: 'Alex Thompson',
-            email: 'alex@hummbl.io',
-            role: 'owner',
-            status: 'active',
-            joinedAt: Date.now() - 15552000000, // 6 months ago
-            lastActive: Date.now() - 3600000, // 1 hour ago
-            workflowsCreated: 24,
-            executionsRun: 156,
-          },
-          {
-            id: 'user-002',
-            name: 'Jordan Lee',
-            email: 'jordan@hummbl.io',
-            role: 'admin',
-            status: 'active',
-            joinedAt: Date.now() - 7776000000, // 3 months ago
-            lastActive: Date.now() - 7200000, // 2 hours ago
-            workflowsCreated: 18,
-            executionsRun: 89,
-          },
-          {
-            id: 'user-003',
-            name: 'Sam Rivera',
-            email: 'sam@example.com',
-            role: 'member',
-            status: 'active',
-            joinedAt: Date.now() - 2592000000, // 1 month ago
-            lastActive: Date.now() - 86400000, // 1 day ago
-            workflowsCreated: 7,
-            executionsRun: 34,
-          },
-          {
-            id: 'user-004',
-            name: 'Casey Morgan',
-            email: 'casey@example.com',
-            role: 'member',
-            status: 'invited',
-            joinedAt: Date.now() - 259200000, // 3 days ago
-            workflowsCreated: 0,
-            executionsRun: 0,
-          },
-          {
-            id: 'user-005',
-            name: 'Taylor Kim',
-            email: 'taylor@example.com',
-            role: 'viewer',
-            status: 'active',
-            joinedAt: Date.now() - 604800000, // 1 week ago
-            lastActive: Date.now() - 172800000, // 2 days ago
-            workflowsCreated: 0,
-            executionsRun: 12,
-          },
-        ];
+      setError(null);
 
-        setMembers(mockMembers);
-      } catch (error) {
-        console.error('Failed to fetch team members:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const [usersResponse, statsResponse, invitesResponse] = await Promise.all([
+        getUsers(),
+        getUserStats(),
+        getInvites(),
+      ]);
 
-    fetchMembers();
+      setMembers(usersResponse.users);
+      setStats(statsResponse.stats);
+      setInvites(invitesResponse.invites);
+    } catch (err) {
+      console.error('Failed to load team data:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load team data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
   // Filter members
@@ -138,20 +89,30 @@ export default function TeamMembers() {
     return matchesRole && matchesStatus && matchesSearch;
   });
 
-  // Calculate stats
-  const stats = {
-    total: members.length,
-    active: members.filter((m) => m.status === 'active').length,
-    invited: members.filter((m) => m.status === 'invited').length,
-    admins: members.filter((m) => m.role === 'admin' || m.role === 'owner').length,
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Users className="h-8 w-8 animate-pulse text-primary-600 mx-auto mb-2" />
           <p className="text-gray-600">Loading team members...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <XCircle className="h-8 w-8 text-red-600 mx-auto mb-2" />
+          <p className="text-red-600 font-medium">Failed to load team members</p>
+          <p className="text-gray-600 text-sm mt-1">{error}</p>
+          <button
+            onClick={loadData}
+            className="btn-primary mt-4"
+          >
+            Try Again
+          </button>
         </div>
       </div>
     );
@@ -181,22 +142,22 @@ export default function TeamMembers() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Total Members" value={stats.total} icon={<Users className="h-5 w-5" />} />
+        <StatCard label="Total Members" value={stats.totalUsers} icon={<Users className="h-5 w-5" />} />
         <StatCard
           label="Active"
-          value={stats.active}
+          value={stats.activeUsers}
           icon={<CheckCircle className="h-5 w-5" />}
           color="text-green-600"
         />
         <StatCard
           label="Pending Invites"
-          value={stats.invited}
+          value={invites.length}
           icon={<Clock className="h-5 w-5" />}
           color="text-amber-600"
         />
         <StatCard
           label="Admins"
-          value={stats.admins}
+          value={stats.owners + stats.admins}
           icon={<Shield className="h-5 w-5" />}
           color="text-purple-600"
         />
@@ -221,6 +182,7 @@ export default function TeamMembers() {
 
           {/* Role Filter */}
           <select
+            aria-label="Select role filter"
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value as RoleFilter)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -234,6 +196,7 @@ export default function TeamMembers() {
 
           {/* Status Filter */}
           <select
+            aria-label="Select status filter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -281,14 +244,20 @@ export default function TeamMembers() {
       {showInviteModal && (
         <InviteModal
           onClose={() => setShowInviteModal(false)}
-          onInvite={(email, role) => {
-            telemetry.track({
-              component: 'team-members',
-              action: 'send_invite',
-              properties: { role },
-            });
-            alert(`Invite sent to ${email} as ${role} - Coming soon!`);
-            setShowInviteModal(false);
+          onInvite={async (email, role) => {
+            try {
+              await createInvite({ email, role });
+              telemetry.track({
+                component: 'team-members',
+                action: 'send_invite',
+                properties: { role },
+              });
+              await loadData(); // Reload data
+              setShowInviteModal(false);
+            } catch (err) {
+              console.error('Failed to send invite:', err);
+              alert('Failed to send invitation. Please try again.');
+            }
           }}
         />
       )}
@@ -309,12 +278,12 @@ export default function TeamMembers() {
           />
           <PermissionCard
             role="Member"
-            icon={<User className="h-5 w-5 text-blue-600" />}
+            icon={<UserIcon className="h-5 w-5 text-blue-600" />}
             permissions={['Create workflows', 'Run workflows', 'View analytics']}
           />
           <PermissionCard
             role="Viewer"
-            icon={<User className="h-5 w-5 text-gray-600" />}
+            icon={<UserIcon className="h-5 w-5 text-gray-600" />}
             permissions={['View workflows', 'View results', 'Read-only']}
           />
         </div>
@@ -349,12 +318,12 @@ function StatCard({
 }
 
 // Member Row Component
-function MemberRow({ member }: { member: TeamMember }) {
+function MemberRow({ member }: { member: User }) {
   const roleConfig = {
     owner: { bg: 'bg-amber-50', text: 'text-amber-700', icon: <Crown className="h-4 w-4" /> },
     admin: { bg: 'bg-purple-50', text: 'text-purple-700', icon: <Shield className="h-4 w-4" /> },
-    member: { bg: 'bg-blue-50', text: 'text-blue-700', icon: <User className="h-4 w-4" /> },
-    viewer: { bg: 'bg-gray-50', text: 'text-gray-700', icon: <User className="h-4 w-4" /> },
+    member: { bg: 'bg-blue-50', text: 'text-blue-700', icon: <UserIcon className="h-4 w-4" /> },
+    viewer: { bg: 'bg-gray-50', text: 'text-gray-700', icon: <UserIcon className="h-4 w-4" /> },
   };
 
   const statusConfig = {
@@ -363,8 +332,8 @@ function MemberRow({ member }: { member: TeamMember }) {
     suspended: { bg: 'bg-red-50', text: 'text-red-700', icon: <XCircle className="h-4 w-4" /> },
   };
 
-  const roleStyle = roleConfig[member.role];
-  const statusStyle = statusConfig[member.status];
+  const roleStyle = roleConfig[member.role as keyof typeof roleConfig] || roleConfig.member;
+  const statusStyle = statusConfig[member.status as keyof typeof statusConfig] || statusConfig.active;
 
   return (
     <tr className="hover:bg-gray-50">
@@ -408,9 +377,9 @@ function MemberRow({ member }: { member: TeamMember }) {
             <span className="text-gray-500">Pending</span>
           ) : (
             <>
-              <p className="text-gray-900">Joined {formatDate(member.joinedAt)}</p>
-              {member.lastActive && (
-                <p className="text-gray-500">Active {formatTimestamp(member.lastActive)}</p>
+              <p className="text-gray-900">Joined {member.joinedAt ? formatDate(member.joinedAt) : 'Unknown'}</p>
+              {member.lastActiveAt && (
+                <p className="text-gray-500">Active {formatTimestamp(member.lastActiveAt)}</p>
               )}
             </>
           )}
@@ -428,6 +397,7 @@ function MemberRow({ member }: { member: TeamMember }) {
       {/* Actions */}
       <td className="p-4 text-right">
         <button
+          aria-label="Member actions menu"
           onClick={() => {
             telemetry.track({
               component: 'team-members',
@@ -461,7 +431,7 @@ function InviteModal({
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Invite Team Member</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} aria-label="Close invite modal" className="text-gray-400 hover:text-gray-600">
             ×
           </button>
         </div>
@@ -484,6 +454,7 @@ function InviteModal({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
             <select
+              aria-label="Select role for invite"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"

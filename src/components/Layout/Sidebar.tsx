@@ -6,7 +6,8 @@ import {
   FileText,
   Activity,
   Brain,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
+  Users
 } from 'lucide-react';
 
 const navigation = [
@@ -15,6 +16,7 @@ const navigation = [
   { name: 'Workflows', href: '/workflows', icon: Workflow },
   { name: 'Agents', href: '/agents', icon: Bot },
   { name: 'Templates', href: '/templates', icon: FileText },
+  { name: 'Team Members', href: '/team', icon: Users },
   { name: 'Settings', href: '/settings', icon: SettingsIcon },
 ];
 

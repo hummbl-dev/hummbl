@@ -12,6 +12,9 @@ import executions from './routes/executions';
 import telemetry from './routes/telemetry';
 import tokens from './routes/tokens';
 import notifications from './routes/notifications';
+import keys from './routes/keys';
+import users from './routes/users';
+import invites from './routes/invites';
 
 // Create Hono app with environment bindings
 const app = new Hono<{ Bindings: Env }>();
@@ -42,6 +45,9 @@ app.route('/api/executions', executions);
 app.route('/api/telemetry', telemetry);
 app.route('/api/tokens', tokens);
 app.route('/api/notifications', notifications);
+app.route('/api/keys', keys);
+app.route('/api/users', users);
+app.route('/api/invites', invites);
 
 // 404 handler
 app.notFound((c) => {

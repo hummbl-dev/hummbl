@@ -219,10 +219,6 @@ export interface TokenStats {
   period: string;
 }
 
-/**
- * Get token usage summary
- * @param range - Time range (7d, 30d, 90d)
- */
 export async function getTokenUsage(
   range: string = '30d'
 ): Promise<TokenStats> {
@@ -236,107 +232,414 @@ export async function getTokenUsage(
   return response.json();
 }
 
-// ============================================
-// NOTIFICATIONS API (Phase 2.2)
-// ============================================
-
-export interface Notification {
+// API Key interfaces
+export interface ApiKey {
   id: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  category: 'workflow' | 'system' | 'team' | 'billing';
-  title: string;
-  message: string;
-  actionUrl?: string;
-  actionLabel?: string;
-  read: boolean;
-  readAt: number | null;
+  name: string;
+  service: string;
+  usageCount: number;
+  lastUsedAt: number | null;
+  status: string;
   createdAt: number;
 }
 
-export interface NotificationsResponse {
-  notifications: Notification[];
-  unreadCount: number;
-  total: number;
+export interface ApiKeyStats {
+  service: string;
+  count: number;
+  totalUsage: number;
+  avgUsage: number;
+}
+
+export interface ApiKeyCreateRequest {
+  name: string;
+  service: string;
+  key: string;
+}
+
+export interface ApiKeyUpdateRequest {
+  name?: string;
+  status?: string;
 }
 
 /**
- * Get notifications
- * @param unreadOnly - Only return unread notifications
- * @param category - Filter by category
+ * Get user's API keys
  */
-export async function getNotifications(
-  unreadOnly: boolean = false,
-  category?: string
-): Promise<NotificationsResponse> {
-  let url = `${API_URL}/api/notifications?unreadOnly=${unreadOnly}`;
-  if (category) {
-    url += `&category=${category}`;
-  }
-  
-  const response = await fetch(url);
-  
+export async function getApiKeys(): Promise<{ keys: ApiKey[] }> {
+  const response = await fetch(`${API_URL}/api/keys`);
+
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Failed to fetch notifications' }));
-    throw new Error(error.error || 'Failed to fetch notifications');
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch API keys' }));
+    throw new Error(error.error || 'Failed to fetch API keys');
   }
-  
+
   return response.json();
 }
 
 /**
- * Mark notification as read
- * @param id - Notification ID
+ * Create new API key
  */
-export async function markNotificationRead(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/api/notifications/${id}/read`, {
-    method: 'PATCH',
+export async function createApiKey(keyData: ApiKeyCreateRequest): Promise<{ success: boolean; key: ApiKey }> {
+  const response = await fetch(`${API_URL}/api/keys`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(keyData),
   });
-  
+
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Failed to mark as read' }));
-    throw new Error(error.error || 'Failed to mark as read');
+    const error = await response.json().catch(() => ({ error: 'Failed to create API key' }));
+    throw new Error(error.error || 'Failed to create API key');
   }
+
+  return response.json();
 }
 
 /**
- * Mark all notifications as read
+ * Update API key
  */
-export async function markAllNotificationsRead(): Promise<void> {
-  const response = await fetch(`${API_URL}/api/notifications/read-all`, {
+export async function updateApiKey(id: string, updates: ApiKeyUpdateRequest): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/keys/${id}`, {
     method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updates),
   });
-  
+
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Failed to mark all as read' }));
-    throw new Error(error.error || 'Failed to mark all as read');
+    const error = await response.json().catch(() => ({ error: 'Failed to update API key' }));
+    throw new Error(error.error || 'Failed to update API key');
   }
+
+  return response.json();
 }
 
 /**
- * Delete notification
- * @param id - Notification ID
+ * Delete API key
  */
-export async function deleteNotification(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/api/notifications/${id}`, {
+export async function deleteApiKey(id: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/keys/${id}`, {
     method: 'DELETE',
   });
-  
+
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Failed to delete notification' }));
-    throw new Error(error.error || 'Failed to delete notification');
+    const error = await response.json().catch(() => ({ error: 'Failed to delete API key' }));
+    throw new Error(error.error || 'Failed to delete API key');
   }
+
+  return response.json();
 }
 
 /**
- * Clear all read notifications
+ * Get API key usage stats
  */
-export async function clearReadNotifications(): Promise<void> {
-  const response = await fetch(`${API_URL}/api/notifications/clear-read`, {
+export async function getApiKeyStats(): Promise<{ stats: ApiKeyStats[] }> {
+  const response = await fetch(`${API_URL}/api/keys/stats`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch API key stats' }));
+    throw new Error(error.error || 'Failed to fetch API key stats');
+  }
+
+  return response.json();
+}
+
+/**
+ * Validate API key (for external use)
+ */
+export async function validateApiKey(service: string, key: string): Promise<{ valid: boolean; keyId?: string; name?: string }> {
+  const response = await fetch(`${API_URL}/api/keys/validate`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ service, key }),
+  });
+
+  if (!response.ok && response.status !== 401) {
+    const error = await response.json().catch(() => ({ error: 'Failed to validate API key' }));
+    throw new Error(error.error || 'Failed to validate API key');
+  }
+
+  return response.json();
+}
+
+// User Management interfaces
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  status: string;
+  invitedBy: string | null;
+  joinedAt: number | null;
+  lastActiveAt: number | null;
+  workflowsCreated: number;
+  executionsRun: number;
+  createdAt: number;
+}
+
+export interface UserStats {
+  totalUsers: number;
+  activeUsers: number;
+  owners: number;
+  admins: number;
+  members: number;
+  viewers: number;
+}
+
+export interface Invite {
+  id: string;
+  email: string;
+  role: string;
+  invitedBy: string;
+  invitedByName: string;
+  expiresAt: number;
+  accepted: boolean;
+  acceptedAt: number | null;
+  createdAt: number;
+}
+
+export interface InviteCreateRequest {
+  email: string;
+  role: string;
+}
+
+export interface WorkflowShareRequest {
+  userId: string;
+  permissionLevel: 'view' | 'edit' | 'admin';
+}
+
+export interface SharedWorkflow {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  permissionLevel: string;
+  sharedBy: string;
+  sharedByName: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface WorkflowSharing {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  permissionLevel: string;
+  createdAt: number;
+}
+
+/**
+ * Get all users (admin/owner only)
+ */
+export async function getUsers(): Promise<{ users: User[] }> {
+  const response = await fetch(`${API_URL}/api/users`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch users' }));
+    throw new Error(error.error || 'Failed to fetch users');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get current user profile
+ */
+export async function getCurrentUser(): Promise<{ user: User }> {
+  const response = await fetch(`${API_URL}/api/users/me`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch user profile' }));
+    throw new Error(error.error || 'Failed to fetch user profile');
+  }
+
+  return response.json();
+}
+
+/**
+ * Update user (admin/owner only)
+ */
+export async function updateUser(id: string, updates: { name?: string; role?: string; status?: string }): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/users/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updates),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to update user' }));
+    throw new Error(error.error || 'Failed to update user');
+  }
+
+  return response.json();
+}
+
+/**
+ * Remove user from organization (admin/owner only)
+ */
+export async function deleteUser(id: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/users/${id}`, {
     method: 'DELETE',
   });
-  
+
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Failed to clear notifications' }));
-    throw new Error(error.error || 'Failed to clear notifications');
+    const error = await response.json().catch(() => ({ error: 'Failed to delete user' }));
+    throw new Error(error.error || 'Failed to delete user');
   }
+
+  return response.json();
+}
+
+/**
+ * Get user statistics (admin/owner only)
+ */
+export async function getUserStats(): Promise<{ stats: UserStats }> {
+  const response = await fetch(`${API_URL}/api/users/stats`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch user stats' }));
+    throw new Error(error.error || 'Failed to fetch user stats');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get pending invitations (admin/owner only)
+ */
+export async function getInvites(): Promise<{ invites: Invite[] }> {
+  const response = await fetch(`${API_URL}/api/invites`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch invites' }));
+    throw new Error(error.error || 'Failed to fetch invites');
+  }
+
+  return response.json();
+}
+
+/**
+ * Send invitation (admin/owner only)
+ */
+export async function createInvite(inviteData: InviteCreateRequest): Promise<{ success: boolean; invite: Invite }> {
+  const response = await fetch(`${API_URL}/api/invites`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(inviteData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to create invitation' }));
+    throw new Error(error.error || 'Failed to create invitation');
+  }
+
+  return response.json();
+}
+
+/**
+ * Accept invitation
+ */
+export async function acceptInvite(token: string, userData: { name: string }): Promise<{ success: boolean; user: User }> {
+  const response = await fetch(`${API_URL}/api/invites/${token}/accept`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to accept invitation' }));
+    throw new Error(error.error || 'Failed to accept invitation');
+  }
+
+  return response.json();
+}
+
+/**
+ * Cancel invitation (admin/owner only)
+ */
+export async function deleteInvite(id: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/invites/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to cancel invitation' }));
+    throw new Error(error.error || 'Failed to cancel invitation');
+  }
+
+  return response.json();
+}
+
+/**
+ * Share workflow with team member
+ */
+export async function shareWorkflow(workflowId: string, shareData: WorkflowShareRequest): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/workflows/${workflowId}/share`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(shareData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to share workflow' }));
+    throw new Error(error.error || 'Failed to share workflow');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get workflows shared with current user
+ */
+export async function getSharedWorkflows(): Promise<{ workflows: SharedWorkflow[] }> {
+  const response = await fetch(`${API_URL}/api/workflows/shared`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch shared workflows' }));
+    throw new Error(error.error || 'Failed to fetch shared workflows');
+  }
+
+  return response.json();
+}
+
+/**
+ * Remove workflow sharing
+ */
+export async function removeWorkflowSharing(workflowId: string, userId: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/workflows/${workflowId}/share/${userId}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to remove workflow sharing' }));
+    throw new Error(error.error || 'Failed to remove workflow sharing');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get workflow sharing permissions
+ */
+export async function getWorkflowSharing(workflowId: string): Promise<{ sharing: WorkflowSharing[] }> {
+  const response = await fetch(`${API_URL}/api/workflows/${workflowId}/sharing`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch workflow sharing' }));
+    throw new Error(error.error || 'Failed to fetch workflow sharing');
+  }
+
+  return response.json();
 }

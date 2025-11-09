@@ -13,9 +13,6 @@ import { telemetry } from '../services/telemetry-enhanced';
 import {
   Key,
   Plus,
-  Eye,
-  EyeOff,
-  Copy,
   Trash2,
   AlertCircle,
   CheckCircle2,
@@ -23,23 +20,18 @@ import {
   Shield,
   Clock,
 } from 'lucide-react';
-
-interface APIKey {
-  id: string;
-  name: string;
-  service: 'anthropic' | 'openai' | 'custom';
-  key: string;
-  masked: string;
-  createdAt: number;
-  lastUsed?: number;
-  usageCount: number;
-  status: 'active' | 'expired' | 'revoked';
-}
+import { getApiKeys, createApiKey, deleteApiKey, getApiKeyStats, type ApiKey } from '../services/api';
 
 export default function APIKeys() {
-  const [keys, setKeys] = useState<APIKey[]>([]);
+  const [keys, setKeys] = useState<ApiKey[]>([]);
+  const [stats, setStats] = useState<{ total: number; active: number; totalUsage: number; services: number }>({
+    total: 0,
+    active: 0,
+    totalUsage: 0,
+    services: 0,
+  });
   const [loading, setLoading] = useState(true);
-  const [showKey, setShowKey] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
 
   // Track page view
@@ -47,88 +39,70 @@ export default function APIKeys() {
     telemetry.pageView('api-keys', {});
   }, []);
 
-  // Load API keys
-  useEffect(() => {
-    const loadKeys = () => {
+  // Load API keys and stats
+  const loadData = async () => {
+    try {
       setLoading(true);
-      try {
-        // Mock data for now - will integrate with localStorage/backend
-        const mockKeys: APIKey[] = [
-          {
-            id: 'key-001',
-            name: 'Anthropic Claude API',
-            service: 'anthropic',
-            key: 'sk-ant-api03-abc123...',
-            masked: 'sk-ant-...abc123',
-            createdAt: Date.now() - 15552000000,
-            lastUsed: Date.now() - 3600000,
-            usageCount: 1247,
-            status: 'active',
-          },
-          {
-            id: 'key-002',
-            name: 'OpenAI GPT API',
-            service: 'openai',
-            key: 'sk-proj-xyz789...',
-            masked: 'sk-proj-...xyz789',
-            createdAt: Date.now() - 7776000000,
-            lastUsed: Date.now() - 86400000,
-            usageCount: 834,
-            status: 'active',
-          },
-          {
-            id: 'key-003',
-            name: 'Legacy OpenAI Key',
-            service: 'openai',
-            key: 'sk-old-key...',
-            masked: 'sk-old-...key',
-            createdAt: Date.now() - 31536000000,
-            lastUsed: Date.now() - 2592000000,
-            usageCount: 45,
-            status: 'expired',
-          },
-        ];
+      setError(null);
 
-        setKeys(mockKeys);
-      } catch (error) {
-        console.error('Failed to load API keys:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const [keysResponse, statsResponse] = await Promise.all([
+        getApiKeys(),
+        getApiKeyStats(),
+      ]);
 
-    loadKeys();
-  }, []);
+      setKeys(keysResponse.keys);
 
-  // Copy key to clipboard
-  const handleCopy = (key: string, keyId: string) => {
-    navigator.clipboard.writeText(key);
-    telemetry.track({
-      component: 'api-keys',
-      action: 'copy_key',
-      properties: { keyId },
-    });
-    alert('API key copied to clipboard!');
-  };
+      // Calculate local stats from keys
+      const total = keysResponse.keys.length;
+      const active = keysResponse.keys.filter(k => k.status === 'active').length;
+      const totalUsage = keysResponse.keys.reduce((sum, k) => sum + k.usageCount, 0);
+      const services = statsResponse.stats.length;
 
-  // Delete key
-  const handleDelete = (keyId: string) => {
-    if (confirm('Are you sure you want to delete this API key? This action cannot be undone.')) {
-      setKeys(keys.filter((k) => k.id !== keyId));
-      telemetry.track({
-        component: 'api-keys',
-        action: 'delete_key',
-        properties: { keyId },
-      });
+      setStats({ total, active, totalUsage, services });
+    } catch (err) {
+      console.error('Failed to load API keys:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load API keys');
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Calculate stats
-  const stats = {
-    total: keys.length,
-    active: keys.filter((k) => k.status === 'active').length,
-    totalUsage: keys.reduce((sum, k) => sum + k.usageCount, 0),
-    services: new Set(keys.map((k) => k.service)).size,
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  // Delete key
+  const handleDelete = async (keyId: string) => {
+    if (confirm('Are you sure you want to delete this API key? This action cannot be undone.')) {
+      try {
+        await deleteApiKey(keyId);
+        telemetry.track({
+          component: 'api-keys',
+          action: 'delete_key',
+          properties: { keyId },
+        });
+        await loadData(); // Reload data
+      } catch (err) {
+        console.error('Failed to delete API key:', err);
+        alert('Failed to delete API key. Please try again.');
+      }
+    }
+  };
+
+  // Handle add key
+  const handleAddKey = async (service: string, name: string, key: string) => {
+    try {
+      await createApiKey({ name, service, key });
+      telemetry.track({
+        component: 'api-keys',
+        action: 'add_key',
+        properties: { service },
+      });
+      await loadData(); // Reload data
+    } catch (err) {
+      console.error('Failed to add API key:', err);
+      alert('Failed to add API key. Please try again.');
+    }
   };
 
   if (loading) {
@@ -137,6 +111,24 @@ export default function APIKeys() {
         <div className="text-center">
           <Key className="h-8 w-8 animate-pulse text-primary-600 mx-auto mb-2" />
           <p className="text-gray-600">Loading API keys...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <AlertCircle className="h-8 w-8 text-red-600 mx-auto mb-2" />
+          <p className="text-red-600 font-medium">Failed to load API keys</p>
+          <p className="text-gray-600 text-sm mt-1">{error}</p>
+          <button
+            onClick={loadData}
+            className="btn-primary mt-4"
+          >
+            Try Again
+          </button>
         </div>
       </div>
     );
@@ -223,9 +215,6 @@ export default function APIKeys() {
             <APIKeyCard
               key={apiKey.id}
               apiKey={apiKey}
-              showKey={showKey === apiKey.id}
-              onToggleShow={() => setShowKey(showKey === apiKey.id ? null : apiKey.id)}
-              onCopy={() => handleCopy(apiKey.key, apiKey.id)}
               onDelete={() => handleDelete(apiKey.id)}
             />
           ))
@@ -236,25 +225,7 @@ export default function APIKeys() {
       {showAddModal && (
         <AddKeyModal
           onClose={() => setShowAddModal(false)}
-          onAdd={(service, name, key) => {
-            const newKey: APIKey = {
-              id: `key-${Date.now()}`,
-              name,
-              service,
-              key,
-              masked: `${key.slice(0, 8)}...${key.slice(-6)}`,
-              createdAt: Date.now(),
-              usageCount: 0,
-              status: 'active',
-            };
-            setKeys([...keys, newKey]);
-            telemetry.track({
-              component: 'api-keys',
-              action: 'add_key',
-              properties: { service },
-            });
-            setShowAddModal(false);
-          }}
+          onAdd={handleAddKey}
         />
       )}
 
@@ -318,15 +289,9 @@ function StatCard({
 // API Key Card Component
 function APIKeyCard({
   apiKey,
-  showKey,
-  onToggleShow,
-  onCopy,
   onDelete,
 }: {
-  apiKey: APIKey;
-  showKey: boolean;
-  onToggleShow: () => void;
-  onCopy: () => void;
+  apiKey: ApiKey;
   onDelete: () => void;
 }) {
   const serviceConfig = {
@@ -341,8 +306,8 @@ function APIKeyCard({
     revoked: { bg: 'bg-red-50', text: 'text-red-700', icon: <AlertCircle className="h-4 w-4" /> },
   };
 
-  const service = serviceConfig[apiKey.service];
-  const status = statusConfig[apiKey.status];
+  const service = serviceConfig[apiKey.service as keyof typeof serviceConfig] || serviceConfig.custom;
+  const status = statusConfig[apiKey.status as keyof typeof statusConfig] || statusConfig.active;
 
   return (
     <div className={`card ${apiKey.status !== 'active' ? 'opacity-60' : ''}`}>
@@ -367,27 +332,14 @@ function APIKeyCard({
         </div>
       </div>
 
-      {/* Key Display */}
+      {/* Key Display - Show masked key since actual key is encrypted */}
       <div className="bg-gray-50 rounded-lg p-4 mb-4">
         <div className="flex items-center justify-between">
           <code className="text-sm font-mono text-gray-900 flex-1">
-            {showKey ? apiKey.key : apiKey.masked}
+            •••••••••••••••••••••••••••• (encrypted)
           </code>
-          <div className="flex items-center space-x-2 ml-4">
-            <button
-              onClick={onToggleShow}
-              className="p-2 hover:bg-gray-200 rounded transition-colors"
-              title={showKey ? 'Hide key' : 'Show key'}
-            >
-              {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
-            <button
-              onClick={onCopy}
-              className="p-2 hover:bg-gray-200 rounded transition-colors"
-              title="Copy to clipboard"
-            >
-              <Copy className="h-4 w-4" />
-            </button>
+          <div className="text-xs text-gray-500 ml-4">
+            Key is encrypted and secure
           </div>
         </div>
       </div>
@@ -398,9 +350,9 @@ function APIKeyCard({
           <div>
             <span className="font-medium">{apiKey.usageCount.toLocaleString()}</span> uses
           </div>
-          {apiKey.lastUsed && (
+          {apiKey.lastUsedAt && (
             <div>
-              Last used <span className="font-medium">{formatTimestamp(apiKey.lastUsed)}</span>
+              Last used <span className="font-medium">{formatTimestamp(apiKey.lastUsedAt)}</span>
             </div>
           )}
         </div>
@@ -423,9 +375,9 @@ function AddKeyModal({
   onAdd,
 }: {
   onClose: () => void;
-  onAdd: (service: 'anthropic' | 'openai' | 'custom', name: string, key: string) => void;
+  onAdd: (service: string, name: string, key: string) => void;
 }) {
-  const [service, setService] = useState<'anthropic' | 'openai' | 'custom'>('anthropic');
+  const [service, setService] = useState<string>('anthropic');
   const [name, setName] = useState('');
   const [key, setKey] = useState('');
 
@@ -444,7 +396,7 @@ function AddKeyModal({
             <label className="block text-sm font-medium text-gray-700 mb-1">Service</label>
             <select
               value={service}
-              onChange={(e) => setService(e.target.value as 'anthropic' | 'openai' | 'custom')}
+              onChange={(e) => setService(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               <option value="anthropic">Anthropic Claude</option>
