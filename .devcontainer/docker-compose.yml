@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  hummbl-dev:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker-host.sock
+    environment:
+      - NODE_ENV=development
+      - HUMMBL_ENV=development
+    ports:
+      - "3000:3000"
+      - "5173:5173"
+      - "8080:8080"
+      - "4000:4000"
+    command: sleep infinity
+    networks:
+      - hummbl-network
+
+  # Optional: Add database service if needed
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: hummbl_dev
+      POSTGRES_USER: hummbl
+      POSTGRES_PASSWORD: hummbl_dev_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - hummbl-network
+
+  # Optional: Add Redis for caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - hummbl-network
+
+networks:
+  hummbl-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
