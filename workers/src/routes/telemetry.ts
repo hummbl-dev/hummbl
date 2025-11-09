@@ -187,12 +187,14 @@ telemetry.get('/actions', async (c) => {
 });
 
 /**
- * Get analytics summary
- * GET /api/telemetry/summary
+ * Get analytics summary (Phase 1 - updated for frontend)
+ * GET /api/telemetry/summary?range=7d
  */
 telemetry.get('/summary', async (c) => {
   try {
-    const since = Number(c.req.query('since')) || Math.floor((Date.now() - 604800000) / 1000); // 7 days default
+    const range = c.req.query('range') || '7d';
+    const rangeMs = range === '7d' ? 604800000 : range === '30d' ? 2592000000 : 7776000000;
+    const since = Math.floor((Date.now() - rangeMs) / 1000);
 
     // Get summary stats
     const stats = await c.env.DB.prepare(`
@@ -205,41 +207,77 @@ telemetry.get('/summary', async (c) => {
       WHERE timestamp > ?
     `).bind(since).first();
 
-    // Get most popular components
-    const topComponents = await c.env.DB.prepare(`
-      SELECT 
-        component_id,
-        COUNT(*) as action_count,
-        COUNT(DISTINCT user_id) as unique_users
+    // Get active components count
+    const activeComponents = await c.env.DB.prepare(`
+      SELECT COUNT(DISTINCT component_id) as count
       FROM user_actions
       WHERE timestamp > ?
-      GROUP BY component_id
-      ORDER BY action_count DESC
-      LIMIT 10
-    `).bind(since).all();
+    `).bind(since).first();
 
-    // Get average page load times
-    const avgLoadTime = await c.env.DB.prepare(`
-      SELECT AVG(value) as avg_load_time
+    // Get average response time from metrics
+    const avgResponseTime = await c.env.DB.prepare(`
+      SELECT AVG(value) as avg_time
       FROM component_metrics
-      WHERE metric_name = 'page_load_time' AND timestamp > ?
+      WHERE metric_type = 'response_time' AND timestamp > ?
     `).bind(since).first();
 
     return c.json({
-      period: {
-        since: since * 1000,
-        until: Date.now()
-      },
-      summary: stats,
-      topComponents: topComponents.results,
-      performance: {
-        avgLoadTime: avgLoadTime?.avg_load_time || 0
-      }
+      totalActions: (stats?.total_actions as number) || 0,
+      uniqueUsers: (stats?.total_users as number) || 0,
+      activeComponents: (activeComponents?.count as number) || 0,
+      avgResponseTime: (avgResponseTime?.avg_time as number) || 0,
+      period: range,
     });
   } catch (error) {
     console.error('Summary error:', error);
     return c.json(
       { error: error instanceof Error ? error.message : 'Failed to generate summary' },
+      500
+    );
+  }
+});
+
+/**
+ * Get top components by usage (Phase 1 - new endpoint)
+ * GET /api/telemetry/components/top?limit=10
+ */
+telemetry.get('/components/top', async (c) => {
+  try {
+    const limit = Number(c.req.query('limit')) || 10;
+    const since = Math.floor((Date.now() - 604800000) / 1000); // 7 days
+
+    // Get top components with details
+    const topComponents = await c.env.DB.prepare(`
+      SELECT 
+        bc.id,
+        bc.code,
+        bc.name,
+        COUNT(CASE WHEN ua.action = 'page_view' THEN 1 END) as views,
+        COUNT(*) as actions,
+        AVG(CASE WHEN cm.metric_type = 'duration' THEN cm.value ELSE NULL END) as avg_duration
+      FROM basen_components bc
+      LEFT JOIN user_actions ua ON bc.id = ua.component_id AND ua.timestamp > ?
+      LEFT JOIN component_metrics cm ON bc.id = cm.component_id AND cm.timestamp > ?
+      WHERE bc.id IN (SELECT DISTINCT component_id FROM user_actions WHERE timestamp > ?)
+      GROUP BY bc.id, bc.code, bc.name
+      ORDER BY actions DESC
+      LIMIT ?
+    `).bind(since, since, since, limit).all();
+
+    return c.json({
+      components: topComponents.results.map(c => ({
+        id: c.id,
+        code: c.code,
+        name: c.name,
+        views: c.views || 0,
+        actions: c.actions || 0,
+        avgDuration: c.avg_duration || 0,
+      })),
+    });
+  } catch (error) {
+    console.error('Top components error:', error);
+    return c.json(
+      { error: error instanceof Error ? error.message : 'Failed to fetch top components' },
       500
     );
   }

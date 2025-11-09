@@ -11,6 +11,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { telemetry } from '../services/telemetry-enhanced';
+import { getTelemetrySummary, getTopComponents, type TelemetrySummary, type TopComponent } from '../services/api';
 import {
   Zap,
   CheckCircle2,
@@ -19,6 +20,7 @@ import {
   Activity,
   ArrowUpRight,
   ArrowDownRight,
+  AlertCircle,
 } from 'lucide-react';
 
 interface MetricCardProps {
@@ -35,19 +37,12 @@ interface ChartDataPoint {
   value: number;
 }
 
-interface AnalyticsSummary {
-  period: { since: number; until: number };
-  summary: Record<string, number>;
-  topComponents: Array<Record<string, unknown>>;
-  performance: {
-    avgLoadTime: number;
-  };
-}
-
 export default function Analytics() {
-  const [summary, setSummary] = useState<AnalyticsSummary | null>(null);
+  const [summary, setSummary] = useState<TelemetrySummary | null>(null);
+  const [topComponents, setTopComponents] = useState<TopComponent[]>([]);
   const [executionTrend, setExecutionTrend] = useState<ChartDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('7d');
 
   // Track page view
@@ -57,23 +52,26 @@ export default function Analytics() {
     });
   }, [timeRange]);
 
-  // Fetch analytics data
+  // Fetch analytics data from REAL API
   useEffect(() => {
     const fetchAnalytics = async () => {
       setLoading(true);
+      setError(null);
       try {
-        const rangeMs = timeRange === '7d' ? 604800000 : timeRange === '30d' ? 2592000000 : 7776000000;
-        const since = Math.floor((Date.now() - rangeMs) / 1000);
-
-        // Get summary from telemetry API
-        const summaryData = await telemetry.getSummary(since);
+        // Get real summary from backend
+        const summaryData = await getTelemetrySummary(timeRange);
         setSummary(summaryData);
+
+        // Get real top components
+        const components = await getTopComponents(10);
+        setTopComponents(components);
 
         // Get execution trend (mock data for now - will be real once executions happen)
         const trend = generateTrendData(timeRange);
         setExecutionTrend(trend);
-      } catch (error) {
-        console.error('Failed to fetch analytics:', error);
+      } catch (err) {
+        console.error('Failed to fetch analytics:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load analytics');
       } finally {
         setLoading(false);
       }
@@ -111,11 +109,29 @@ export default function Analytics() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Analytics</h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="btn-primary"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const metrics = {
-    total_users: (summary?.summary?.total_users as number) || 0,
-    total_sessions: (summary?.summary?.total_sessions as number) || 0,
-    total_actions: (summary?.summary?.total_actions as number) || 0,
-    page_views: (summary?.summary?.page_views as number) || 0,
+    totalActions: summary?.totalActions || 0,
+    uniqueUsers: summary?.uniqueUsers || 0,
+    activeComponents: summary?.activeComponents || 0,
+    avgResponseTime: summary?.avgResponseTime || 0,
   };
 
   return (
@@ -166,10 +182,10 @@ export default function Analytics() {
           trend="up"
         />
         <MetricCard
-          title="Avg Execution Time"
-          value={summary?.performance.avgLoadTime 
-            ? `${(summary.performance.avgLoadTime / 1000).toFixed(1)}s`
-            : '2.3s'}
+          title="Avg Response Time"
+          value={summary?.avgResponseTime
+            ? `${(summary.avgResponseTime / 1000).toFixed(2)}s`
+            : '0s'}
           change={-8}
           changeLabel="faster"
           icon={<Clock className="h-6 w-6" />}
@@ -177,8 +193,8 @@ export default function Analytics() {
         />
         <MetricCard
           title="Active Users"
-          value={metrics.total_users}
-          change={metrics.total_sessions > 0 ? 15 : 0}
+          value={metrics.uniqueUsers}
+          change={metrics.uniqueUsers > 0 ? 15 : 0}
           changeLabel="vs last period"
           icon={<Users className="h-6 w-6" />}
           trend="up"
@@ -197,22 +213,27 @@ export default function Analytics() {
 
         {/* Top Components */}
         <div className="card">
-          <h3 className="text-lg font-semibold mb-4">Most Used Pages</h3>
+          <h3 className="text-lg font-semibold mb-4">Most Used Components</h3>
           <div className="space-y-3">
-            {summary?.topComponents.slice(0, 5).map((comp, index) => (
-              <div key={comp.component_id as string} className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <span className="text-sm font-medium text-gray-500">#{index + 1}</span>
-                  <span className="font-medium">{formatComponentName(comp.component_id as string)}</span>
+            {topComponents.length > 0 ? (
+              topComponents.slice(0, 5).map((comp, index) => (
+                <div key={comp.id} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-sm font-medium text-gray-500">#{index + 1}</span>
+                    <div>
+                      <span className="font-medium">{comp.name}</span>
+                      <span className="text-xs text-gray-500 ml-2">{comp.code}</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-medium">{comp.actions} actions</div>
+                    <div className="text-xs text-gray-500">{comp.views} views</div>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-sm font-medium">{comp.action_count as number} actions</div>
-                  <div className="text-xs text-gray-500">{comp.unique_users as number} users</div>
-                </div>
-              </div>
-            )) || (
+              ))
+            ) : (
               <p className="text-gray-500 text-center py-8">
-                No data yet. Start using HUMMBL to see analytics!
+                No component data yet. Start using HUMMBL to see analytics!
               </p>
             )}
           </div>
@@ -223,15 +244,15 @@ export default function Analytics() {
       <div className="card">
         <h3 className="text-lg font-semibold mb-4">Usage Statistics</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <StatItem label="Total Actions" value={metrics.total_actions.toLocaleString()} />
-          <StatItem label="Page Views" value={metrics.page_views.toLocaleString()} />
-          <StatItem label="Sessions" value={metrics.total_sessions.toLocaleString()} />
+          <StatItem label="Total Actions" value={metrics.totalActions.toLocaleString()} />
+          <StatItem label="Unique Users" value={metrics.uniqueUsers.toLocaleString()} />
+          <StatItem label="Active Components" value={metrics.activeComponents.toLocaleString()} />
           <StatItem
-            label="Actions/Session"
+            label="Avg Response Time"
             value={
-              metrics.total_sessions > 0
-                ? (metrics.total_actions / metrics.total_sessions).toFixed(1)
-                : '0'
+              metrics.avgResponseTime > 0
+                ? `${(metrics.avgResponseTime / 1000).toFixed(2)}s`
+                : '0s'
             }
           />
         </div>
@@ -347,18 +368,4 @@ function StatItem({ label, value }: { label: string; value: string | number }) {
       <p className="text-2xl font-bold text-gray-900">{value}</p>
     </div>
   );
-}
-
-// Format component name helper
-function formatComponentName(id: string): string {
-  const names: Record<string, string> = {
-    dashboard: 'Dashboard',
-    'mental-models': 'Mental Models',
-    workflows: 'Workflows',
-    agents: 'Agents',
-    templates: 'Templates',
-    settings: 'Settings',
-    'analytics-dashboard': 'Analytics',
-  };
-  return names[id] || id;
 }

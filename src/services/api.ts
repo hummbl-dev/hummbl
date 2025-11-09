@@ -136,3 +136,59 @@ export async function healthCheck(): Promise<{ status: string; timestamp: number
   const response = await fetch(`${API_URL}/`);
   return response.json();
 }
+
+// ============================================
+// TELEMETRY API (Phase 1)
+// ============================================
+
+export interface TelemetrySummary {
+  totalActions: number;
+  uniqueUsers: number;
+  activeComponents: number;
+  avgResponseTime: number;
+  period: string;
+}
+
+export interface TopComponent {
+  id: string;
+  code: string;
+  name: string;
+  views: number;
+  actions: number;
+  avgDuration: number;
+}
+
+/**
+ * Get telemetry summary for analytics dashboard
+ * @param range - Time range (7d, 30d, 90d)
+ */
+export async function getTelemetrySummary(
+  range: string = '7d'
+): Promise<TelemetrySummary> {
+  const response = await fetch(`${API_URL}/api/telemetry/summary?range=${range}`);
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch telemetry summary' }));
+    throw new Error(error.error || 'Failed to fetch telemetry summary');
+  }
+  
+  return response.json();
+}
+
+/**
+ * Get top components by usage
+ * @param limit - Number of components to return
+ */
+export async function getTopComponents(
+  limit: number = 10
+): Promise<TopComponent[]> {
+  const response = await fetch(`${API_URL}/api/telemetry/components/top?limit=${limit}`);
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch top components' }));
+    throw new Error(error.error || 'Failed to fetch top components');
+  }
+  
+  const data = await response.json();
+  return data.components || [];
+}
