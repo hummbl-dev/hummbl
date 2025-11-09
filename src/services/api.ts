@@ -219,10 +219,6 @@ export interface TokenStats {
   period: string;
 }
 
-/**
- * Get token usage summary
- * @param range - Time range (7d, 30d, 90d)
- */
 export async function getTokenUsage(
   range: string = '30d'
 ): Promise<TokenStats> {
@@ -233,5 +229,143 @@ export async function getTokenUsage(
     throw new Error(error.error || 'Failed to fetch token usage');
   }
   
+  return response.json();
+}
+
+// API Key interfaces
+export interface ApiKey {
+  id: string;
+  name: string;
+  service: string;
+  usageCount: number;
+  lastUsedAt: number | null;
+  status: string;
+  createdAt: number;
+}
+
+export interface ApiKeyStats {
+  service: string;
+  count: number;
+  totalUsage: number;
+  avgUsage: number;
+}
+
+export interface ApiKeyCreateRequest {
+  name: string;
+  service: string;
+  key: string;
+}
+
+export interface ApiKeyUpdateRequest {
+  name?: string;
+  status?: string;
+}
+
+export interface ApiKeysResponse extends Result<{ keys: ApiKey[] }, Error> {}
+export interface ApiKeyResponse extends Result<ApiKey, Error> {}
+export interface ApiKeyStatsResponse extends Result<{ stats: ApiKeyStats[] }, Error> {}
+export interface ApiKeyValidationResponse extends Result<{ valid: boolean; keyId?: string; name?: string }, Error> {}
+
+/**
+ * Get user's API keys
+ */
+export async function getApiKeys(): Promise<{ keys: ApiKey[] }> {
+  const response = await fetch(`${API_URL}/api/keys`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch API keys' }));
+    throw new Error(error.error || 'Failed to fetch API keys');
+  }
+
+  return response.json();
+}
+
+/**
+ * Create new API key
+ */
+export async function createApiKey(keyData: ApiKeyCreateRequest): Promise<{ success: boolean; key: ApiKey }> {
+  const response = await fetch(`${API_URL}/api/keys`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(keyData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to create API key' }));
+    throw new Error(error.error || 'Failed to create API key');
+  }
+
+  return response.json();
+}
+
+/**
+ * Update API key
+ */
+export async function updateApiKey(id: string, updates: ApiKeyUpdateRequest): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/keys/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updates),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to update API key' }));
+    throw new Error(error.error || 'Failed to update API key');
+  }
+
+  return response.json();
+}
+
+/**
+ * Delete API key
+ */
+export async function deleteApiKey(id: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/keys/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to delete API key' }));
+    throw new Error(error.error || 'Failed to delete API key');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get API key usage stats
+ */
+export async function getApiKeyStats(): Promise<{ stats: ApiKeyStats[] }> {
+  const response = await fetch(`${API_URL}/api/keys/stats`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch API key stats' }));
+    throw new Error(error.error || 'Failed to fetch API key stats');
+  }
+
+  return response.json();
+}
+
+/**
+ * Validate API key (for external use)
+ */
+export async function validateApiKey(service: string, key: string): Promise<{ valid: boolean; keyId?: string; name?: string }> {
+  const response = await fetch(`${API_URL}/api/keys/validate`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ service, key }),
+  });
+
+  if (!response.ok && response.status !== 401) {
+    const error = await response.json().catch(() => ({ error: 'Failed to validate API key' }));
+    throw new Error(error.error || 'Failed to validate API key');
+  }
+
   return response.json();
 }
