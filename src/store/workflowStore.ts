@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
 import { Workflow, Agent, Task, ExecutionLog, WorkflowTemplate } from '../types/workflow';
 
@@ -38,7 +39,35 @@ interface WorkflowStore {
   createWorkflowFromTemplate: (templateId: string, name: string) => void;
 }
 
-export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
+// Safe localStorage wrapper with error handling
+const safeStorage = {
+  getItem: (name: string): string | null => {
+    try {
+      return localStorage.getItem(name);
+    } catch (error) {
+      console.error('Error reading from localStorage:', error);
+      return null;
+    }
+  },
+  setItem: (name: string, value: string): void => {
+    try {
+      localStorage.setItem(name, value);
+    } catch (error) {
+      console.error('Error writing to localStorage:', error);
+    }
+  },
+  removeItem: (name: string): void => {
+    try {
+      localStorage.removeItem(name);
+    } catch (error) {
+      console.error('Error removing from localStorage:', error);
+    }
+  },
+};
+
+export const useWorkflowStore = create<WorkflowStore>()(
+  persist(
+    (set, get) => ({
   workflows: [],
   agents: [],
   executionLogs: [],
@@ -268,4 +297,24 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
       tags: template.tags,
     });
   },
-}));
+}),
+    {
+      name: 'hummbl-workflow-storage',
+      storage: createJSONStorage(() => safeStorage),
+      partialize: (state) => ({
+        workflows: state.workflows,
+        agents: state.agents,
+        executionLogs: state.executionLogs,
+      }),
+      onRehydrateStorage: () => {
+        return (state, error) => {
+          if (error) {
+            console.error('Error rehydrating store:', error);
+          } else if (state) {
+            console.log('Store rehydrated successfully');
+          }
+        };
+      },
+    }
+  )
+);
