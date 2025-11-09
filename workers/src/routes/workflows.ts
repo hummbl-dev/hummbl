@@ -270,4 +270,218 @@ ${Object.keys(context).length > 0 ? `\nYou have access to outputs from previous 
   return { ok: true, output: aiResult.value.content };
 }
 
+/**
+ * Share workflow with team member
+ * POST /api/workflows/:id/share
+ */
+workflows.post('/:id/share', async (c) => {
+  try {
+    const workflowId = c.req.param('id');
+    const shareData = await c.req.json<{
+      userId: string;
+      permissionLevel: 'view' | 'edit' | 'admin';
+    }>();
+
+    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+
+    // Check if current user owns the workflow or has admin permissions
+    const workflowOwner = await c.env.DB.prepare(`
+      SELECT created_by FROM workflows WHERE id = ?
+    `).bind(workflowId).first();
+
+    const currentUser = await c.env.DB.prepare(`
+      SELECT role FROM users WHERE id = ?
+    `).bind(currentUserId).first();
+
+    if (!workflowOwner || (workflowOwner.created_by !== currentUserId && currentUser?.role !== 'owner' && currentUser?.role !== 'admin')) {
+      return c.json({ error: 'Insufficient permissions to share this workflow' }, 403);
+    }
+
+    // Check if user exists
+    const targetUser = await c.env.DB.prepare(`
+      SELECT id FROM users WHERE id = ?
+    `).bind(shareData.userId).first();
+
+    if (!targetUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Check if already shared
+    const existingShare = await c.env.DB.prepare(`
+      SELECT id FROM workflow_sharing
+      WHERE workflow_id = ? AND shared_with_user_id = ?
+    `).bind(workflowId, shareData.userId).first();
+
+    const now = Math.floor(Date.now() / 1000);
+
+    if (existingShare) {
+      // Update existing share
+      await c.env.DB.prepare(`
+        UPDATE workflow_sharing
+        SET permission_level = ?, created_at = ?
+        WHERE id = ?
+      `).bind(shareData.permissionLevel, now, existingShare.id).run();
+    } else {
+      // Create new share
+      const shareId = crypto.randomUUID();
+      await c.env.DB.prepare(`
+        INSERT INTO workflow_sharing (
+          id, workflow_id, shared_with_user_id, shared_by_user_id,
+          permission_level, created_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).bind(
+        shareId,
+        workflowId,
+        shareData.userId,
+        currentUserId,
+        shareData.permissionLevel,
+        now
+      ).run();
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Share workflow error:', error);
+    return c.json(
+      { error: error instanceof Error ? error.message : 'Failed to share workflow' },
+      500
+    );
+  }
+});
+
+/**
+ * Get workflows shared with current user
+ * GET /api/workflows/shared
+ */
+workflows.get('/shared', async (c) => {
+  try {
+    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+
+    const sharedWorkflows = await c.env.DB.prepare(`
+      SELECT
+        w.id, w.name, w.description, w.status, w.created_at, w.updated_at,
+        ws.permission_level, ws.shared_by_user_id, u.name as shared_by_name
+      FROM workflows w
+      JOIN workflow_sharing ws ON w.id = ws.workflow_id
+      LEFT JOIN users u ON ws.shared_by_user_id = u.id
+      WHERE ws.shared_with_user_id = ?
+      ORDER BY ws.created_at DESC
+    `).bind(currentUserId).all();
+
+    return c.json({
+      workflows: sharedWorkflows.results.map(w => ({
+        id: w.id,
+        name: w.name,
+        description: w.description,
+        status: w.status,
+        permissionLevel: w.permission_level,
+        sharedBy: w.shared_by_user_id,
+        sharedByName: w.shared_by_name,
+        createdAt: (w.created_at as number) * 1000,
+        updatedAt: (w.updated_at as number) * 1000,
+      })),
+    });
+  } catch (error) {
+    console.error('Get shared workflows error:', error);
+    return c.json(
+      { error: error instanceof Error ? error.message : 'Failed to fetch shared workflows' },
+      500
+    );
+  }
+});
+
+/**
+ * Remove workflow sharing
+ * DELETE /api/workflows/:id/share/:userId
+ */
+workflows.delete('/:id/share/:userId', async (c) => {
+  try {
+    const workflowId = c.req.param('id');
+    const targetUserId = c.req.param('userId');
+    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+
+    // Check permissions
+    const workflowOwner = await c.env.DB.prepare(`
+      SELECT created_by FROM workflows WHERE id = ?
+    `).bind(workflowId).first();
+
+    const currentUser = await c.env.DB.prepare(`
+      SELECT role FROM users WHERE id = ?
+    `).bind(currentUserId).first();
+
+    if (!workflowOwner || (workflowOwner.created_by !== currentUserId && currentUser?.role !== 'owner' && currentUser?.role !== 'admin')) {
+      return c.json({ error: 'Insufficient permissions to manage sharing' }, 403);
+    }
+
+    const result = await c.env.DB.prepare(`
+      DELETE FROM workflow_sharing
+      WHERE workflow_id = ? AND shared_with_user_id = ?
+    `).bind(workflowId, targetUserId).run();
+
+    if (result.meta.changes === 0) {
+      return c.json({ error: 'Sharing not found' }, 404);
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Remove workflow sharing error:', error);
+    return c.json(
+      { error: error instanceof Error ? error.message : 'Failed to remove workflow sharing' },
+      500
+    );
+  }
+});
+
+/**
+ * Get workflow sharing permissions
+ * GET /api/workflows/:id/sharing
+ */
+workflows.get('/:id/sharing', async (c) => {
+  try {
+    const workflowId = c.req.param('id');
+    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+
+    // Check permissions
+    const workflowOwner = await c.env.DB.prepare(`
+      SELECT created_by FROM workflows WHERE id = ?
+    `).bind(workflowId).first();
+
+    const currentUser = await c.env.DB.prepare(`
+      SELECT role FROM users WHERE id = ?
+    `).bind(currentUserId).first();
+
+    if (!workflowOwner || (workflowOwner.created_by !== currentUserId && currentUser?.role !== 'owner' && currentUser?.role !== 'admin')) {
+      return c.json({ error: 'Insufficient permissions to view sharing' }, 403);
+    }
+
+    const sharing = await c.env.DB.prepare(`
+      SELECT
+        ws.id, ws.shared_with_user_id, ws.permission_level, ws.created_at,
+        u.name, u.email
+      FROM workflow_sharing ws
+      JOIN users u ON ws.shared_with_user_id = u.id
+      WHERE ws.workflow_id = ?
+      ORDER BY ws.created_at DESC
+    `).bind(workflowId).all();
+
+    return c.json({
+      sharing: sharing.results.map(s => ({
+        id: s.id,
+        userId: s.shared_with_user_id,
+        userName: s.name,
+        userEmail: s.email,
+        permissionLevel: s.permission_level,
+        createdAt: (s.created_at as number) * 1000,
+      })),
+    });
+  } catch (error) {
+    console.error('Get workflow sharing error:', error);
+    return c.json(
+      { error: error instanceof Error ? error.message : 'Failed to fetch workflow sharing' },
+      500
+    );
+  }
+});
+
 export default workflows;

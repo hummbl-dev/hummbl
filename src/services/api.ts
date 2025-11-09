@@ -261,11 +261,6 @@ export interface ApiKeyUpdateRequest {
   status?: string;
 }
 
-export interface ApiKeysResponse extends Result<{ keys: ApiKey[] }, Error> {}
-export interface ApiKeyResponse extends Result<ApiKey, Error> {}
-export interface ApiKeyStatsResponse extends Result<{ stats: ApiKeyStats[] }, Error> {}
-export interface ApiKeyValidationResponse extends Result<{ valid: boolean; keyId?: string; name?: string }, Error> {}
-
 /**
  * Get user's API keys
  */
@@ -365,6 +360,285 @@ export async function validateApiKey(service: string, key: string): Promise<{ va
   if (!response.ok && response.status !== 401) {
     const error = await response.json().catch(() => ({ error: 'Failed to validate API key' }));
     throw new Error(error.error || 'Failed to validate API key');
+  }
+
+  return response.json();
+}
+
+// User Management interfaces
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  status: string;
+  invitedBy: string | null;
+  joinedAt: number | null;
+  lastActiveAt: number | null;
+  workflowsCreated: number;
+  executionsRun: number;
+  createdAt: number;
+}
+
+export interface UserStats {
+  totalUsers: number;
+  activeUsers: number;
+  owners: number;
+  admins: number;
+  members: number;
+  viewers: number;
+}
+
+export interface Invite {
+  id: string;
+  email: string;
+  role: string;
+  invitedBy: string;
+  invitedByName: string;
+  expiresAt: number;
+  accepted: boolean;
+  acceptedAt: number | null;
+  createdAt: number;
+}
+
+export interface InviteCreateRequest {
+  email: string;
+  role: string;
+}
+
+export interface WorkflowShareRequest {
+  userId: string;
+  permissionLevel: 'view' | 'edit' | 'admin';
+}
+
+export interface SharedWorkflow {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  permissionLevel: string;
+  sharedBy: string;
+  sharedByName: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface WorkflowSharing {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  permissionLevel: string;
+  createdAt: number;
+}
+
+/**
+ * Get all users (admin/owner only)
+ */
+export async function getUsers(): Promise<{ users: User[] }> {
+  const response = await fetch(`${API_URL}/api/users`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch users' }));
+    throw new Error(error.error || 'Failed to fetch users');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get current user profile
+ */
+export async function getCurrentUser(): Promise<{ user: User }> {
+  const response = await fetch(`${API_URL}/api/users/me`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch user profile' }));
+    throw new Error(error.error || 'Failed to fetch user profile');
+  }
+
+  return response.json();
+}
+
+/**
+ * Update user (admin/owner only)
+ */
+export async function updateUser(id: string, updates: { name?: string; role?: string; status?: string }): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/users/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updates),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to update user' }));
+    throw new Error(error.error || 'Failed to update user');
+  }
+
+  return response.json();
+}
+
+/**
+ * Remove user from organization (admin/owner only)
+ */
+export async function deleteUser(id: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/users/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to delete user' }));
+    throw new Error(error.error || 'Failed to delete user');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get user statistics (admin/owner only)
+ */
+export async function getUserStats(): Promise<{ stats: UserStats }> {
+  const response = await fetch(`${API_URL}/api/users/stats`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch user stats' }));
+    throw new Error(error.error || 'Failed to fetch user stats');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get pending invitations (admin/owner only)
+ */
+export async function getInvites(): Promise<{ invites: Invite[] }> {
+  const response = await fetch(`${API_URL}/api/invites`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch invites' }));
+    throw new Error(error.error || 'Failed to fetch invites');
+  }
+
+  return response.json();
+}
+
+/**
+ * Send invitation (admin/owner only)
+ */
+export async function createInvite(inviteData: InviteCreateRequest): Promise<{ success: boolean; invite: Invite }> {
+  const response = await fetch(`${API_URL}/api/invites`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(inviteData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to create invitation' }));
+    throw new Error(error.error || 'Failed to create invitation');
+  }
+
+  return response.json();
+}
+
+/**
+ * Accept invitation
+ */
+export async function acceptInvite(token: string, userData: { name: string }): Promise<{ success: boolean; user: User }> {
+  const response = await fetch(`${API_URL}/api/invites/${token}/accept`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to accept invitation' }));
+    throw new Error(error.error || 'Failed to accept invitation');
+  }
+
+  return response.json();
+}
+
+/**
+ * Cancel invitation (admin/owner only)
+ */
+export async function deleteInvite(id: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/invites/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to cancel invitation' }));
+    throw new Error(error.error || 'Failed to cancel invitation');
+  }
+
+  return response.json();
+}
+
+/**
+ * Share workflow with team member
+ */
+export async function shareWorkflow(workflowId: string, shareData: WorkflowShareRequest): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/workflows/${workflowId}/share`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(shareData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to share workflow' }));
+    throw new Error(error.error || 'Failed to share workflow');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get workflows shared with current user
+ */
+export async function getSharedWorkflows(): Promise<{ workflows: SharedWorkflow[] }> {
+  const response = await fetch(`${API_URL}/api/workflows/shared`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch shared workflows' }));
+    throw new Error(error.error || 'Failed to fetch shared workflows');
+  }
+
+  return response.json();
+}
+
+/**
+ * Remove workflow sharing
+ */
+export async function removeWorkflowSharing(workflowId: string, userId: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/api/workflows/${workflowId}/share/${userId}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to remove workflow sharing' }));
+    throw new Error(error.error || 'Failed to remove workflow sharing');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get workflow sharing permissions
+ */
+export async function getWorkflowSharing(workflowId: string): Promise<{ sharing: WorkflowSharing[] }> {
+  const response = await fetch(`${API_URL}/api/workflows/${workflowId}/sharing`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch workflow sharing' }));
+    throw new Error(error.error || 'Failed to fetch workflow sharing');
   }
 
   return response.json();

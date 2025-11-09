@@ -10,7 +10,17 @@
 
 import { useState, useEffect } from 'react';
 import { telemetry } from '../services/telemetry-enhanced';
-import { getApiKeys, createApiKey, updateApiKey, deleteApiKey, getApiKeyStats, type ApiKey } from '../services/api';
+import {
+  Key,
+  Plus,
+  Trash2,
+  AlertCircle,
+  CheckCircle2,
+  Settings,
+  Shield,
+  Clock,
+} from 'lucide-react';
+import { getApiKeys, createApiKey, deleteApiKey, getApiKeyStats, type ApiKey } from '../services/api';
 
 export default function APIKeys() {
   const [keys, setKeys] = useState<ApiKey[]>([]);
@@ -22,7 +32,6 @@ export default function APIKeys() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showKey, setShowKey] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
 
   // Track page view
@@ -61,17 +70,6 @@ export default function APIKeys() {
   useEffect(() => {
     loadData();
   }, []);
-
-  // Copy key to clipboard
-  const handleCopy = (key: string, keyId: string) => {
-    navigator.clipboard.writeText(key);
-    telemetry.track({
-      component: 'api-keys',
-      action: 'copy_key',
-      properties: { keyId },
-    });
-    alert('API key copied to clipboard!');
-  };
 
   // Delete key
   const handleDelete = async (keyId: string) => {
