@@ -8,6 +8,7 @@ interface WorkflowStore {
   agents: Agent[];
   executionLogs: ExecutionLog[];
   templates: WorkflowTemplate[];
+  errors: string[];
 
   // Workflow operations
   addWorkflow: (workflow: Omit<Workflow, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -37,7 +38,42 @@ interface WorkflowStore {
   // Template operations
   addTemplate: (template: WorkflowTemplate) => void;
   createWorkflowFromTemplate: (templateId: string, name: string) => void;
+
+  // Error handling
+  addError: (error: string) => void;
+  clearErrors: () => void;
+  clearOldLogs: (daysToKeep?: number) => void;
 }
+
+// Helper function to convert date strings back to Date objects
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const deserializeDates = (obj: any): any => {
+  if (obj === null || obj === undefined) return obj;
+
+  if (typeof obj === 'string') {
+    // Check if string looks like ISO date
+    const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+    if (dateRegex.test(obj)) {
+      return new Date(obj);
+    }
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(deserializeDates);
+  }
+
+  if (typeof obj === 'object') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: any = {};
+    for (const key in obj) {
+      result[key] = deserializeDates(obj[key]);
+    }
+    return result;
+  }
+
+  return obj;
+};
 
 // Safe localStorage wrapper with error handling
 const safeStorage = {
@@ -72,31 +108,58 @@ export const useWorkflowStore = create<WorkflowStore>()(
   agents: [],
   executionLogs: [],
   templates: [],
+  errors: [],
 
   // Workflow operations
   addWorkflow: (workflow) => {
-    const newWorkflow: Workflow = {
-      ...workflow,
-      id: uuidv4(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    set((state) => ({ workflows: [...state.workflows, newWorkflow] }));
+    try {
+      const newWorkflow: Workflow = {
+        ...workflow,
+        id: uuidv4(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      set((state) => ({ workflows: [...state.workflows, newWorkflow] }));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to add workflow';
+      get().addError(errorMessage);
+      console.error('Error adding workflow:', error);
+    }
   },
 
   updateWorkflow: (id, updates) => {
-    set((state) => ({
-      workflows: state.workflows.map((w) =>
-        w.id === id ? { ...w, ...updates, updatedAt: new Date() } : w
-      ),
-    }));
+    try {
+      const workflow = get().getWorkflow(id);
+      if (!workflow) {
+        throw new Error(`Workflow with id ${id} not found`);
+      }
+      set((state) => ({
+        workflows: state.workflows.map((w) =>
+          w.id === id ? { ...w, ...updates, updatedAt: new Date() } : w
+        ),
+      }));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update workflow';
+      get().addError(errorMessage);
+      console.error('Error updating workflow:', error);
+    }
   },
 
   deleteWorkflow: (id) => {
-    set((state) => ({
-      workflows: state.workflows.filter((w) => w.id !== id),
-      executionLogs: state.executionLogs.filter((log) => log.workflowId !== id),
-    }));
+    try {
+      const workflow = get().getWorkflow(id);
+      if (!workflow) {
+        throw new Error(`Workflow with id ${id} not found`);
+      }
+      set((state) => ({
+        workflows: state.workflows.filter((w) => w.id !== id),
+        executionLogs: state.executionLogs.filter((log) => log.workflowId !== id),
+      }));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete workflow';
+      get().addError(errorMessage);
+      console.error('Error deleting workflow:', error);
+    }
   },
 
   getWorkflow: (id) => {
@@ -105,27 +168,53 @@ export const useWorkflowStore = create<WorkflowStore>()(
 
   // Agent operations
   addAgent: (agent) => {
-    const newAgent: Agent = {
-      ...agent,
-      id: uuidv4(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    set((state) => ({ agents: [...state.agents, newAgent] }));
+    try {
+      const newAgent: Agent = {
+        ...agent,
+        id: uuidv4(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      set((state) => ({ agents: [...state.agents, newAgent] }));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to add agent';
+      get().addError(errorMessage);
+      console.error('Error adding agent:', error);
+    }
   },
 
   updateAgent: (id, updates) => {
-    set((state) => ({
-      agents: state.agents.map((a) =>
-        a.id === id ? { ...a, ...updates, updatedAt: new Date() } : a
-      ),
-    }));
+    try {
+      const agent = get().getAgent(id);
+      if (!agent) {
+        throw new Error(`Agent with id ${id} not found`);
+      }
+      set((state) => ({
+        agents: state.agents.map((a) =>
+          a.id === id ? { ...a, ...updates, updatedAt: new Date() } : a
+        ),
+      }));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update agent';
+      get().addError(errorMessage);
+      console.error('Error updating agent:', error);
+    }
   },
 
   deleteAgent: (id) => {
-    set((state) => ({
-      agents: state.agents.filter((a) => a.id !== id),
-    }));
+    try {
+      const agent = get().getAgent(id);
+      if (!agent) {
+        throw new Error(`Agent with id ${id} not found`);
+      }
+      set((state) => ({
+        agents: state.agents.filter((a) => a.id !== id),
+      }));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete agent';
+      get().addError(errorMessage);
+      console.error('Error deleting agent:', error);
+    }
   },
 
   getAgent: (id) => {
@@ -163,71 +252,119 @@ export const useWorkflowStore = create<WorkflowStore>()(
 
   // Execution operations
   startWorkflow: (id) => {
-    const workflow = get().getWorkflow(id);
-    if (!workflow) return;
+    try {
+      const workflow = get().getWorkflow(id);
+      if (!workflow) {
+        throw new Error(`Workflow with id ${id} not found`);
+      }
 
-    set((state) => ({
-      workflows: state.workflows.map((w) =>
-        w.id === id
-          ? {
-              ...w,
-              status: 'active',
-              startedAt: new Date(),
-              updatedAt: new Date(),
-            }
-          : w
-      ),
-    }));
+      if (workflow.tasks.length === 0) {
+        throw new Error('Cannot start workflow: No tasks configured');
+      }
 
-    get().addLog({
-      workflowId: id,
-      taskId: '',
-      level: 'info',
-      message: `Workflow "${workflow.name}" started`,
-    });
+      if (workflow.agents.length === 0) {
+        throw new Error('Cannot start workflow: No agents configured');
+      }
+
+      set((state) => ({
+        workflows: state.workflows.map((w) =>
+          w.id === id
+            ? {
+                ...w,
+                status: 'active',
+                startedAt: new Date(),
+                updatedAt: new Date(),
+              }
+            : w
+        ),
+      }));
+
+      get().addLog({
+        workflowId: id,
+        taskId: '',
+        level: 'info',
+        message: `Workflow "${workflow.name}" started`,
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to start workflow';
+      get().addError(errorMessage);
+      console.error('Error starting workflow:', error);
+
+      // Mark workflow as failed if it exists
+      const workflow = get().getWorkflow(id);
+      if (workflow) {
+        get().updateWorkflow(id, { status: 'failed' });
+        get().addLog({
+          workflowId: id,
+          taskId: '',
+          level: 'error',
+          message: `Failed to start workflow: ${errorMessage}`,
+        });
+      }
+    }
   },
 
   pauseWorkflow: (id) => {
-    const workflow = get().getWorkflow(id);
-    if (!workflow) return;
+    try {
+      const workflow = get().getWorkflow(id);
+      if (!workflow) {
+        throw new Error(`Workflow with id ${id} not found`);
+      }
 
-    set((state) => ({
-      workflows: state.workflows.map((w) =>
-        w.id === id ? { ...w, status: 'paused', updatedAt: new Date() } : w
-      ),
-    }));
+      if (workflow.status !== 'active') {
+        throw new Error('Can only pause active workflows');
+      }
 
-    get().addLog({
-      workflowId: id,
-      taskId: '',
-      level: 'info',
-      message: `Workflow "${workflow.name}" paused`,
-    });
+      set((state) => ({
+        workflows: state.workflows.map((w) =>
+          w.id === id ? { ...w, status: 'paused', updatedAt: new Date() } : w
+        ),
+      }));
+
+      get().addLog({
+        workflowId: id,
+        taskId: '',
+        level: 'info',
+        message: `Workflow "${workflow.name}" paused`,
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to pause workflow';
+      get().addError(errorMessage);
+      console.error('Error pausing workflow:', error);
+    }
   },
 
   stopWorkflow: (id) => {
-    const workflow = get().getWorkflow(id);
-    if (!workflow) return;
+    try {
+      const workflow = get().getWorkflow(id);
+      if (!workflow) {
+        throw new Error(`Workflow with id ${id} not found`);
+      }
 
-    set((state) => ({
-      workflows: state.workflows.map((w) =>
-        w.id === id
-          ? {
-              ...w,
-              status: 'completed',
-              completedAt: new Date(),
-              updatedAt: new Date(),
-            }
-          : w
-      ),
-    }));
+      set((state) => ({
+        workflows: state.workflows.map((w) =>
+          w.id === id
+            ? {
+                ...w,
+                status: 'completed',
+                completedAt: new Date(),
+                updatedAt: new Date(),
+              }
+            : w
+        ),
+      }));
 
-    get().addLog({
-      workflowId: id,
-      taskId: '',
-      level: 'info',
-      message: `Workflow "${workflow.name}" completed`,
-    });
+      get().addLog({
+        workflowId: id,
+        taskId: '',
+        level: 'info',
+        message: `Workflow "${workflow.name}" completed`,
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to stop workflow';
+      get().addError(errorMessage);
+      console.error('Error stopping workflow:', error);
+    }
   },
 
   // Log operations
@@ -250,52 +387,68 @@ export const useWorkflowStore = create<WorkflowStore>()(
   },
 
   createWorkflowFromTemplate: (templateId, name) => {
-    const template = get().templates.find((t) => t.id === templateId);
-    if (!template) return;
+    try {
+      const template = get().templates.find((t) => t.id === templateId);
+      if (!template) {
+        throw new Error(`Template with id ${templateId} not found`);
+      }
 
-    // Create agents with new IDs
-    const agents: Agent[] = template.agents.map((a) => ({
-      ...a,
-      id: uuidv4(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }));
+      const agents: Agent[] = template.agents.map((a) => ({
+        ...a,
+        id: uuidv4(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }));
 
-    // Create tasks with new IDs and assign agents by index
-    const tasks: Task[] = template.tasks.map((t, index) => {
-      const taskId = uuidv4();
-      // Assign agent by index (first task gets first agent, etc.)
-      const agentId = agents[index % agents.length]?.id || agents[0]?.id || '';
-      
-      return {
+      const tasks: Task[] = template.tasks.map((t) => ({
         ...t,
-        id: taskId,
-        agentId, // Assign the agent
+        id: uuidv4(),
         status: 'pending',
         retryCount: 0,
-        dependencies: [], // Will update below
-      };
-    });
+      }));
 
-    // Update task dependencies from indices to actual task IDs
-    tasks.forEach((task, index) => {
-      const templateTask = template.tasks[index];
-      if (templateTask.dependencies && templateTask.dependencies.length > 0) {
-        task.dependencies = templateTask.dependencies.map((depIndex) => {
-          const depIndexNum = parseInt(depIndex, 10);
-          return tasks[depIndexNum]?.id || depIndex;
-        });
-      }
-    });
+      get().addWorkflow({
+        name,
+        description: template.description,
+        status: 'draft',
+        tasks,
+        agents,
+        tags: template.tags,
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create workflow from template';
+      get().addError(errorMessage);
+      console.error('Error creating workflow from template:', error);
+    }
+  },
 
-    get().addWorkflow({
-      name,
-      description: template.description,
-      status: 'draft',
-      tasks,
-      agents,
-      tags: template.tags,
-    });
+  // Error handling
+  addError: (error: string) => {
+    set((state) => ({
+      errors: [...state.errors, error],
+    }));
+
+    // Auto-clear error after 10 seconds
+    setTimeout(() => {
+      set((state) => ({
+        errors: state.errors.filter((e) => e !== error),
+      }));
+    }, 10000);
+  },
+
+  clearErrors: () => {
+    set({ errors: [] });
+  },
+
+  clearOldLogs: (daysToKeep = 7) => {
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
+    
+    set((state) => ({
+      executionLogs: state.executionLogs.filter(
+        (log) => log.timestamp >= cutoffDate
+      ),
+    }));
   },
 }),
     {
@@ -305,15 +458,16 @@ export const useWorkflowStore = create<WorkflowStore>()(
         workflows: state.workflows,
         agents: state.agents,
         executionLogs: state.executionLogs,
+        templates: state.templates,
       }),
-      onRehydrateStorage: () => {
-        return (state, error) => {
-          if (error) {
-            console.error('Error rehydrating store:', error);
-          } else if (state) {
-            console.log('Store rehydrated successfully');
-          }
-        };
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          // Convert date strings back to Date objects after rehydration
+          state.workflows = deserializeDates(state.workflows);
+          state.agents = deserializeDates(state.agents);
+          state.executionLogs = deserializeDates(state.executionLogs);
+          console.log('Store rehydrated successfully');
+        }
       },
     }
   )

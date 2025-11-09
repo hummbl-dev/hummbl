@@ -1,3 +1,6 @@
+import { Component, ErrorInfo, ReactNode } from 'react';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+
 /**
  * Error Boundary Component
  * 
@@ -7,9 +10,6 @@
  * 
  * HUMMBL Systems
  */
-
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 
 interface Props {
   children: ReactNode;
