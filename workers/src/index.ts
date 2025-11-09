@@ -11,14 +11,15 @@ import workflows from './routes/workflows';
 import executions from './routes/executions';
 import telemetry from './routes/telemetry';
 import tokens from './routes/tokens';
+import notifications from './routes/notifications';
 
 // Create Hono app with environment bindings
 const app = new Hono<{ Bindings: Env }>();
 
 // CORS middleware - Allow frontend to call backend
 app.use('/*', cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://hummbl.io', 'https://*.hummbl.io'],
-  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://hummbl.io', 'https://*.hummbl.io', 'https://hummbl.vercel.app', 'https://*.vercel.app'],
+  allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
   exposeHeaders: ['Content-Length'],
   maxAge: 600,
@@ -40,6 +41,7 @@ app.route('/api/workflows', workflows);
 app.route('/api/executions', executions);
 app.route('/api/telemetry', telemetry);
 app.route('/api/tokens', tokens);
+app.route('/api/notifications', notifications);
 
 // 404 handler
 app.notFound((c) => {
