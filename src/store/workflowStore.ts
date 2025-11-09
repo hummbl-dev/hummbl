@@ -71,6 +71,8 @@ const deserializeDates = (obj: any): any => {
   }
 
   return obj;
+};
+
 // Safe localStorage wrapper with error handling
 const safeStorage = {
   getItem: (name: string): string | null => {
@@ -439,41 +441,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
   clearOldLogs: (daysToKeep = 7) => {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
-    // Create agents with new IDs
-    const agents: Agent[] = template.agents.map((a) => ({
-      ...a,
-      id: uuidv4(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }));
-
-    // Create tasks with new IDs and assign agents by index
-    const tasks: Task[] = template.tasks.map((t, index) => {
-      const taskId = uuidv4();
-      // Assign agent by index (first task gets first agent, etc.)
-      const agentId = agents[index % agents.length]?.id || agents[0]?.id || '';
-      
-      return {
-        ...t,
-        id: taskId,
-        agentId, // Assign the agent
-        status: 'pending',
-        retryCount: 0,
-        dependencies: [], // Will update below
-      };
-    });
-
-    // Update task dependencies from indices to actual task IDs
-    tasks.forEach((task, index) => {
-      const templateTask = template.tasks[index];
-      if (templateTask.dependencies && templateTask.dependencies.length > 0) {
-        task.dependencies = templateTask.dependencies.map((depIndex) => {
-          const depIndexNum = parseInt(depIndex, 10);
-          return tasks[depIndexNum]?.id || depIndex;
-        });
-      }
-    });
-
+    
     set((state) => ({
       executionLogs: state.executionLogs.filter(
         (log) => log.timestamp >= cutoffDate
@@ -483,7 +451,6 @@ export const useWorkflowStore = create<WorkflowStore>()(
 }),
     {
       name: 'hummbl-workflow-storage',
-      storage: createJSONStorage(() => localStorage),
       storage: createJSONStorage(() => safeStorage),
       partialize: (state) => ({
         workflows: state.workflows,
@@ -497,16 +464,8 @@ export const useWorkflowStore = create<WorkflowStore>()(
           state.workflows = deserializeDates(state.workflows);
           state.agents = deserializeDates(state.agents);
           state.executionLogs = deserializeDates(state.executionLogs);
+          console.log('Store rehydrated successfully');
         }
-      }),
-      onRehydrateStorage: () => {
-        return (state, error) => {
-          if (error) {
-            console.error('Error rehydrating store:', error);
-          } else if (state) {
-            console.log('Store rehydrated successfully');
-          }
-        };
       },
     }
   )
