@@ -10,14 +10,29 @@
 
 import { useState, useEffect } from 'react';
 import { telemetry } from '../services/telemetry-enhanced';
-import {
-  getNotifications,
-  markNotificationRead,
-  markAllNotificationsRead,
-  deleteNotification,
-  clearReadNotifications,
-  type Notification as ApiNotification,
-} from '../services/api';
+
+// Placeholder types and functions until API is implemented
+type ApiNotification = {
+  id: string;
+  type: string;
+  category: string;
+  title: string;
+  message: string;
+  read: boolean;
+  timestamp: Date;
+  createdAt: number;
+  actionUrl?: string;
+  actionLabel?: string;
+};
+
+const getNotifications = async (_unreadOnly?: boolean, _category?: string): Promise<{ notifications: ApiNotification[]; unreadCount: number }> => ({
+  notifications: [],
+  unreadCount: 0
+});
+const markNotificationRead = async (_id: string): Promise<void> => {};
+const markAllNotificationsRead = async (): Promise<void> => {};
+const deleteNotification = async (_id: string): Promise<void> => {};
+const clearReadNotifications = async (): Promise<void> => {};
 import {
   Bell,
   Check,
@@ -357,15 +372,15 @@ function NotificationCard({
     },
   };
 
-  const categoryColors = {
+  const categoryColors: Record<string, string> = {
     workflow: 'bg-blue-100 text-blue-700',
     system: 'bg-purple-100 text-purple-700',
     team: 'bg-green-100 text-green-700',
     billing: 'bg-amber-100 text-amber-700',
   };
 
-  const config = typeConfig[notification.type];
-  const categoryColor = categoryColors[notification.category];
+  const config = typeConfig[notification.type as keyof typeof typeConfig] || typeConfig.info;
+  const categoryColor = categoryColors[notification.category] || 'bg-gray-100 text-gray-700';
 
   return (
     <div

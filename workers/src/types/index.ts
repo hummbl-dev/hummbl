@@ -20,7 +20,7 @@ export type Result<T, E = string> =
 
 // Workflow execution status
 export type ExecutionStatus = 'pending' | 'running' | 'completed' | 'failed';
-export type TaskStatus = 'pending' | 'running' | 'completed' | 'failed';
+export type TaskStatus = 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
 
 // Database models
 export interface WorkflowDB {

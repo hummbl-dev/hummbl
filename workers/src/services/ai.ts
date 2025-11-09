@@ -6,6 +6,7 @@
  */
 
 import type { AIProvider, AIResponse, Result } from '../types';
+import { fetchWithTimeout } from '../lib/http';
 
 /**
  * Call AI API (server-side, CORS-free)
@@ -50,7 +51,7 @@ async function callClaude(
   maxTokens: number = 2000
 ): Promise<Result<AIResponse>> {
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +71,7 @@ async function callClaude(
           },
         ],
       }),
-    });
+    }, 60000);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -114,7 +115,7 @@ async function callOpenAI(
   maxTokens: number = 2000
 ): Promise<Result<AIResponse>> {
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetchWithTimeout('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -137,7 +138,7 @@ async function callOpenAI(
           },
         ],
       }),
-    });
+    }, 60000);
 
     if (!response.ok) {
       const errorText = await response.text();

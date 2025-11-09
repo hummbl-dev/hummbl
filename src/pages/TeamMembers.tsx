@@ -10,7 +10,7 @@
 
 import { useState, useEffect } from 'react';
 import { telemetry } from '../services/telemetry-enhanced';
-import { getUsers, getUserStats, getInvites, createInvite, deleteInvite, type User, type UserStats, type Invite } from '../services/api';
+import { getUsers, getUserStats, getInvites, createInvite, type User, type UserStats, type Invite } from '../services/api';
 import {
   Users,
   UserPlus,

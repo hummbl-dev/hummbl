@@ -9,6 +9,7 @@
  */
 
 import { callAI, createProvider, type AIResponse } from './ai';
+import { retryWithBackoff, isRetryableError } from '../utils/http';
 import type { Task, Agent } from '../types/workflow';
 
 export interface TaskExecutionContext {
@@ -190,7 +191,7 @@ const parseTaskOutput = (content: string): unknown => {
 };
 
 /**
- * Retry failed task
+ * Retry failed task with exponential backoff
  */
 export const retryTask = async (
   task: Task,
@@ -203,13 +204,38 @@ export const retryTask = async (
     return {
       ...previousResult,
       status: 'failed',
-      error: `Max retries (${task.maxRetries}) exceeded`,
+      error: `Max retries (${task.maxRetries}) exceeded. Last error: ${previousResult.error}`,
+    };
+  }
+
+  // Only retry if error is retryable
+  if (previousResult.error && !isRetryableError(previousResult.error)) {
+    return {
+      ...previousResult,
+      status: 'failed',
+      error: `Non-retryable error: ${previousResult.error}`,
     };
   }
 
   // Increment retry count
   task.retryCount++;
 
-  // Execute task again
-  return await executeTask(task, agent, context);
+  try {
+    // Use exponential backoff for retry
+    const result = await retryWithBackoff(
+      async () => executeTask(task, agent, context),
+      1, // Only do 1 retry attempt here (already tracking retries in task)
+      1000 * task.retryCount // Base delay increases with retry count
+    );
+    
+    return result;
+  } catch (error) {
+    return {
+      taskId: task.id,
+      status: 'failed',
+      error: error instanceof Error ? error.message : 'Retry failed',
+      retryCount: task.retryCount,
+      completedAt: new Date(),
+    };
+  }
 };

@@ -290,3 +290,42 @@ export const trackOnboarding = telemetry.trackOnboarding.bind(telemetry);
 export const trackDelight = telemetry.trackDelightFeedback.bind(telemetry);
 export const trackVisualBuilder = telemetry.trackVisualBuilderUsage.bind(telemetry);
 export const trackTemplate = telemetry.trackTemplateUsage.bind(telemetry);
+
+/**
+ * Error Report Interface
+ */
+export interface ErrorReport {
+  message: string;
+  stack?: string;
+  componentStack?: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  context?: Record<string, any>;
+  userId?: string;
+  url?: string;
+  userAgent?: string;
+}
+
+/**
+ * Track error event
+ */
+export function trackError(error: Error | ErrorReport, context?: Record<string, unknown>): void {
+  if (error instanceof Error) {
+    track('error', {
+      message: error.message,
+      stack: error.stack || '',
+      severity: 'medium' as const,
+      ...(context as Record<string, string | number | boolean>),
+    });
+  } else {
+    track('error', {
+      message: error.message,
+      stack: error.stack || '',
+      componentStack: error.componentStack || '',
+      severity: error.severity,
+      url: error.url || window.location.href,
+      userAgent: error.userAgent || navigator.userAgent,
+      ...(error.context as Record<string, string | number | boolean>),
+      ...(context as Record<string, string | number | boolean>),
+    });
+  }
+}

@@ -1,5 +1,9 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { createLogger } from '../utils/logger';
+import { trackError } from '../services/telemetry';
+
+const logger = createLogger('ErrorBoundary');
 
 /**
  * Error Boundary Component
@@ -35,11 +39,21 @@ class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-    this.setState({
-      error,
-      errorInfo,
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // Log error with production error tracking hook
+    logger.error('App error caught by boundary', error, {
+      componentStack: errorInfo.componentStack,
+    });
+
+    // Track error in telemetry
+    trackError({
+      message: error.message,
+      stack: error.stack || undefined,
+      componentStack: errorInfo.componentStack || undefined,
+      severity: 'critical',
+      context: {
+        boundary: 'app',
+      },
     });
   }
 

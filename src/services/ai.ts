@@ -8,6 +8,8 @@
  * HUMMBL Systems
  */
 
+import { fetchWithTimeout } from '../utils/http';
+
 export interface AIProvider {
   name: string;
   model: string;
@@ -87,7 +89,7 @@ const callClaude = async (
   temperature?: number,
   maxTokens?: number
 ): Promise<AIResponse> => {
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -107,7 +109,7 @@ const callClaude = async (
         },
       ],
     }),
-  });
+  }, 60000);
 
   if (!response.ok) {
     const error = await response.text();
@@ -134,7 +136,7 @@ const callOpenAI = async (
   temperature?: number,
   maxTokens?: number
 ): Promise<AIResponse> => {
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+  const response = await fetchWithTimeout('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -153,7 +155,7 @@ const callOpenAI = async (
         },
       ],
     }),
-  });
+  }, 60000);
 
   if (!response.ok) {
     const error = await response.text();

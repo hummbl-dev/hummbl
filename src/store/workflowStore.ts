@@ -2,6 +2,9 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
 import { Workflow, Agent, Task, ExecutionLog, WorkflowTemplate } from '../types/workflow';
+import { createLogger } from '../utils/logger';
+
+const logger = createLogger('WorkflowStore');
 
 interface WorkflowStore {
   workflows: Workflow[];
@@ -75,13 +78,13 @@ const deserializeDates = (obj: any): any => {
   return obj;
 };
 
-// Safe localStorage wrapper with error handling
+// Safe localStorage wrapper with error handling and quota management
 const safeStorage = {
   getItem: (name: string): string | null => {
     try {
       return localStorage.getItem(name);
     } catch (error) {
-      console.error('Error reading from localStorage:', error);
+      logger.error('Error reading from localStorage', error);
       return null;
     }
   },
@@ -89,14 +92,36 @@ const safeStorage = {
     try {
       localStorage.setItem(name, value);
     } catch (error) {
-      console.error('Error writing to localStorage:', error);
+      // Check if quota exceeded
+      if (error instanceof DOMException && (
+        error.code === 22 || // QUOTA_EXCEEDED_ERR
+        error.name === 'QuotaExceededError'
+      )) {
+        logger.warn('localStorage quota exceeded. Attempting to free space...');
+        
+        // Try to clear old logs first
+        const store = useWorkflowStore.getState();
+        store.clearOldLogs(7); // Clear logs older than 7 days
+        
+        // Retry once
+        try {
+          localStorage.setItem(name, value);
+          logger.info('Successfully saved after clearing old data');
+        } catch (retryError) {
+          logger.error('localStorage quota still exceeded after cleanup', retryError);
+          // Show user-friendly error
+          store.addError('Storage quota exceeded. Please clear old workflows or logs to free space.');
+        }
+      } else {
+        logger.error('Error writing to localStorage', error);
+      }
     }
   },
   removeItem: (name: string): void => {
     try {
       localStorage.removeItem(name);
     } catch (error) {
-      console.error('Error removing from localStorage:', error);
+      logger.error('Error removing from localStorage', error);
     }
   },
 };
@@ -123,7 +148,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to add workflow';
       get().addError(errorMessage);
-      console.error('Error adding workflow:', error);
+      logger.error('Error adding workflow:', error);
     }
   },
 
@@ -141,7 +166,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to update workflow';
       get().addError(errorMessage);
-      console.error('Error updating workflow:', error);
+      logger.error('Error updating workflow:', error);
     }
   },
 
@@ -158,7 +183,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to delete workflow';
       get().addError(errorMessage);
-      console.error('Error deleting workflow:', error);
+      logger.error('Error deleting workflow:', error);
     }
   },
 
@@ -179,7 +204,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to add agent';
       get().addError(errorMessage);
-      console.error('Error adding agent:', error);
+      logger.error('Error adding agent:', error);
     }
   },
 
@@ -197,7 +222,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to update agent';
       get().addError(errorMessage);
-      console.error('Error updating agent:', error);
+      logger.error('Error updating agent:', error);
     }
   },
 
@@ -213,7 +238,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to delete agent';
       get().addError(errorMessage);
-      console.error('Error deleting agent:', error);
+      logger.error('Error deleting agent:', error);
     }
   },
 
@@ -288,7 +313,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to start workflow';
       get().addError(errorMessage);
-      console.error('Error starting workflow:', error);
+      logger.error('Error starting workflow:', error);
 
       // Mark workflow as failed if it exists
       const workflow = get().getWorkflow(id);
@@ -330,7 +355,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to pause workflow';
       get().addError(errorMessage);
-      console.error('Error pausing workflow:', error);
+      logger.error('Error pausing workflow:', error);
     }
   },
 
@@ -363,7 +388,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to stop workflow';
       get().addError(errorMessage);
-      console.error('Error stopping workflow:', error);
+      logger.error('Error stopping workflow:', error);
     }
   },
 
@@ -418,7 +443,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to create workflow from template';
       get().addError(errorMessage);
-      console.error('Error creating workflow from template:', error);
+      logger.error('Error creating workflow from template:', error);
     }
   },
 
@@ -466,7 +491,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
           state.workflows = deserializeDates(state.workflows);
           state.agents = deserializeDates(state.agents);
           state.executionLogs = deserializeDates(state.executionLogs);
-          console.log('Store rehydrated successfully');
+          logger.info('Store rehydrated successfully');
         }
       },
     }

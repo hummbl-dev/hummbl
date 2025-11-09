@@ -1,27 +1,40 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import Layout from './components/Layout/Layout';
 import ErrorBoundary from './components/ErrorBoundary';
+import PageErrorBoundary from './components/PageErrorBoundary';
 import ErrorNotification from './components/ErrorNotification';
-import Dashboard from './pages/Dashboard';
-import MentalModels from './pages/MentalModels';
-import WorkflowList from './pages/WorkflowList';
-import WorkflowDetail from './pages/WorkflowDetail';
-import WorkflowEditorFull from './pages/WorkflowEditorFull';
-import AgentManagement from './pages/AgentManagement';
-import Templates from './pages/Templates';
-import Settings from './pages/Settings';
-import Analytics from './pages/Analytics';
-import TokenUsage from './pages/TokenUsage';
-import ExecutionMonitor from './pages/ExecutionMonitor';
-import ErrorLogs from './pages/ErrorLogs';
-import TeamMembers from './pages/TeamMembers';
-import APIKeys from './pages/APIKeys';
-import Notifications from './pages/Notifications';
-import NotFound from './pages/NotFound';
 import { useWorkflowStore } from './store/workflowStore';
 import { workflowTemplates } from './data/templates';
 import { usePageTracking } from './hooks/usePageTracking';
+
+// Lazy load pages for code splitting and improved initial load time
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const MentalModels = lazy(() => import('./pages/MentalModels'));
+const WorkflowList = lazy(() => import('./pages/WorkflowList'));
+const WorkflowDetail = lazy(() => import('./pages/WorkflowDetail'));
+const WorkflowEditorFull = lazy(() => import('./pages/WorkflowEditorFull'));
+const AgentManagement = lazy(() => import('./pages/AgentManagement'));
+const Templates = lazy(() => import('./pages/Templates'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Analytics = lazy(() => import('./pages/Analytics'));
+const TokenUsage = lazy(() => import('./pages/TokenUsage'));
+const ExecutionMonitor = lazy(() => import('./pages/ExecutionMonitor'));
+const ErrorLogs = lazy(() => import('./pages/ErrorLogs'));
+const TeamMembers = lazy(() => import('./pages/TeamMembers'));
+const APIKeys = lazy(() => import('./pages/APIKeys'));
+const Notifications = lazy(() => import('./pages/Notifications'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="text-center">
+      <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <p className="mt-4 text-gray-600">Loading...</p>
+    </div>
+  </div>
+);
 
 // Main content of the app
 const AppContent: React.FC = () => {
@@ -43,25 +56,26 @@ const AppContent: React.FC = () => {
     <>
       <ErrorNotification />
       <Layout>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/mental-models" element={<MentalModels />} />
-          <Route path="/workflows" element={<WorkflowList />} />
-          <Route path="/workflows/new" element={<WorkflowEditorFull />} />
-          <Route path="/workflows/:id" element={<WorkflowDetail />} />
-          <Route path="/workflows/:id/edit" element={<WorkflowEditorFull />} />
-          <Route path="/agents" element={<AgentManagement />} />
-          <Route path="/templates" element={<Templates />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/analytics/tokens" element={<TokenUsage />} />
-          <Route path="/monitor" element={<ExecutionMonitor />} />
-          <Route path="/logs/errors" element={<ErrorLogs />} />
-          <Route path="/team" element={<TeamMembers />} />
-          <Route path="/settings/api-keys" element={<APIKeys />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<PageErrorBoundary pageName="Dashboard"><Dashboard /></PageErrorBoundary>} />
+            <Route path="/mental-models" element={<PageErrorBoundary pageName="Mental Models"><MentalModels /></PageErrorBoundary>} />
+            <Route path="/workflows" element={<PageErrorBoundary pageName="Workflows"><WorkflowList /></PageErrorBoundary>} />
+            <Route path="/workflows/new" element={<PageErrorBoundary pageName="Workflow Editor"><WorkflowEditorFull /></PageErrorBoundary>} />
+            <Route path="/workflows/:id" element={<PageErrorBoundary pageName="Workflow Details"><WorkflowDetail /></PageErrorBoundary>} />
+            <Route path="/agents" element={<PageErrorBoundary pageName="Agents"><AgentManagement /></PageErrorBoundary>} />
+            <Route path="/templates" element={<PageErrorBoundary pageName="Templates"><Templates /></PageErrorBoundary>} />
+            <Route path="/analytics" element={<PageErrorBoundary pageName="Analytics"><Analytics /></PageErrorBoundary>} />
+            <Route path="/execution-monitor" element={<PageErrorBoundary pageName="Execution Monitor"><ExecutionMonitor /></PageErrorBoundary>} />
+            <Route path="/error-logs" element={<PageErrorBoundary pageName="Error Logs"><ErrorLogs /></PageErrorBoundary>} />
+            <Route path="/team" element={<PageErrorBoundary pageName="Team"><TeamMembers /></PageErrorBoundary>} />
+            <Route path="/token-usage" element={<PageErrorBoundary pageName="Token Usage"><TokenUsage /></PageErrorBoundary>} />
+            <Route path="/settings/api-keys" element={<PageErrorBoundary pageName="API Keys"><APIKeys /></PageErrorBoundary>} />
+            <Route path="/notifications" element={<PageErrorBoundary pageName="Notifications"><Notifications /></PageErrorBoundary>} />
+            <Route path="/settings" element={<PageErrorBoundary pageName="Settings"><Settings /></PageErrorBoundary>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </Layout>
     </>
   );

@@ -8,8 +8,12 @@ import { Hono } from 'hono';
 import type { Env, ExecuteWorkflowRequest, Task, Agent } from '../types';
 import { createExecution, createTaskResult, updateTaskResult, updateExecutionStatus } from '../lib/db';
 import { callAI, createAIProvider } from '../services/ai';
+import { rateLimit, RATE_LIMITS } from '../lib/rateLimit';
 
 const workflows = new Hono<{ Bindings: Env }>();
+
+// Apply rate limiting to execution endpoint
+workflows.use('/:id/execute', rateLimit(RATE_LIMITS.execution));
 
 /**
  * Execute workflow endpoint
@@ -17,8 +21,23 @@ const workflows = new Hono<{ Bindings: Env }>();
  */
 workflows.post('/:id/execute', async (c) => {
   try {
-    const body = await c.req.json<ExecuteWorkflowRequest>();
-    const { workflowData, apiKeys, input } = body;
+    const body = await c.req.json();
+    
+    // Validate request body
+    const { validate, ExecuteWorkflowRequestSchema } = await import('../lib/validation');
+    const validation = validate(ExecuteWorkflowRequestSchema, body);
+    
+    if (!validation.success) {
+      return c.json(
+        {
+          error: 'Validation failed',
+          details: validation.errors,
+        },
+        400
+      );
+    }
+    
+    const { workflowData, apiKeys, input } = validation.data;
 
     // Generate execution ID
     const executionId = crypto.randomUUID();
@@ -62,7 +81,8 @@ workflows.post('/:id/execute', async (c) => {
       message: 'Workflow execution started',
     });
   } catch (error) {
-    console.error('Execute workflow error:', error);
+    const { logger } = await import('../lib/logger');
+    logger.error('Execute workflow error', error, { workflowId: c.req.param('id') });
     return c.json(
       { error: error instanceof Error ? error.message : 'Unknown error' },
       500
@@ -81,6 +101,7 @@ export async function executeWorkflow(
   apiKeys: { anthropic?: string; openai?: string },
   input?: Record<string, unknown>
 ): Promise<void> {
+  // Wrap everything in try-catch to capture execution errors
   try {
     const { tasks, agents } = workflowData;
     
@@ -148,7 +169,8 @@ export async function executeWorkflow(
       await updateExecutionStatus(env.DB, executionId, 'completed');
     }
   } catch (error) {
-    console.error('Workflow execution error:', error);
+    const { logger } = await import('../lib/logger');
+    logger.error('Workflow execution error', error, { executionId, workflowId: workflowData.id });
     await updateExecutionStatus(
       env.DB,
       executionId,
