@@ -17,7 +17,7 @@ import {
   Mail,
   Shield,
   Crown,
-  User,
+  User as UserIcon,
   MoreVertical,
   Search,
   CheckCircle,
@@ -182,6 +182,7 @@ export default function TeamMembers() {
 
           {/* Role Filter */}
           <select
+            aria-label="Select role filter"
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value as RoleFilter)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -195,6 +196,7 @@ export default function TeamMembers() {
 
           {/* Status Filter */}
           <select
+            aria-label="Select status filter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -276,12 +278,12 @@ export default function TeamMembers() {
           />
           <PermissionCard
             role="Member"
-            icon={<User className="h-5 w-5 text-blue-600" />}
+            icon={<UserIcon className="h-5 w-5 text-blue-600" />}
             permissions={['Create workflows', 'Run workflows', 'View analytics']}
           />
           <PermissionCard
             role="Viewer"
-            icon={<User className="h-5 w-5 text-gray-600" />}
+            icon={<UserIcon className="h-5 w-5 text-gray-600" />}
             permissions={['View workflows', 'View results', 'Read-only']}
           />
         </div>
@@ -320,8 +322,8 @@ function MemberRow({ member }: { member: User }) {
   const roleConfig = {
     owner: { bg: 'bg-amber-50', text: 'text-amber-700', icon: <Crown className="h-4 w-4" /> },
     admin: { bg: 'bg-purple-50', text: 'text-purple-700', icon: <Shield className="h-4 w-4" /> },
-    member: { bg: 'bg-blue-50', text: 'text-blue-700', icon: <User className="h-4 w-4" /> },
-    viewer: { bg: 'bg-gray-50', text: 'text-gray-700', icon: <User className="h-4 w-4" /> },
+    member: { bg: 'bg-blue-50', text: 'text-blue-700', icon: <UserIcon className="h-4 w-4" /> },
+    viewer: { bg: 'bg-gray-50', text: 'text-gray-700', icon: <UserIcon className="h-4 w-4" /> },
   };
 
   const statusConfig = {
@@ -395,6 +397,7 @@ function MemberRow({ member }: { member: User }) {
       {/* Actions */}
       <td className="p-4 text-right">
         <button
+          aria-label="Member actions menu"
           onClick={() => {
             telemetry.track({
               component: 'team-members',
@@ -428,7 +431,7 @@ function InviteModal({
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Invite Team Member</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} aria-label="Close invite modal" className="text-gray-400 hover:text-gray-600">
             ×
           </button>
         </div>
@@ -451,6 +454,7 @@ function InviteModal({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
             <select
+              aria-label="Select role for invite"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
