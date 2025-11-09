@@ -235,3 +235,108 @@ export async function getTokenUsage(
   
   return response.json();
 }
+
+// ============================================
+// NOTIFICATIONS API (Phase 2.2)
+// ============================================
+
+export interface Notification {
+  id: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+  category: 'workflow' | 'system' | 'team' | 'billing';
+  title: string;
+  message: string;
+  actionUrl?: string;
+  actionLabel?: string;
+  read: boolean;
+  readAt: number | null;
+  createdAt: number;
+}
+
+export interface NotificationsResponse {
+  notifications: Notification[];
+  unreadCount: number;
+  total: number;
+}
+
+/**
+ * Get notifications
+ * @param unreadOnly - Only return unread notifications
+ * @param category - Filter by category
+ */
+export async function getNotifications(
+  unreadOnly: boolean = false,
+  category?: string
+): Promise<NotificationsResponse> {
+  let url = `${API_URL}/api/notifications?unreadOnly=${unreadOnly}`;
+  if (category) {
+    url += `&category=${category}`;
+  }
+  
+  const response = await fetch(url);
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to fetch notifications' }));
+    throw new Error(error.error || 'Failed to fetch notifications');
+  }
+  
+  return response.json();
+}
+
+/**
+ * Mark notification as read
+ * @param id - Notification ID
+ */
+export async function markNotificationRead(id: string): Promise<void> {
+  const response = await fetch(`${API_URL}/api/notifications/${id}/read`, {
+    method: 'PATCH',
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to mark as read' }));
+    throw new Error(error.error || 'Failed to mark as read');
+  }
+}
+
+/**
+ * Mark all notifications as read
+ */
+export async function markAllNotificationsRead(): Promise<void> {
+  const response = await fetch(`${API_URL}/api/notifications/read-all`, {
+    method: 'PATCH',
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to mark all as read' }));
+    throw new Error(error.error || 'Failed to mark all as read');
+  }
+}
+
+/**
+ * Delete notification
+ * @param id - Notification ID
+ */
+export async function deleteNotification(id: string): Promise<void> {
+  const response = await fetch(`${API_URL}/api/notifications/${id}`, {
+    method: 'DELETE',
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to delete notification' }));
+    throw new Error(error.error || 'Failed to delete notification');
+  }
+}
+
+/**
+ * Clear all read notifications
+ */
+export async function clearReadNotifications(): Promise<void> {
+  const response = await fetch(`${API_URL}/api/notifications/clear-read`, {
+    method: 'DELETE',
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to clear notifications' }));
+    throw new Error(error.error || 'Failed to clear notifications');
+  }
+}

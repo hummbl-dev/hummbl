@@ -11,6 +11,14 @@
 import { useState, useEffect } from 'react';
 import { telemetry } from '../services/telemetry-enhanced';
 import {
+  getNotifications,
+  markNotificationRead,
+  markAllNotificationsRead,
+  deleteNotification,
+  clearReadNotifications,
+  type Notification as ApiNotification,
+} from '../services/api';
+import {
   Bell,
   Check,
   CheckCheck,
@@ -21,126 +29,47 @@ import {
   XCircle,
   Settings,
   Filter,
+  Activity,
 } from 'lucide-react';
 
-interface Notification {
-  id: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  title: string;
-  message: string;
-  timestamp: number;
-  read: boolean;
-  actionUrl?: string;
-  actionLabel?: string;
-  category: 'workflow' | 'system' | 'team' | 'billing';
-}
+type Notification = ApiNotification;
 
 type FilterType = 'all' | 'unread' | 'workflow' | 'system' | 'team' | 'billing';
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterType>('all');
+  const [unreadCount, setUnreadCount] = useState(0);
 
   // Track page view
   useEffect(() => {
     telemetry.pageView('notifications', { filter });
   }, [filter]);
 
-  // Load notifications
+  // Load notifications from REAL API
   useEffect(() => {
-    const loadNotifications = () => {
+    const loadNotifications = async () => {
       setLoading(true);
+      setError(null);
       try {
-        // Mock data for now - will be real-time with WebSockets in production
-        const mockNotifications: Notification[] = [
-          {
-            id: 'notif-001',
-            type: 'success',
-            title: 'Workflow completed successfully',
-            message: 'Content Generation Pipeline finished in 2m 15s',
-            timestamp: Date.now() - 300000, // 5 min ago
-            read: false,
-            category: 'workflow',
-            actionUrl: '/workflows/wf-001',
-            actionLabel: 'View Results',
-          },
-          {
-            id: 'notif-002',
-            type: 'error',
-            title: 'Workflow execution failed',
-            message: 'Data Processing workflow failed: API rate limit exceeded',
-            timestamp: Date.now() - 900000, // 15 min ago
-            read: false,
-            category: 'workflow',
-            actionUrl: '/logs/errors',
-            actionLabel: 'View Error',
-          },
-          {
-            id: 'notif-003',
-            type: 'warning',
-            title: 'Token usage approaching limit',
-            message: 'You have used 85% of your monthly token allocation',
-            timestamp: Date.now() - 3600000, // 1 hour ago
-            read: false,
-            category: 'billing',
-            actionUrl: '/analytics/tokens',
-            actionLabel: 'View Usage',
-          },
-          {
-            id: 'notif-004',
-            type: 'info',
-            title: 'New team member joined',
-            message: 'Casey Morgan accepted your invitation and joined the team',
-            timestamp: Date.now() - 7200000, // 2 hours ago
-            read: true,
-            category: 'team',
-            actionUrl: '/team',
-            actionLabel: 'View Team',
-          },
-          {
-            id: 'notif-005',
-            type: 'success',
-            title: 'API key created',
-            message: 'New Anthropic Claude API key successfully added',
-            timestamp: Date.now() - 10800000, // 3 hours ago
-            read: true,
-            category: 'system',
-            actionUrl: '/settings/api-keys',
-            actionLabel: 'Manage Keys',
-          },
-          {
-            id: 'notif-006',
-            type: 'info',
-            title: 'System update completed',
-            message: 'HUMMBL v1.2.0 deployed with performance improvements',
-            timestamp: Date.now() - 86400000, // 1 day ago
-            read: true,
-            category: 'system',
-          },
-          {
-            id: 'notif-007',
-            type: 'warning',
-            title: 'Execution monitor alert',
-            message: '3 workflows pending for more than 10 minutes',
-            timestamp: Date.now() - 172800000, // 2 days ago
-            read: true,
-            category: 'workflow',
-            actionUrl: '/monitor',
-            actionLabel: 'View Monitor',
-          },
-        ];
-
-        setNotifications(mockNotifications);
-      } catch (error) {
-        console.error('Failed to load notifications:', error);
+        const unreadOnly = filter === 'unread';
+        const category = ['workflow', 'system', 'team', 'billing'].includes(filter) ? filter : undefined;
+        
+        const data = await getNotifications(unreadOnly, category);
+        setNotifications(data.notifications);
+        setUnreadCount(data.unreadCount);
+      } catch (err) {
+        console.error('Failed to load notifications:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load notifications');
       } finally {
         setLoading(false);
       }
     };
 
     loadNotifications();
-  }, []);
+  }, [filter]);
 
   // Filter notifications
   const filteredNotifications = notifications.filter((notif) => {
@@ -150,49 +79,79 @@ export default function Notifications() {
   });
 
   // Mark as read
-  const handleMarkAsRead = (id: string) => {
-    setNotifications(
-      notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-    telemetry.track({
-      component: 'notifications',
-      action: 'mark_as_read',
-      properties: { notificationId: id },
-    });
+  const handleMarkAsRead = async (id: string) => {
+    try {
+      await markNotificationRead(id);
+      setNotifications(
+        notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+      telemetry.track({
+        component: 'notifications',
+        action: 'mark_as_read',
+        properties: { notificationId: id },
+      });
+    } catch (err) {
+      console.error('Failed to mark as read:', err);
+      alert('Failed to mark notification as read');
+    }
   };
 
   // Mark all as read
-  const handleMarkAllAsRead = () => {
-    setNotifications(notifications.map((n) => ({ ...n, read: true })));
-    telemetry.track({
-      component: 'notifications',
-      action: 'mark_all_as_read',
-    });
+  const handleMarkAllAsRead = async () => {
+    try {
+      await markAllNotificationsRead();
+      setNotifications(notifications.map((n) => ({ ...n, read: true })));
+      setUnreadCount(0);
+      telemetry.track({
+        component: 'notifications',
+        action: 'mark_all_as_read',
+      });
+    } catch (err) {
+      console.error('Failed to mark all as read:', err);
+      alert('Failed to mark all notifications as read');
+    }
   };
 
   // Delete notification
-  const handleDelete = (id: string) => {
-    setNotifications(notifications.filter((n) => n.id !== id));
-    telemetry.track({
-      component: 'notifications',
-      action: 'delete_notification',
-      properties: { notificationId: id },
-    });
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteNotification(id);
+      const deletedNotif = notifications.find(n => n.id === id);
+      if (deletedNotif && !deletedNotif.read) {
+        setUnreadCount(prev => Math.max(0, prev - 1));
+      }
+      setNotifications(notifications.filter((n) => n.id !== id));
+      telemetry.track({
+        component: 'notifications',
+        action: 'delete_notification',
+        properties: { notificationId: id },
+      });
+    } catch (err) {
+      console.error('Failed to delete notification:', err);
+      alert('Failed to delete notification');
+    }
   };
 
   // Clear all read
-  const handleClearRead = () => {
-    setNotifications(notifications.filter((n) => !n.read));
-    telemetry.track({
-      component: 'notifications',
-      action: 'clear_read',
-    });
+  const handleClearRead = async () => {
+    try {
+      await clearReadNotifications();
+      setNotifications(notifications.filter((n) => !n.read));
+      telemetry.track({
+        component: 'notifications',
+        action: 'clear_read',
+      });
+    } catch (err) {
+      console.error('Failed to clear read notifications:', err);
+      alert('Failed to clear read notifications');
+    }
   };
 
   // Calculate stats
   const stats = {
     total: notifications.length,
-    unread: notifications.filter((n) => !n.read).length,
+    unread: unreadCount, // Use unreadCount from API
     workflow: notifications.filter((n) => n.category === 'workflow').length,
     system: notifications.filter((n) => n.category === 'system').length,
   };
@@ -201,8 +160,26 @@ export default function Notifications() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <Bell className="h-8 w-8 animate-pulse text-primary-600 mx-auto mb-2" />
+          <Activity className="h-8 w-8 animate-spin text-primary-600 mx-auto mb-2" />
           <p className="text-gray-600">Loading notifications...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Notifications</h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="btn-primary"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
@@ -410,7 +387,7 @@ function NotificationCard({
               </span>
             </div>
             <p className="text-sm text-gray-700">{notification.message}</p>
-            <p className="text-xs text-gray-500 mt-1">{formatTimestamp(notification.timestamp)}</p>
+            <p className="text-xs text-gray-500 mt-1">{formatTimestamp(notification.createdAt)}</p>
           </div>
         </div>
 
