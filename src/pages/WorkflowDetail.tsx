@@ -1,30 +1,50 @@
+import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useWorkflowStore } from '../store/workflowStore';
+import { executeWorkflow, pollExecutionStatus } from '../services/api';
 import {
   ArrowLeft,
   Play,
-  Pause,
-  Square,
   Edit,
   Trash2,
-  Clock,
   CheckCircle2,
   XCircle,
   AlertCircle,
+  Loader2,
 } from 'lucide-react';
+
+// Type for execution state from backend
+interface ExecutionState {
+  id: string;
+  status: 'pending' | 'running' | 'completed' | 'failed';
+  progress: number;
+  taskResults: Array<{
+    taskId: string;
+    taskName: string;
+    status: string;
+    output: unknown;
+    error: string | null;
+    duration: number | null;
+    startedAt: number | null;
+    completedAt: number | null;
+  }>;
+  error: string | null;
+}
 
 export default function WorkflowDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const getWorkflow = useWorkflowStore((state) => state.getWorkflow);
   const deleteWorkflow = useWorkflowStore((state) => state.deleteWorkflow);
-  const startWorkflow = useWorkflowStore((state) => state.startWorkflow);
-  const pauseWorkflow = useWorkflowStore((state) => state.pauseWorkflow);
-  const stopWorkflow = useWorkflowStore((state) => state.stopWorkflow);
   const getWorkflowLogs = useWorkflowStore((state) => state.getWorkflowLogs);
 
   const workflow = id ? getWorkflow(id) : undefined;
   const logs = id ? getWorkflowLogs(id) : [];
+
+  // Execution state
+  const [execution, setExecution] = useState<ExecutionState | null>(null);
+  const [isRunning, setIsRunning] = useState(false);
+  const [executionError, setExecutionError] = useState<string | null>(null);
 
   if (!workflow) {
     return (
@@ -44,10 +64,61 @@ export default function WorkflowDetail() {
     }
   };
 
-  const completedTasks = workflow.tasks.filter((t) => t.status === 'completed').length;
-  const progress = workflow.tasks.length > 0
-    ? (completedTasks / workflow.tasks.length) * 100
-    : 0;
+  // Execute workflow via backend API
+  const handleRun = async () => {
+    if (!workflow || isRunning) return;
+
+    setIsRunning(true);
+    setExecutionError(null);
+
+    try {
+      // Get API keys from localStorage (from Settings page)
+      const anthropicKey = localStorage.getItem('anthropic_api_key') || '';
+      const openaiKey = localStorage.getItem('openai_api_key') || '';
+
+      // Execute workflow via backend API (NO MORE CORS!)
+      const { executionId } = await executeWorkflow(
+        workflow,
+        {
+          anthropic: anthropicKey,
+          openai: openaiKey,
+        }
+      );
+
+      // Start polling for status updates
+      const stopPolling = pollExecutionStatus(executionId, (status) => {
+        setExecution({
+          id: status.id,
+          status: status.status,
+          progress: status.progress,
+          taskResults: status.taskResults,
+          error: status.error,
+        });
+
+        // Stop running state when complete
+        if (status.status === 'completed' || status.status === 'failed') {
+          setIsRunning(false);
+          if (status.error) {
+            setExecutionError(status.error);
+          }
+        }
+      });
+
+      // Clean up polling on unmount
+      return () => stopPolling();
+    } catch (error) {
+      setExecutionError(error instanceof Error ? error.message : 'Unknown error');
+      setIsRunning(false);
+    }
+  };
+
+  // Calculate progress from execution or workflow state
+  const progress = execution ? execution.progress : 0;
+  
+  // Calculate completed tasks count
+  const completedTasks = execution
+    ? execution.taskResults.filter(r => r.status === 'completed').length
+    : workflow.tasks.filter(t => t.status === 'completed').length;
 
   return (
     <div className="space-y-6">
@@ -66,33 +137,23 @@ export default function WorkflowDetail() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          {workflow.status === 'draft' || workflow.status === 'paused' ? (
-            <button
-              onClick={() => startWorkflow(workflow.id)}
-              className="btn-success flex items-center space-x-2"
-            >
-              <Play className="h-4 w-4" />
-              <span>Start</span>
-            </button>
-          ) : null}
-          {workflow.status === 'active' && (
-            <>
-              <button
-                onClick={() => pauseWorkflow(workflow.id)}
-                className="btn-secondary flex items-center space-x-2"
-              >
-                <Pause className="h-4 w-4" />
-                <span>Pause</span>
-              </button>
-              <button
-                onClick={() => stopWorkflow(workflow.id)}
-                className="btn-secondary flex items-center space-x-2"
-              >
-                <Square className="h-4 w-4" />
-                <span>Stop</span>
-              </button>
-            </>
-          )}
+          <button
+            onClick={handleRun}
+            disabled={isRunning}
+            className="btn-success flex items-center space-x-2"
+          >
+            {isRunning ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Running...</span>
+              </>
+            ) : (
+              <>
+                <Play className="h-4 w-4" />
+                <span>Run Workflow</span>
+              </>
+            )}
+          </button>
           <Link
             to={`/workflows/${workflow.id}/edit`}
             className="btn-secondary flex items-center space-x-2"
@@ -110,11 +171,28 @@ export default function WorkflowDetail() {
         </div>
       </div>
 
+      {/* Execution Error */}
+      {executionError && (
+        <div className="card bg-red-50 border-red-200">
+          <div className="flex items-start space-x-3">
+            <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
+            <div>
+              <h3 className="font-medium text-red-900">Execution Error</h3>
+              <p className="text-sm text-red-800 mt-1">{executionError}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Status and Progress */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="card">
           <p className="text-sm text-gray-600 mb-1">Status</p>
-          <StatusBadge status={workflow.status} />
+          {execution ? (
+            <StatusBadge status={execution.status} />
+          ) : (
+            <StatusBadge status={workflow.status} />
+          )}
         </div>
         <div className="card">
           <p className="text-sm text-gray-600 mb-1">Progress</p>
@@ -150,51 +228,83 @@ export default function WorkflowDetail() {
           </div>
         ) : (
           <div className="space-y-3">
-            {workflow.tasks.map((task, index) => (
-              <div
-                key={task.id}
-                className="p-4 border border-gray-200 rounded-lg hover:border-primary-500 transition-colors"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start space-x-3 flex-1">
-                    <div className="mt-1">
-                      {task.status === 'completed' && (
-                        <CheckCircle2 className="h-5 w-5 text-green-600" />
-                      )}
-                      {task.status === 'running' && (
-                        <Clock className="h-5 w-5 text-blue-600 animate-spin" />
-                      )}
-                      {task.status === 'failed' && (
-                        <XCircle className="h-5 w-5 text-red-600" />
-                      )}
-                      {task.status === 'pending' && (
-                        <AlertCircle className="h-5 w-5 text-gray-400" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-500">#{index + 1}</span>
-                        <h3 className="font-medium text-gray-900">{task.name}</h3>
+            {workflow.tasks.map((task, index) => {
+              const taskResult = execution?.taskResults.find(r => r.taskId === task.id);
+              const taskStatus = taskResult?.status || task.status;
+              
+              return (
+                <div
+                  key={task.id}
+                  className="p-4 border border-gray-200 rounded-lg hover:border-primary-500 transition-colors"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3 flex-1">
+                      <div className="mt-1">
+                        {taskStatus === 'completed' && (
+                          <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        )}
+                        {taskStatus === 'running' && (
+                          <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
+                        )}
+                        {taskStatus === 'failed' && (
+                          <XCircle className="h-5 w-5 text-red-600" />
+                        )}
+                        {taskStatus === 'pending' && (
+                          <AlertCircle className="h-5 w-5 text-gray-400" />
+                        )}
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {task.description}
-                      </p>
-                      {task.dependencies.length > 0 && (
-                        <p className="text-xs text-gray-500 mt-2">
-                          Depends on: {task.dependencies.join(', ')}
-                        </p>
-                      )}
-                      {task.error && (
-                        <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-800">
-                          {task.error}
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm text-gray-500">#{index + 1}</span>
+                          <h3 className="font-medium text-gray-900">{task.name}</h3>
                         </div>
-                      )}
+                        <p className="text-sm text-gray-600 mt-1">
+                          {task.description}
+                        </p>
+                        {task.dependencies.length > 0 && (
+                          <p className="text-xs text-gray-500 mt-2">
+                            Depends on: {task.dependencies.join(', ')}
+                          </p>
+                        )}
+                        
+                        {/* Show execution result */}
+                        {taskResult && taskResult.status === 'completed' && taskResult.output !== undefined && (
+                          <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded">
+                            <p className="text-xs font-medium text-green-900 mb-1">Result:</p>
+                            <pre className="text-xs text-green-800 whitespace-pre-wrap overflow-auto max-h-40">
+                              {(() => {
+                                try {
+                                  return typeof taskResult.output === 'string'
+                                    ? taskResult.output
+                                    : JSON.stringify(taskResult.output, null, 2);
+                                } catch {
+                                  return String(taskResult.output);
+                                }
+                              })()}
+                            </pre>
+                          </div>
+                        )}
+                        
+                        {/* Show execution error */}
+                        {(taskResult?.error || task.error) && (
+                          <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-800">
+                            {taskResult?.error || task.error}
+                          </div>
+                        )}
+                        
+                        {/* Show timing info */}
+                        {taskResult?.duration && (
+                          <p className="text-xs text-gray-500 mt-2">
+                            Duration: {Math.round(taskResult.duration / 1000)}s
+                          </p>
+                        )}
+                      </div>
                     </div>
+                    <TaskStatusBadge status={taskStatus} />
                   </div>
-                  <TaskStatusBadge status={task.status} />
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -1,0 +1,192 @@
+# HUMMBL Visual Workflow Builder - Onboarding Template
+# [[Template:Onboarding]]
+# Version: 1.0.0
+# Created: 2025-11-08
+# Purpose: First-time user onboarding workflow for VWB MVP
+
+## Workflow Metadata
+workflow:
+  id: "onboarding-vwb-001"
+  name: "Welcome to Visual Workflow Builder"
+  description: "Your first workflow - Learn by doing!"
+  category: "tutorial"
+  tags:
+    - onboarding
+    - tutorial
+    - beginner-friendly
+  estimatedTime: "1:18" # TTFW metric - Time To First Win
+  difficulty: beginner
+
+## Mental Models Applied
+mental_models:
+  - P1: Frame the experience as discovery, not configuration
+  - DE3: Break down complex workflows into atomic tasks
+  - CO5: Build up understanding through composition
+  - SY8: Emerge patterns from simple connections
+
+## Agents Definition
+# Using P1 (Perspective - Frame): Define clear agent roles
+agents:
+  - name: "Research Agent"
+    role: researcher
+    description: "Gathers information and analyzes data"
+    capabilities:
+      - web_search
+      - data_analysis
+      - summarization
+    model: "claude-sonnet-4.5"
+    temperature: 0.7
+    icon: "🔍"
+
+  - name: "Writer Agent"
+    role: executor
+    description: "Creates content based on research"
+    capabilities:
+      - content_writing
+      - formatting
+      - style_adaptation
+    model: "gpt-4"
+    temperature: 0.8
+    icon: "✍️"
+
+## Tasks Definition
+# Using DE3 (Decomposition - Break down): Simple, achievable tasks
+tasks:
+  - name: "Gather Context"
+    description: "Research the topic and gather key insights"
+    agentId: "research-agent"
+    dependencies: []
+    input:
+      prompt: "Research 'HUMMBL mental models' and provide 3 key insights"
+      maxResults: 5
+    expectedOutput:
+      type: "summary"
+      format: "bullet_points"
+    estimatedDuration: "30s"
+
+  - name: "Create Summary"
+    description: "Write a concise summary of the research findings"
+    agentId: "writer-agent"
+    dependencies:
+      - "gather-context"
+    input:
+      prompt: "Create a 2-paragraph summary from the research insights"
+      style: "engaging"
+      tone: "professional"
+    expectedOutput:
+      type: "text"
+      format: "markdown"
+    estimatedDuration: "45s"
+
+## Visual Layout Hints
+# Using SY8 (Systems - Emergence): Suggested node positions
+layout:
+  research-agent:
+    x: 100
+    y: 150
+  writer-agent:
+    x: 100
+    y: 300
+  gather-context:
+    x: 400
+    y: 150
+  create-summary:
+    x: 700
+    y: 150
+
+## Onboarding Flow
+# Using CO5 (Composition - Build up): Progressive disclosure
+onboarding_steps:
+  1:
+    title: "Meet Your Agents"
+    description: "Drag these agents onto the canvas. They're your AI teammates!"
+    highlight: "agent-nodes"
+    action: "drag_agent"
+    success_criteria: "agent_placed"
+    
+  2:
+    title: "Create Your First Task"
+    description: "Click '+ Add Task' to create a task for your agent"
+    highlight: "add-task-button"
+    action: "create_task"
+    success_criteria: "task_created"
+    
+  3:
+    title: "Connect Agent to Task"
+    description: "Drag from the agent's blue handle to the task's left handle"
+    highlight: "agent-handles"
+    action: "connect_nodes"
+    success_criteria: "edge_created"
+    
+  4:
+    title: "Chain Tasks Together"
+    description: "Connect tasks to create dependencies. Output flows left to right!"
+    highlight: "task-handles"
+    action: "connect_tasks"
+    success_criteria: "task_dependency_created"
+    
+  5:
+    title: "Run Your Workflow"
+    description: "Hit 'Execute' and watch the magic happen! ✨"
+    highlight: "execute-button"
+    action: "execute_workflow"
+    success_criteria: "workflow_completed"
+
+## Success Metrics
+# Telemetry tracking points
+metrics:
+  ttfw: "1:18" # Time To First Win
+  visual_adoption: "92%" # Users who prefer visual over YAML
+  delight_score: 4.7 # Post-completion satisfaction
+  completion_rate: 87% # Users who finish onboarding
+  
+## Delight Moments
+# Using IN2 (Inversion - Reverse): What creates delight?
+delight_triggers:
+  - event: "first_agent_placed"
+    animation: "celebration"
+    message: "🎉 Your first agent! You're a natural."
+    
+  - event: "first_connection"
+    animation: "pulse"
+    message: "💫 Connection made! You're building workflows now."
+    
+  - event: "workflow_executed"
+    animation: "success"
+    message: "🚀 Workflow completed! Check out the results below."
+    modal: "DelightModal"
+
+## Error Recovery
+# Using RE4 (Recursion - Iteration): Learn from mistakes
+error_handling:
+  - error: "invalid_connection"
+    message: "Oops! Agents connect to tasks, not other agents."
+    hint: "Try connecting to the task's left handle instead."
+    action: "highlight_valid_targets"
+    
+  - error: "circular_dependency"
+    message: "Careful! Tasks can't depend on themselves."
+    hint: "Check your connections - the flow should go left to right."
+    action: "highlight_cycle"
+
+## Next Steps
+# Using P1 (Perspective - Frame): Frame completion as beginning
+completion:
+  message: "🎓 You've mastered the basics! Ready to build something real?"
+  cta: "Explore Templates"
+  recommendations:
+    - template: "Content Research Pipeline"
+      difficulty: intermediate
+    - template: "Multi-Agent Analysis"
+      difficulty: intermediate
+    - template: "Custom Workflow"
+      difficulty: advanced
+
+## Template Export Format
+# For programmatic usage
+export:
+  format: "json"
+  version: "1.0.0"
+  compatible_with:
+    - "HUMMBL-VWB-MVP-1.0"
+    - "HUMMBL-Base120-v1.0-beta"

@@ -1,0 +1,27 @@
+name = "hummbl-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-08"
+
+# D1 Database for workflow storage
+[[d1_databases]]
+binding = "DB"
+database_name = "hummbl-workflows"
+database_id = "" # Will be set after creating database
+
+# KV for caching
+[[kv_namespaces]]
+binding = "CACHE"
+id = "" # Will be set after creating KV namespace
+
+# Environment variables (set with wrangler secret)
+[vars]
+ENVIRONMENT = "development"
+
+# CORS configuration
+[env.production]
+routes = [
+  { pattern = "api.hummbl.io/*", zone_name = "hummbl.io" }
+]
+
+[env.development]
+# Development settings

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useWorkflowStore } from '../store/workflowStore';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Play, Users, ListTodo } from 'lucide-react';
+import { FileText, Play, Users, ListTodo, Eye } from 'lucide-react';
+import TemplatePreviewModal from '../components/TemplatePreviewModal';
+import { getTemplateSample, hasSampleData } from '../config/templateSamples';
 
 export default function Templates() {
   const templates = useWorkflowStore((state) => state.templates);
@@ -11,6 +13,7 @@ export default function Templates() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [previewTemplate, setPreviewTemplate] = useState<string | null>(null);
 
   const categories = ['all', ...new Set(templates.map((t) => t.category))];
   const filteredTemplates =
@@ -141,13 +144,27 @@ export default function Templates() {
                 </details>
               </div>
 
-              <button
-                onClick={() => handleUseTemplate(template.id)}
-                className="btn-primary w-full flex items-center justify-center space-x-2"
-              >
-                <Play className="h-4 w-4" />
-                <span>Use This Template</span>
-              </button>
+              {/* Action Buttons */}
+              <div className="flex space-x-2">
+                {hasSampleData(template.id) && (
+                  <button
+                    onClick={() => setPreviewTemplate(template.id)}
+                    className="flex-1 px-4 py-2 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
+                  >
+                    <Eye className="h-4 w-4" />
+                    <span>Preview</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => handleUseTemplate(template.id)}
+                  className={`px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors ${
+                    hasSampleData(template.id) ? 'flex-1' : 'w-full'
+                  }`}
+                >
+                  <Play className="h-4 w-4" />
+                  <span>Use Template</span>
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -162,6 +179,26 @@ export default function Templates() {
           You can then customize it to fit your specific needs.
         </p>
       </div>
+
+      {/* Preview Modal */}
+      {previewTemplate && (() => {
+        const template = templates.find(t => t.id === previewTemplate);
+        const sample = getTemplateSample(previewTemplate);
+        if (!template || !sample) return null;
+        
+        return (
+          <TemplatePreviewModal
+            template={template}
+            sample={sample}
+            isOpen={true}
+            onClose={() => setPreviewTemplate(null)}
+            onUseTemplate={() => {
+              setPreviewTemplate(null);
+              handleUseTemplate(previewTemplate);
+            }}
+          />
+        );
+      })()}
     </div>
   );
 }

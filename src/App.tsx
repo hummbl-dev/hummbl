@@ -1,19 +1,34 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import Layout from './components/Layout/Layout';
+import ErrorBoundary from './components/ErrorBoundary';
 import ErrorNotification from './components/ErrorNotification';
 import Dashboard from './pages/Dashboard';
+import MentalModels from './pages/MentalModels';
 import WorkflowList from './pages/WorkflowList';
 import WorkflowDetail from './pages/WorkflowDetail';
-import WorkflowEditor from './pages/WorkflowEditor';
+import WorkflowEditorFull from './pages/WorkflowEditorFull';
 import AgentManagement from './pages/AgentManagement';
 import Templates from './pages/Templates';
+import Settings from './pages/Settings';
+import Analytics from './pages/Analytics';
+import TokenUsage from './pages/TokenUsage';
+import ExecutionMonitor from './pages/ExecutionMonitor';
+import ErrorLogs from './pages/ErrorLogs';
+import TeamMembers from './pages/TeamMembers';
+import APIKeys from './pages/APIKeys';
+import Notifications from './pages/Notifications';
+import NotFound from './pages/NotFound';
 import { useWorkflowStore } from './store/workflowStore';
 import { workflowTemplates } from './data/templates';
+import { usePageTracking } from './hooks/usePageTracking';
 
-function App() {
+// Main content of the app
+const AppContent: React.FC = () => {
   const addTemplate = useWorkflowStore((state) => state.addTemplate);
   const templates = useWorkflowStore((state) => state.templates);
+
+  usePageTracking(); // Ensures analytics/page tracking hook is active
 
   useEffect(() => {
     // Initialize templates on app load if not already loaded
@@ -25,21 +40,40 @@ function App() {
   }, [addTemplate, templates.length]);
 
   return (
-    <Router>
+    <>
       <ErrorNotification />
       <Layout>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/mental-models" element={<MentalModels />} />
           <Route path="/workflows" element={<WorkflowList />} />
+          <Route path="/workflows/new" element={<WorkflowEditorFull />} />
           <Route path="/workflows/:id" element={<WorkflowDetail />} />
-          <Route path="/workflows/new" element={<WorkflowEditor />} />
-          <Route path="/workflows/:id/edit" element={<WorkflowEditor />} />
+          <Route path="/workflows/:id/edit" element={<WorkflowEditorFull />} />
           <Route path="/agents" element={<AgentManagement />} />
           <Route path="/templates" element={<Templates />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/analytics/tokens" element={<TokenUsage />} />
+          <Route path="/monitor" element={<ExecutionMonitor />} />
+          <Route path="/logs/errors" element={<ErrorLogs />} />
+          <Route path="/team" element={<TeamMembers />} />
+          <Route path="/settings/api-keys" element={<APIKeys />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
-    </Router>
+    </>
   );
-}
+};
 
-export default App;
+// Main app wrapper
+export const App: React.FC = () => {
+  return (
+    <ErrorBoundary>
+      <Router>
+        <AppContent />
+      </Router>
+    </ErrorBoundary>
+  );
+};

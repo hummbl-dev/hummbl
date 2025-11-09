@@ -8,18 +8,26 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test:production": "tsx scripts/test-production.ts",
+    "test:visual": "tsx scripts/visual-test-agent.ts",
+    "test:all": "npm run test:production && npm run test:visual"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.1.1",
+    "@xyflow/react": "^12.9.2",
+    "date-fns": "^3.0.6",
+    "lucide-react": "^0.303.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.0",
-    "zustand": "^4.4.7",
-    "lucide-react": "^0.303.0",
-    "date-fns": "^3.0.6",
-    "uuid": "^9.0.1"
+    "reactflow": "^11.11.4",
+    "uuid": "^9.0.1",
+    "zod": "^4.1.12",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/node": "^20.10.6",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "@types/uuid": "^9.0.7",
@@ -32,6 +40,7 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.8"
   }

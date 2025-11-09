@@ -1,0 +1,559 @@
+/**
+ * Team Members - Collaboration & Access Management
+ * 
+ * T2 (Composition): Team collaboration through shared workspace
+ * Sixth page of 8-page pilot (Week 2, Day 6)
+ * 
+ * @module pages/TeamMembers
+ * @version 1.0.0
+ */
+
+import { useState, useEffect } from 'react';
+import { telemetry } from '../services/telemetry-enhanced';
+import {
+  Users,
+  UserPlus,
+  Mail,
+  Shield,
+  Crown,
+  User,
+  MoreVertical,
+  Search,
+  CheckCircle,
+  Clock,
+  XCircle,
+} from 'lucide-react';
+
+interface TeamMember {
+  id: string;
+  name: string;
+  email: string;
+  role: 'owner' | 'admin' | 'member' | 'viewer';
+  status: 'active' | 'invited' | 'suspended';
+  joinedAt: number;
+  lastActive?: number;
+  workflowsCreated: number;
+  executionsRun: number;
+  avatar?: string;
+}
+
+type RoleFilter = 'all' | 'owner' | 'admin' | 'member' | 'viewer';
+type StatusFilter = 'all' | 'active' | 'invited' | 'suspended';
+
+export default function TeamMembers() {
+  const [members, setMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [roleFilter, setRoleFilter] = useState<RoleFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showInviteModal, setShowInviteModal] = useState(false);
+
+  // Track page view
+  useEffect(() => {
+    telemetry.pageView('team-members', { roleFilter, statusFilter });
+  }, [roleFilter, statusFilter]);
+
+  // Fetch team members
+  useEffect(() => {
+    const fetchMembers = async () => {
+      setLoading(true);
+      try {
+        // Mock data for now - will be real once backend API is called
+        const mockMembers: TeamMember[] = [
+          {
+            id: 'user-001',
+            name: 'Alex Thompson',
+            email: 'alex@hummbl.io',
+            role: 'owner',
+            status: 'active',
+            joinedAt: Date.now() - 15552000000, // 6 months ago
+            lastActive: Date.now() - 3600000, // 1 hour ago
+            workflowsCreated: 24,
+            executionsRun: 156,
+          },
+          {
+            id: 'user-002',
+            name: 'Jordan Lee',
+            email: 'jordan@hummbl.io',
+            role: 'admin',
+            status: 'active',
+            joinedAt: Date.now() - 7776000000, // 3 months ago
+            lastActive: Date.now() - 7200000, // 2 hours ago
+            workflowsCreated: 18,
+            executionsRun: 89,
+          },
+          {
+            id: 'user-003',
+            name: 'Sam Rivera',
+            email: 'sam@example.com',
+            role: 'member',
+            status: 'active',
+            joinedAt: Date.now() - 2592000000, // 1 month ago
+            lastActive: Date.now() - 86400000, // 1 day ago
+            workflowsCreated: 7,
+            executionsRun: 34,
+          },
+          {
+            id: 'user-004',
+            name: 'Casey Morgan',
+            email: 'casey@example.com',
+            role: 'member',
+            status: 'invited',
+            joinedAt: Date.now() - 259200000, // 3 days ago
+            workflowsCreated: 0,
+            executionsRun: 0,
+          },
+          {
+            id: 'user-005',
+            name: 'Taylor Kim',
+            email: 'taylor@example.com',
+            role: 'viewer',
+            status: 'active',
+            joinedAt: Date.now() - 604800000, // 1 week ago
+            lastActive: Date.now() - 172800000, // 2 days ago
+            workflowsCreated: 0,
+            executionsRun: 12,
+          },
+        ];
+
+        setMembers(mockMembers);
+      } catch (error) {
+        console.error('Failed to fetch team members:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMembers();
+  }, []);
+
+  // Filter members
+  const filteredMembers = members.filter((member) => {
+    const matchesRole = roleFilter === 'all' || member.role === roleFilter;
+    const matchesStatus = statusFilter === 'all' || member.status === statusFilter;
+    const matchesSearch =
+      searchQuery === '' ||
+      member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      member.email.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesRole && matchesStatus && matchesSearch;
+  });
+
+  // Calculate stats
+  const stats = {
+    total: members.length,
+    active: members.filter((m) => m.status === 'active').length,
+    invited: members.filter((m) => m.status === 'invited').length,
+    admins: members.filter((m) => m.role === 'admin' || m.role === 'owner').length,
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <Users className="h-8 w-8 animate-pulse text-primary-600 mx-auto mb-2" />
+          <p className="text-gray-600">Loading team members...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Team Members</h1>
+          <p className="text-gray-600 mt-1">Manage team access and collaboration</p>
+        </div>
+
+        {/* Invite Button */}
+        <button
+          onClick={() => {
+            setShowInviteModal(true);
+            telemetry.track({ component: 'team-members', action: 'click_invite' });
+          }}
+          className="btn-primary flex items-center space-x-2"
+        >
+          <UserPlus className="h-4 w-4" />
+          <span>Invite Member</span>
+        </button>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard label="Total Members" value={stats.total} icon={<Users className="h-5 w-5" />} />
+        <StatCard
+          label="Active"
+          value={stats.active}
+          icon={<CheckCircle className="h-5 w-5" />}
+          color="text-green-600"
+        />
+        <StatCard
+          label="Pending Invites"
+          value={stats.invited}
+          icon={<Clock className="h-5 w-5" />}
+          color="text-amber-600"
+        />
+        <StatCard
+          label="Admins"
+          value={stats.admins}
+          icon={<Shield className="h-5 w-5" />}
+          color="text-purple-600"
+        />
+      </div>
+
+      {/* Filters */}
+      <div className="card">
+        <div className="flex flex-col sm:flex-row gap-4">
+          {/* Search */}
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search members..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          {/* Role Filter */}
+          <select
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value as RoleFilter)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          >
+            <option value="all">All Roles</option>
+            <option value="owner">Owner</option>
+            <option value="admin">Admin</option>
+            <option value="member">Member</option>
+            <option value="viewer">Viewer</option>
+          </select>
+
+          {/* Status Filter */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="invited">Invited</option>
+            <option value="suspended">Suspended</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Members List */}
+      <div className="card">
+        {filteredMembers.length === 0 ? (
+          <div className="text-center py-12">
+            <Users className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+            <p className="text-gray-600">No team members found</p>
+            <p className="text-sm text-gray-500 mt-1">Try adjusting your filters or invite new members</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b">
+                <tr>
+                  <th className="text-left p-4 text-sm font-medium text-gray-700">Member</th>
+                  <th className="text-left p-4 text-sm font-medium text-gray-700">Role</th>
+                  <th className="text-left p-4 text-sm font-medium text-gray-700">Status</th>
+                  <th className="text-left p-4 text-sm font-medium text-gray-700">Activity</th>
+                  <th className="text-left p-4 text-sm font-medium text-gray-700">Stats</th>
+                  <th className="text-right p-4 text-sm font-medium text-gray-700">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {filteredMembers.map((member) => (
+                  <MemberRow key={member.id} member={member} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Invite Modal */}
+      {showInviteModal && (
+        <InviteModal
+          onClose={() => setShowInviteModal(false)}
+          onInvite={(email, role) => {
+            telemetry.track({
+              component: 'team-members',
+              action: 'send_invite',
+              properties: { role },
+            });
+            alert(`Invite sent to ${email} as ${role} - Coming soon!`);
+            setShowInviteModal(false);
+          }}
+        />
+      )}
+
+      {/* Permissions Guide */}
+      <div className="card bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <h3 className="text-lg font-semibold mb-3">Role Permissions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <PermissionCard
+            role="Owner"
+            icon={<Crown className="h-5 w-5 text-amber-600" />}
+            permissions={['Full access', 'Billing', 'Delete workspace']}
+          />
+          <PermissionCard
+            role="Admin"
+            icon={<Shield className="h-5 w-5 text-purple-600" />}
+            permissions={['Manage members', 'All workflows', 'Settings']}
+          />
+          <PermissionCard
+            role="Member"
+            icon={<User className="h-5 w-5 text-blue-600" />}
+            permissions={['Create workflows', 'Run workflows', 'View analytics']}
+          />
+          <PermissionCard
+            role="Viewer"
+            icon={<User className="h-5 w-5 text-gray-600" />}
+            permissions={['View workflows', 'View results', 'Read-only']}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Stat Card Component
+function StatCard({
+  label,
+  value,
+  icon,
+  color = 'text-gray-700',
+}: {
+  label: string;
+  value: string | number;
+  icon: React.ReactNode;
+  color?: string;
+}) {
+  return (
+    <div className="card">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm text-gray-600">{label}</p>
+          <p className={`text-2xl font-bold ${color}`}>{value}</p>
+        </div>
+        <div className={`p-2 bg-gray-50 rounded-lg ${color}`}>{icon}</div>
+      </div>
+    </div>
+  );
+}
+
+// Member Row Component
+function MemberRow({ member }: { member: TeamMember }) {
+  const roleConfig = {
+    owner: { bg: 'bg-amber-50', text: 'text-amber-700', icon: <Crown className="h-4 w-4" /> },
+    admin: { bg: 'bg-purple-50', text: 'text-purple-700', icon: <Shield className="h-4 w-4" /> },
+    member: { bg: 'bg-blue-50', text: 'text-blue-700', icon: <User className="h-4 w-4" /> },
+    viewer: { bg: 'bg-gray-50', text: 'text-gray-700', icon: <User className="h-4 w-4" /> },
+  };
+
+  const statusConfig = {
+    active: { bg: 'bg-green-50', text: 'text-green-700', icon: <CheckCircle className="h-4 w-4" /> },
+    invited: { bg: 'bg-amber-50', text: 'text-amber-700', icon: <Clock className="h-4 w-4" /> },
+    suspended: { bg: 'bg-red-50', text: 'text-red-700', icon: <XCircle className="h-4 w-4" /> },
+  };
+
+  const roleStyle = roleConfig[member.role];
+  const statusStyle = statusConfig[member.status];
+
+  return (
+    <tr className="hover:bg-gray-50">
+      {/* Member */}
+      <td className="p-4">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-medium">
+            {member.name.charAt(0)}
+          </div>
+          <div>
+            <p className="font-medium text-gray-900">{member.name}</p>
+            <p className="text-sm text-gray-500">{member.email}</p>
+          </div>
+        </div>
+      </td>
+
+      {/* Role */}
+      <td className="p-4">
+        <span
+          className={`inline-flex items-center space-x-1 px-2 py-1 rounded text-xs font-medium ${roleStyle.bg} ${roleStyle.text}`}
+        >
+          {roleStyle.icon}
+          <span className="capitalize">{member.role}</span>
+        </span>
+      </td>
+
+      {/* Status */}
+      <td className="p-4">
+        <span
+          className={`inline-flex items-center space-x-1 px-2 py-1 rounded text-xs font-medium ${statusStyle.bg} ${statusStyle.text}`}
+        >
+          {statusStyle.icon}
+          <span className="capitalize">{member.status}</span>
+        </span>
+      </td>
+
+      {/* Activity */}
+      <td className="p-4">
+        <div className="text-sm">
+          {member.status === 'invited' ? (
+            <span className="text-gray-500">Pending</span>
+          ) : (
+            <>
+              <p className="text-gray-900">Joined {formatDate(member.joinedAt)}</p>
+              {member.lastActive && (
+                <p className="text-gray-500">Active {formatTimestamp(member.lastActive)}</p>
+              )}
+            </>
+          )}
+        </div>
+      </td>
+
+      {/* Stats */}
+      <td className="p-4">
+        <div className="text-sm">
+          <p className="text-gray-900">{member.workflowsCreated} workflows</p>
+          <p className="text-gray-500">{member.executionsRun} executions</p>
+        </div>
+      </td>
+
+      {/* Actions */}
+      <td className="p-4 text-right">
+        <button
+          onClick={() => {
+            telemetry.track({
+              component: 'team-members',
+              action: 'click_member_menu',
+              properties: { memberId: member.id },
+            });
+            alert('Member actions menu - Coming soon!');
+          }}
+          className="p-2 hover:bg-gray-100 rounded transition-colors"
+        >
+          <MoreVertical className="h-4 w-4 text-gray-600" />
+        </button>
+      </td>
+    </tr>
+  );
+}
+
+// Invite Modal Component
+function InviteModal({
+  onClose,
+  onInvite,
+}: {
+  onClose: () => void;
+  onInvite: (email: string, role: string) => void;
+}) {
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('member');
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">Invite Team Member</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            ×
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="colleague@example.com"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            >
+              <option value="viewer">Viewer - Read-only access</option>
+              <option value="member">Member - Create & run workflows</option>
+              <option value="admin">Admin - Manage team & settings</option>
+            </select>
+          </div>
+
+          <div className="flex space-x-3 pt-4">
+            <button onClick={onClose} className="btn-secondary flex-1">
+              Cancel
+            </button>
+            <button
+              onClick={() => onInvite(email, role)}
+              disabled={!email}
+              className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Send Invite
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Permission Card Component
+function PermissionCard({
+  role,
+  icon,
+  permissions,
+}: {
+  role: string;
+  icon: React.ReactNode;
+  permissions: string[];
+}) {
+  return (
+    <div className="bg-white p-4 rounded-lg">
+      <div className="flex items-center space-x-2 mb-3">
+        {icon}
+        <h4 className="font-medium text-gray-900">{role}</h4>
+      </div>
+      <ul className="space-y-1">
+        {permissions.map((perm, index) => (
+          <li key={index} className="text-sm text-gray-600 flex items-center space-x-2">
+            <CheckCircle className="h-3 w-3 text-green-600" />
+            <span>{perm}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// Format date helper
+function formatDate(timestamp: number): string {
+  const date = new Date(timestamp);
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+
+// Format timestamp helper
+function formatTimestamp(timestamp: number): string {
+  const diff = Date.now() - timestamp;
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+
+  if (hours < 1) return 'just now';
+  if (hours < 24) return `${hours}h ago`;
+  if (days < 7) return `${days}d ago`;
+  return formatDate(timestamp);
+}

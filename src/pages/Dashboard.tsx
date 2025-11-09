@@ -1,5 +1,5 @@
 import { useWorkflowStore } from '../store/workflowStore';
-import { Workflow, CheckCircle2, XCircle, Clock, Activity } from 'lucide-react';
+import { Workflow, CheckCircle2, XCircle, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
