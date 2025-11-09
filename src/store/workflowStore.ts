@@ -46,6 +46,7 @@ interface WorkflowStore {
 }
 
 // Helper function to convert date strings back to Date objects
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const deserializeDates = (obj: any): any => {
   if (obj === null || obj === undefined) return obj;
 
@@ -63,6 +64,7 @@ const deserializeDates = (obj: any): any => {
   }
 
   if (typeof obj === 'object') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = {};
     for (const key in obj) {
       result[key] = deserializeDates(obj[key]);
