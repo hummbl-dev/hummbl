@@ -202,6 +202,7 @@ export default function Analytics() {
       </div>
 
       {/* Charts Row 1 */}
+      <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-6">Performance Metrics</h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Executions Over Time */}
         <div className="card">

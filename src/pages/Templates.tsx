@@ -69,17 +69,19 @@ export default function Templates() {
           <p className="text-gray-600">No templates available</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredTemplates.map((template) => (
-            <div
-              key={template.id}
-              className="card hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <FileText className="h-5 w-5 text-primary-600" />
-                    <h3 className="font-bold text-gray-900">{template.name}</h3>
+        <>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Available Templates</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredTemplates.map((template) => (
+              <div
+                key={template.id}
+                className="card hover:shadow-lg transition-shadow"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <FileText className="h-5 w-5 text-primary-600" />
+                      <h3 className="font-bold text-gray-900">{template.name}</h3>
                   </div>
                   <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">
                     {template.category}
@@ -167,7 +169,8 @@ export default function Templates() {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        </>
       )}
 
       {/* Info Box */}

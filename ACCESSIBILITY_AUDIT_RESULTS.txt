@@ -1,0 +1,311 @@
+HUMMBL Accessibility Audit Results
+Generated: Tue Nov 11 13:29:15 EST 2025
+======================================
+
+
+========================================
+PAGE: /
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: SessionNotCreatedError: session not created
+from unknown error: cannot find Chrome binary
+    at Object.throwDecodedError (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/error.js:523:15)
+    at parseHttpResponse (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:524:13)
+    at Executor.execute (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:456:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  remoteStacktrace: '0   chromedriver                        0x00000001030ca198 chromedriver + 6148504\n' +
+    '1   chromedriver                        0x00000001030c166a chromedriver + 6112874\n' +
+    '2   chromedriver                        0x0000000102b57a7b chromedriver + 436859\n' +
+    '3   chromedriver                        0x0000000102b9088e chromedriver + 669838\n' +
+    '4   chromedriver                        0x0000000102b8f492 chromedriver + 664722\n' +
+    '5   chromedriver                        0x0000000102bdf294 chromedriver + 991892\n' +
+    '6   chromedriver                        0x0000000102bde976 chromedriver + 989558\n' +
+    '7   chromedriver                        0x0000000102b9cb7f chromedriver + 719743\n' +
+    '8   chromedriver                        0x0000000102b9d881 chromedriver + 723073\n' +
+    '9   chromedriver                        0x0000000103086dc1 chromedriver + 5873089\n' +
+    '10  chromedriver                        0x000000010308b292 chromedriver + 5890706\n' +
+    '11  chromedriver                        0x0000000103063777 chromedriver + 5728119\n' +
+    '12  chromedriver                        0x000000010308bd3f chromedriver + 5893439\n' +
+    '13  chromedriver                        0x00000001030533f4 chromedriver + 5661684\n' +
+    '14  chromedriver                        0x00000001030ae698 chromedriver + 6035096\n' +
+    '15  chromedriver                        0x00000001030ae85d chromedriver + 6035549\n' +
+    '16  chromedriver                        0x00000001030c1251 chromedriver + 6111825\n' +
+    '17  libsystem_pthread.dylib             0x00007ff815bcc1d3 _pthread_start + 125\n' +
+    '18  libsystem_pthread.dylib             0x00007ff815bc7bd3 thread_start + 15\n'
+}[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+
+
+========================================
+PAGE: /workflows
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: SessionNotCreatedError: session not created
+from unknown error: cannot find Chrome binary
+    at Object.throwDecodedError (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/error.js:523:15)
+    at parseHttpResponse (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:524:13)
+    at Executor.execute (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:456:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  remoteStacktrace: '0   chromedriver                        0x000000010bc7f198 chromedriver + 6148504\n' +
+    '1   chromedriver                        0x000000010bc7666a chromedriver + 6112874\n' +
+    '2   chromedriver                        0x000000010b70ca7b chromedriver + 436859\n' +
+    '3   chromedriver                        0x000000010b74588e chromedriver + 669838\n' +
+    '4   chromedriver                        0x000000010b744492 chromedriver + 664722\n' +
+    '5   chromedriver                        0x000000010b794294 chromedriver + 991892\n' +
+    '6   chromedriver                        0x000000010b793976 chromedriver + 989558\n' +
+    '7   chromedriver                        0x000000010b751b7f chromedriver + 719743\n' +
+    '8   chromedriver                        0x000000010b752881 chromedriver + 723073\n' +
+    '9   chromedriver                        0x000000010bc3bdc1 chromedriver + 5873089\n' +
+    '10  chromedriver                        0x000000010bc40292 chromedriver + 5890706\n' +
+    '11  chromedriver                        0x000000010bc18777 chromedriver + 5728119\n' +
+    '12  chromedriver                        0x000000010bc40d3f chromedriver + 5893439\n' +
+    '13  chromedriver                        0x000000010bc083f4 chromedriver + 5661684\n' +
+    '14  chromedriver                        0x000000010bc63698 chromedriver + 6035096\n' +
+    '15  chromedriver                        0x000000010bc6385d chromedriver + 6035549\n' +
+    '16  chromedriver                        0x000000010bc76251 chromedriver + 6111825\n' +
+    '17  libsystem_pthread.dylib             0x00007ff815bcc1d3 _pthread_start + 125\n' +
+    '18  libsystem_pthread.dylib             0x00007ff815bc7bd3 thread_start + 15\n'
+}[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+
+
+========================================
+PAGE: /agents
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: SessionNotCreatedError: session not created
+from unknown error: cannot find Chrome binary
+    at Object.throwDecodedError (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/error.js:523:15)
+    at parseHttpResponse (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:524:13)
+    at Executor.execute (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:456:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  remoteStacktrace: '0   chromedriver                        0x0000000103e44198 chromedriver + 6148504\n' +
+    '1   chromedriver                        0x0000000103e3b66a chromedriver + 6112874\n' +
+    '2   chromedriver                        0x00000001038d1a7b chromedriver + 436859\n' +
+    '3   chromedriver                        0x000000010390a88e chromedriver + 669838\n' +
+    '4   chromedriver                        0x0000000103909492 chromedriver + 664722\n' +
+    '5   chromedriver                        0x0000000103959294 chromedriver + 991892\n' +
+    '6   chromedriver                        0x0000000103958976 chromedriver + 989558\n' +
+    '7   chromedriver                        0x0000000103916b7f chromedriver + 719743\n' +
+    '8   chromedriver                        0x0000000103917881 chromedriver + 723073\n' +
+    '9   chromedriver                        0x0000000103e00dc1 chromedriver + 5873089\n' +
+    '10  chromedriver                        0x0000000103e05292 chromedriver + 5890706\n' +
+    '11  chromedriver                        0x0000000103ddd777 chromedriver + 5728119\n' +
+    '12  chromedriver                        0x0000000103e05d3f chromedriver + 5893439\n' +
+    '13  chromedriver                        0x0000000103dcd3f4 chromedriver + 5661684\n' +
+    '14  chromedriver                        0x0000000103e28698 chromedriver + 6035096\n' +
+    '15  chromedriver                        0x0000000103e2885d chromedriver + 6035549\n' +
+    '16  chromedriver                        0x0000000103e3b251 chromedriver + 6111825\n' +
+    '17  libsystem_pthread.dylib             0x00007ff815bcc1d3 _pthread_start + 125\n' +
+    '18  libsystem_pthread.dylib             0x00007ff815bc7bd3 thread_start + 15\n'
+}[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+
+
+========================================
+PAGE: /analytics
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: SessionNotCreatedError: session not created
+from unknown error: cannot find Chrome binary
+    at Object.throwDecodedError (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/error.js:523:15)
+    at parseHttpResponse (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:524:13)
+    at Executor.execute (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:456:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  remoteStacktrace: '0   chromedriver                        0x000000010513b198 chromedriver + 6148504\n' +
+    '1   chromedriver                        0x000000010513266a chromedriver + 6112874\n' +
+    '2   chromedriver                        0x0000000104bc8a7b chromedriver + 436859\n' +
+    '3   chromedriver                        0x0000000104c0188e chromedriver + 669838\n' +
+    '4   chromedriver                        0x0000000104c00492 chromedriver + 664722\n' +
+    '5   chromedriver                        0x0000000104c50294 chromedriver + 991892\n' +
+    '6   chromedriver                        0x0000000104c4f976 chromedriver + 989558\n' +
+    '7   chromedriver                        0x0000000104c0db7f chromedriver + 719743\n' +
+    '8   chromedriver                        0x0000000104c0e881 chromedriver + 723073\n' +
+    '9   chromedriver                        0x00000001050f7dc1 chromedriver + 5873089\n' +
+    '10  chromedriver                        0x00000001050fc292 chromedriver + 5890706\n' +
+    '11  chromedriver                        0x00000001050d4777 chromedriver + 5728119\n' +
+    '12  chromedriver                        0x00000001050fcd3f chromedriver + 5893439\n' +
+    '13  chromedriver                        0x00000001050c43f4 chromedriver + 5661684\n' +
+    '14  chromedriver                        0x000000010511f698 chromedriver + 6035096\n' +
+    '15  chromedriver                        0x000000010511f85d chromedriver + 6035549\n' +
+    '16  chromedriver                        0x0000000105132251 chromedriver + 6111825\n' +
+    '17  libsystem_pthread.dylib             0x00007ff815bcc1d3 _pthread_start + 125\n' +
+    '18  libsystem_pthread.dylib             0x00007ff815bc7bd3 thread_start + 15\n'
+}[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+
+
+========================================
+PAGE: /mental-models
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: Error: Server terminated early with status 1
+    at /Users/others/hummbl-1/node_modules/selenium-webdriver/remote/index.js:256:70
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+
+
+========================================
+PAGE: /templates
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: SessionNotCreatedError: session not created
+from unknown error: cannot find Chrome binary
+    at Object.throwDecodedError (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/error.js:523:15)
+    at parseHttpResponse (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:524:13)
+    at Executor.execute (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:456:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  remoteStacktrace: '0   chromedriver                        0x00000001014fd198 chromedriver + 6148504\n' +
+    '1   chromedriver                        0x00000001014f466a chromedriver + 6112874\n' +
+    '2   chromedriver                        0x0000000100f8aa7b chromedriver + 436859\n' +
+    '3   chromedriver                        0x0000000100fc388e chromedriver + 669838\n' +
+    '4   chromedriver                        0x0000000100fc2492 chromedriver + 664722\n' +
+    '5   chromedriver                        0x0000000101012294 chromedriver + 991892\n' +
+    '6   chromedriver                        0x0000000101011976 chromedriver + 989558\n' +
+    '7   chromedriver                        0x0000000100fcfb7f chromedriver + 719743\n' +
+    '8   chromedriver                        0x0000000100fd0881 chromedriver + 723073\n' +
+    '9   chromedriver                        0x00000001014b9dc1 chromedriver + 5873089\n' +
+    '10  chromedriver                        0x00000001014be292 chromedriver + 5890706\n' +
+    '11  chromedriver                        0x0000000101496777 chromedriver + 5728119\n' +
+    '12  chromedriver                        0x00000001014bed3f chromedriver + 5893439\n' +
+    '13  chromedriver                        0x00000001014863f4 chromedriver + 5661684\n' +
+    '14  chromedriver                        0x00000001014e1698 chromedriver + 6035096\n' +
+    '15  chromedriver                        0x00000001014e185d chromedriver + 6035549\n' +
+    '16  chromedriver                        0x00000001014f4251 chromedriver + 6111825\n' +
+    '17  libsystem_pthread.dylib             0x00007ff815bcc1d3 _pthread_start + 125\n' +
+    '18  libsystem_pthread.dylib             0x00007ff815bc7bd3 thread_start + 15\n'
+}[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+
+
+========================================
+PAGE: /settings
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: SessionNotCreatedError: session not created
+from unknown error: cannot find Chrome binary
+    at Object.throwDecodedError (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/error.js:523:15)
+    at parseHttpResponse (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:524:13)
+    at Executor.execute (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:456:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  remoteStacktrace: '0   chromedriver                        0x00000001005f8198 chromedriver + 6148504\n' +
+    '1   chromedriver                        0x00000001005ef66a chromedriver + 6112874\n' +
+    '2   chromedriver                        0x0000000100085a7b chromedriver + 436859\n' +
+    '3   chromedriver                        0x00000001000be88e chromedriver + 669838\n' +
+    '4   chromedriver                        0x00000001000bd492 chromedriver + 664722\n' +
+    '5   chromedriver                        0x000000010010d294 chromedriver + 991892\n' +
+    '6   chromedriver                        0x000000010010c976 chromedriver + 989558\n' +
+    '7   chromedriver                        0x00000001000cab7f chromedriver + 719743\n' +
+    '8   chromedriver                        0x00000001000cb881 chromedriver + 723073\n' +
+    '9   chromedriver                        0x00000001005b4dc1 chromedriver + 5873089\n' +
+    '10  chromedriver                        0x00000001005b9292 chromedriver + 5890706\n' +
+    '11  chromedriver                        0x0000000100591777 chromedriver + 5728119\n' +
+    '12  chromedriver                        0x00000001005b9d3f chromedriver + 5893439\n' +
+    '13  chromedriver                        0x00000001005813f4 chromedriver + 5661684\n' +
+    '14  chromedriver                        0x00000001005dc698 chromedriver + 6035096\n' +
+    '15  chromedriver                        0x00000001005dc85d chromedriver + 6035549\n' +
+    '16  chromedriver                        0x00000001005ef251 chromedriver + 6111825\n' +
+    '17  libsystem_pthread.dylib             0x00007ff815bcc1d3 _pthread_start + 125\n' +
+    '18  libsystem_pthread.dylib             0x00007ff815bc7bd3 thread_start + 15\n'
+}[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+
+
+========================================
+PAGE: /notifications
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: SessionNotCreatedError: session not created
+from unknown error: cannot find Chrome binary
+    at Object.throwDecodedError (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/error.js:523:15)
+    at parseHttpResponse (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:524:13)
+    at Executor.execute (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:456:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  remoteStacktrace: '0   chromedriver                        0x0000000104b29198 chromedriver + 6148504\n' +
+    '1   chromedriver                        0x0000000104b2066a chromedriver + 6112874\n' +
+    '2   chromedriver                        0x00000001045b6a7b chromedriver + 436859\n' +
+    '3   chromedriver                        0x00000001045ef88e chromedriver + 669838\n' +
+    '4   chromedriver                        0x00000001045ee492 chromedriver + 664722\n' +
+    '5   chromedriver                        0x000000010463e294 chromedriver + 991892\n' +
+    '6   chromedriver                        0x000000010463d976 chromedriver + 989558\n' +
+    '7   chromedriver                        0x00000001045fbb7f chromedriver + 719743\n' +
+    '8   chromedriver                        0x00000001045fc881 chromedriver + 723073\n' +
+    '9   chromedriver                        0x0000000104ae5dc1 chromedriver + 5873089\n' +
+    '10  chromedriver                        0x0000000104aea292 chromedriver + 5890706\n' +
+    '11  chromedriver                        0x0000000104ac2777 chromedriver + 5728119\n' +
+    '12  chromedriver                        0x0000000104aead3f chromedriver + 5893439\n' +
+    '13  chromedriver                        0x0000000104ab23f4 chromedriver + 5661684\n' +
+    '14  chromedriver                        0x0000000104b0d698 chromedriver + 6035096\n' +
+    '15  chromedriver                        0x0000000104b0d85d chromedriver + 6035549\n' +
+    '16  chromedriver                        0x0000000104b20251 chromedriver + 6111825\n' +
+    '17  libsystem_pthread.dylib             0x00007ff815bcc1d3 _pthread_start + 125\n' +
+    '18  libsystem_pthread.dylib             0x00007ff815bc7bd3 thread_start + 15\n'
+}[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+
+
+========================================
+PAGE: /team
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: SessionNotCreatedError: session not created
+from unknown error: cannot find Chrome binary
+    at Object.throwDecodedError (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/error.js:523:15)
+    at parseHttpResponse (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:524:13)
+    at Executor.execute (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:456:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  remoteStacktrace: '0   chromedriver                        0x0000000102e29198 chromedriver + 6148504\n' +
+    '1   chromedriver                        0x0000000102e2066a chromedriver + 6112874\n' +
+    '2   chromedriver                        0x00000001028b6a7b chromedriver + 436859\n' +
+    '3   chromedriver                        0x00000001028ef88e chromedriver + 669838\n' +
+    '4   chromedriver                        0x00000001028ee492 chromedriver + 664722\n' +
+    '5   chromedriver                        0x000000010293e294 chromedriver + 991892\n' +
+    '6   chromedriver                        0x000000010293d976 chromedriver + 989558\n' +
+    '7   chromedriver                        0x00000001028fbb7f chromedriver + 719743\n' +
+    '8   chromedriver                        0x00000001028fc881 chromedriver + 723073\n' +
+    '9   chromedriver                        0x0000000102de5dc1 chromedriver + 5873089\n' +
+    '10  chromedriver                        0x0000000102dea292 chromedriver + 5890706\n' +
+    '11  chromedriver                        0x0000000102dc2777 chromedriver + 5728119\n' +
+    '12  chromedriver                        0x0000000102dead3f chromedriver + 5893439\n' +
+    '13  chromedriver                        0x0000000102db23f4 chromedriver + 5661684\n' +
+    '14  chromedriver                        0x0000000102e0d698 chromedriver + 6035096\n' +
+    '15  chromedriver                        0x0000000102e0d85d chromedriver + 6035549\n' +
+    '16  chromedriver                        0x0000000102e20251 chromedriver + 6111825\n' +
+    '17  libsystem_pthread.dylib             0x00007ff815bcc1d3 _pthread_start + 125\n' +
+    '18  libsystem_pthread.dylib             0x00007ff815bc7bd3 thread_start + 15\n'
+}[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+
+
+========================================
+PAGE: /login
+========================================
+[1mRunning axe-core 4.11.0 in chrome-headless[22m
+[31m[1mError: SessionNotCreatedError: session not created
+from unknown error: cannot find Chrome binary
+    at Object.throwDecodedError (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/error.js:523:15)
+    at parseHttpResponse (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:524:13)
+    at Executor.execute (/Users/others/hummbl-1/node_modules/selenium-webdriver/lib/http.js:456:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  remoteStacktrace: '0   chromedriver                        0x000000010f189198 chromedriver + 6148504\n' +
+    '1   chromedriver                        0x000000010f18066a chromedriver + 6112874\n' +
+    '2   chromedriver                        0x000000010ec16a7b chromedriver + 436859\n' +
+    '3   chromedriver                        0x000000010ec4f88e chromedriver + 669838\n' +
+    '4   chromedriver                        0x000000010ec4e492 chromedriver + 664722\n' +
+    '5   chromedriver                        0x000000010ec9e294 chromedriver + 991892\n' +
+    '6   chromedriver                        0x000000010ec9d976 chromedriver + 989558\n' +
+    '7   chromedriver                        0x000000010ec5bb7f chromedriver + 719743\n' +
+    '8   chromedriver                        0x000000010ec5c881 chromedriver + 723073\n' +
+    '9   chromedriver                        0x000000010f145dc1 chromedriver + 5873089\n' +
+    '10  chromedriver                        0x000000010f14a292 chromedriver + 5890706\n' +
+    '11  chromedriver                        0x000000010f122777 chromedriver + 5728119\n' +
+    '12  chromedriver                        0x000000010f14ad3f chromedriver + 5893439\n' +
+    '13  chromedriver                        0x000000010f1123f4 chromedriver + 5661684\n' +
+    '14  chromedriver                        0x000000010f16d698 chromedriver + 6035096\n' +
+    '15  chromedriver                        0x000000010f16d85d chromedriver + 6035549\n' +
+    '16  chromedriver                        0x000000010f180251 chromedriver + 6111825\n' +
+    '17  libsystem_pthread.dylib             0x00007ff815bcc1d3 _pthread_start + 125\n' +
+    '18  libsystem_pthread.dylib             0x00007ff815bc7bd3 thread_start + 15\n'
+}[22m[39m
+Please report the problem to: [4m[34mhttps://github.com/dequelabs/axe-core-npm/issues/[39m[24m
+

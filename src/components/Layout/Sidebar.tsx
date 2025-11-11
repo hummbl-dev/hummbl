@@ -23,7 +23,7 @@ const navigation = [
 export default function Sidebar() {
   return (
     <div className="w-64 bg-gray-900 text-white">
-      <div className="p-4 border-b border-gray-800">
+      <div className="p-4 border-b border-gray-800" role="complementary" aria-label="Application branding">
         <div className="flex items-center space-x-2">
           <Activity className="h-8 w-8 text-primary-400" />
           <div>
@@ -32,7 +32,7 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
-      <nav className="p-4 space-y-2">
+      <nav className="p-4 space-y-2" role="navigation" aria-label="Main navigation">
         {navigation.map((item) => (
           <NavLink
             key={item.name}

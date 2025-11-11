@@ -76,6 +76,7 @@ export default function Settings() {
             <button
               onClick={() => setShowAnthropicKey(!showAnthropicKey)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              aria-label={showAnthropicKey ? 'Hide Anthropic API key' : 'Show Anthropic API key'}
             >
               {showAnthropicKey ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
@@ -109,6 +110,7 @@ export default function Settings() {
             <button
               onClick={() => setShowOpenaiKey(!showOpenaiKey)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              aria-label={showOpenaiKey ? 'Hide OpenAI API key' : 'Show OpenAI API key'}
             >
               {showOpenaiKey ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
