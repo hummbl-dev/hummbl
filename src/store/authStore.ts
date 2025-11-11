@@ -24,6 +24,7 @@ interface AuthState {
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => void;
   clearError: () => void;
+  fetchCurrentUser: () => Promise<void>;
 }
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://hummbl-backend.hummbl.workers.dev';
@@ -118,6 +119,30 @@ export const useAuthStore = create<AuthState>()(
 
       clearError: () => {
         set({ error: null });
+      },
+
+      fetchCurrentUser: async () => {
+        const state = useAuthStore.getState();
+        const token = state.token;
+
+        if (!token) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_URL}/api/auth/me`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            set({ user: data.user });
+          }
+        } catch (error) {
+          console.error('Failed to fetch current user:', error);
+        }
       },
     }),
     {

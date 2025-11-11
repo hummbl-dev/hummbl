@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Check, X, Loader2, Mail } from 'lucide-react';
+import { useAuthStore } from '../store/authStore';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { fetchCurrentUser } = useAuthStore();
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
   const [message, setMessage] = useState('');
 
@@ -31,6 +33,10 @@ export default function VerifyEmail() {
       if (response.ok) {
         setStatus('success');
         setMessage(data.message || 'Email verified successfully!');
+        
+        // Refresh user data to update emailVerified status
+        await fetchCurrentUser();
+        
         // Redirect to dashboard after 3 seconds
         setTimeout(() => navigate('/'), 3000);
       } else {
