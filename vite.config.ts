@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [
     react(),
-    splitVendorChunkPlugin(), // Split vendor code into separate chunk
+    // Don't use splitVendorChunkPlugin() - we'll do manual splitting
   ],
   server: {
     port: 3000,
@@ -16,25 +16,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Vendor chunks - split by major dependencies
+          // Keep all node_modules in a single vendor chunk to avoid dependency issues
           if (id.includes('node_modules')) {
-            // React MUST be in its own chunk and loaded first
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            // React Router depends on React, so separate it
-            if (id.includes('react-router')) {
-              return 'router-vendor';
-            }
-            // Zustand uses React hooks
-            if (id.includes('zustand')) {
-              return 'state-vendor';
-            }
-            // UI libraries that use React
-            if (id.includes('lucide-react') || id.includes('@xyflow') || id.includes('@vercel/analytics')) {
-              return 'ui-vendor';
-            }
-            // Other node_modules go to 'vendor'
             return 'vendor';
           }
         },
