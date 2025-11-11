@@ -1,0 +1,92 @@
+name: Load Tests
+
+on:
+  schedule:
+    # Run weekly on Sundays at midnight UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+    inputs:
+      stress_test:
+        description: 'Run stress test (12 min duration)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install k6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+      
+      - name: Verify k6 installation
+        run: k6 version
+      
+      - name: Create results directory
+        run: mkdir -p load-tests/results
+      
+      - name: Run Health Check Test
+        continue-on-error: true
+        run: |
+          k6 run --out json=load-tests/results/health-check.json \
+            --env BASE_URL=https://hummbl-backend.hummbl.workers.dev \
+            load-tests/health-check.js
+      
+      - name: Run Auth Flow Test
+        continue-on-error: true
+        run: |
+          k6 run --out json=load-tests/results/auth-flow.json \
+            --env BASE_URL=https://hummbl-backend.hummbl.workers.dev \
+            load-tests/auth-flow.js
+      
+      - name: Run Rate Limit Test
+        continue-on-error: true
+        run: |
+          k6 run --out json=load-tests/results/rate-limit.json \
+            --env BASE_URL=https://hummbl-backend.hummbl.workers.dev \
+            load-tests/rate-limit.js
+      
+      - name: Run Spike Test
+        continue-on-error: true
+        run: |
+          k6 run --out json=load-tests/results/spike-test.json \
+            --env BASE_URL=https://hummbl-backend.hummbl.workers.dev \
+            load-tests/spike-test.js
+      
+      - name: Run Stress Test
+        if: github.event.inputs.stress_test == 'true'
+        continue-on-error: true
+        run: |
+          k6 run --out json=load-tests/results/stress-test.json \
+            --env BASE_URL=https://hummbl-backend.hummbl.workers.dev \
+            load-tests/stress-test.js
+      
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: load-test-results
+          path: load-tests/results/
+          retention-days: 30
+      
+      - name: Generate Summary
+        if: always()
+        run: |
+          echo "## Load Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Tests completed at $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Files Generated:" >> $GITHUB_STEP_SUMMARY
+          ls -lh load-tests/results/ >> $GITHUB_STEP_SUMMARY || echo "No results generated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Download artifacts to view detailed metrics." >> $GITHUB_STEP_SUMMARY
