@@ -18,14 +18,21 @@ export default defineConfig({
         manualChunks(id) {
           // Vendor chunks - split by major dependencies
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+            // React MUST be in its own chunk and loaded first
+            if (id.includes('react') || id.includes('react-dom')) {
               return 'react-vendor';
             }
-            if (id.includes('lucide-react') || id.includes('@xyflow')) {
-              return 'ui-vendor';
+            // React Router depends on React, so separate it
+            if (id.includes('react-router')) {
+              return 'router-vendor';
             }
+            // Zustand uses React hooks
             if (id.includes('zustand')) {
               return 'state-vendor';
+            }
+            // UI libraries that use React
+            if (id.includes('lucide-react') || id.includes('@xyflow') || id.includes('@vercel/analytics')) {
+              return 'ui-vendor';
             }
             // Other node_modules go to 'vendor'
             return 'vendor';
