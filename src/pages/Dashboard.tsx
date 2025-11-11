@@ -1,17 +1,21 @@
 import { useWorkflowStore } from '../store/workflowStore';
-import { Workflow, CheckCircle2, XCircle, Activity } from 'lucide-react';
+import { Workflow, CheckCircle2, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const workflows = useWorkflowStore((state) => state.workflows);
   const agents = useWorkflowStore((state) => state.agents);
 
+  const draftWorkflows = workflows.filter((w) => w.status === 'draft');
   const activeWorkflows = workflows.filter((w) => w.status === 'active');
   const completedWorkflows = workflows.filter((w) => w.status === 'completed');
-  const failedWorkflows = workflows.filter((w) => w.status === 'failed');
   const recentWorkflows = workflows
     .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
     .slice(0, 5);
+
+  // Count all agents including those embedded in workflows
+  const workflowAgents = workflows.flatMap((w) => w.agents || []);
+  const totalAgentCount = agents.length + workflowAgents.length;
 
   const stats = [
     {
@@ -19,6 +23,12 @@ export default function Dashboard() {
       value: workflows.length,
       icon: Workflow,
       color: 'bg-blue-500',
+    },
+    {
+      name: 'Draft',
+      value: draftWorkflows.length,
+      icon: Activity,
+      color: 'bg-gray-500',
     },
     {
       name: 'Active',
@@ -31,12 +41,6 @@ export default function Dashboard() {
       value: completedWorkflows.length,
       icon: CheckCircle2,
       color: 'bg-purple-500',
-    },
-    {
-      name: 'Failed',
-      value: failedWorkflows.length,
-      icon: XCircle,
-      color: 'bg-red-500',
     },
   ];
 
@@ -135,17 +139,15 @@ export default function Dashboard() {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Total Agents</span>
-              <span className="font-bold text-gray-900">{agents.length}</span>
+              <span className="font-bold text-gray-900">{totalAgentCount}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Active Agents</span>
-              <span className="font-bold text-gray-900">
-                {agents.filter((a) =>
-                  workflows.some((w) =>
-                    w.status === 'active' && w.agents.some((wa) => wa.id === a.id)
-                  )
-                ).length}
-              </span>
+              <span className="text-gray-600">In Workflows</span>
+              <span className="font-bold text-gray-900">{workflowAgents.length}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600">Global Agents</span>
+              <span className="font-bold text-gray-900">{agents.length}</span>
             </div>
           </div>
           <Link

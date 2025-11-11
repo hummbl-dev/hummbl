@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Settings, Search, User, LogOut } from 'lucide-react';
+import { Bell, Settings, User, LogOut } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
+import GlobalSearch from './GlobalSearch';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -11,24 +12,7 @@ export default function Header() {
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
-        <div className="flex-1 max-w-lg">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search workflows, agents, or tasks..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const query = e.currentTarget.value;
-                  if (query.trim()) {
-                    navigate(`/workflows?search=${encodeURIComponent(query)}`);
-                  }
-                }
-              }}
-            />
-          </div>
-        </div>
+        <GlobalSearch />
         <div className="flex items-center space-x-4 ml-4">
           <button
             onClick={() => navigate('/notifications')}
@@ -36,7 +20,7 @@ export default function Header() {
             title="Notifications"
           >
             <Bell className="h-5 w-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            {/* Note: Notification badge removed - will show when notifications exist */}
           </button>
           <button
             onClick={() => navigate('/settings')}
