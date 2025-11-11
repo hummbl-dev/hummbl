@@ -25,7 +25,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
+      <main className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Logo/Header */}
           <div className="text-center mb-8">
@@ -140,7 +140,7 @@ export default function Login() {
         <p className="text-center text-sm text-gray-600 mt-6">
           © 2024 HUMMBL. All rights reserved.
         </p>
-      </div>
+      </main>
     </div>
   );
 }

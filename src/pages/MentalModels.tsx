@@ -122,6 +122,9 @@ export default function MentalModels() {
         Showing {filteredModels.length} of {mentalModels.length} mental models
       </div>
 
+      {/* Models Section */}
+      <h2 className="sr-only">Mental Models</h2>
+      
       {/* Models Grid */}
       {filteredModels.length === 0 ? (
         <div className="card text-center py-12">
