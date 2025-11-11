@@ -9,6 +9,7 @@ interface User {
   isActive: boolean;
   createdAt: number;
   lastLoginAt: number;
+  emailVerified?: boolean;
 }
 
 interface AuthState {

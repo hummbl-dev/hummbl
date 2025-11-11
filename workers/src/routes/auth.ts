@@ -19,6 +19,7 @@ import {
   verifyPassword,
 } from '../lib/auth';
 import { rateLimit, RATE_LIMITS } from '../lib/rateLimit';
+import { sendEmail, generateVerificationEmail } from '../lib/email';
 
 const logger = createLogger('AuthRoutes');
 const app = new Hono<{ Bindings: Env }>();
@@ -41,7 +42,7 @@ app.post('/login', async (c) => {
 
     // Get user from database
     const user = await c.env.DB.prepare(
-      'SELECT id, email, password_hash, name, role, is_active FROM users WHERE email = ?'
+      'SELECT id, email, password_hash, name, role, is_active, email_verified FROM users WHERE email = ?'
     )
       .bind(email.toLowerCase())
       .first<{
@@ -51,6 +52,7 @@ app.post('/login', async (c) => {
         name: string;
         role: string;
         is_active: number;
+        email_verified: number;
       }>();
 
     if (!user) {
@@ -83,6 +85,7 @@ app.post('/login', async (c) => {
         email: user.email,
         name: user.name,
         role: user.role,
+        emailVerified: user.email_verified === 1,
       },
     });
   } catch (error) {
@@ -127,6 +130,7 @@ app.get('/me', requireAuth, async (c) => {
       email: user.email,
       name: user.name,
       role: user.role,
+      emailVerified: user.email_verified === 1,
     },
   });
 });
@@ -165,16 +169,43 @@ app.post('/register', async (c) => {
     const now = Math.floor(Date.now() / 1000);
 
     await c.env.DB.prepare(
-      `INSERT INTO users (id, email, password_hash, name, role, is_active, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO users (id, email, password_hash, name, role, is_active, created_at, updated_at, email_verified)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
-      .bind(userId, email.toLowerCase(), passwordHash, name || null, 'user', 1, now, now)
+      .bind(userId, email.toLowerCase(), passwordHash, name || null, 'user', 1, now, now, 0)
       .run();
 
-    // Create session
+    // Generate verification token
+    const verificationToken = crypto.randomUUID().replace(/-/g, '');
+    const verificationId = `verify-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const expiresAt = now + (24 * 60 * 60); // 24 hours
+
+    await c.env.DB.prepare(
+      `INSERT INTO email_verifications (id, user_id, token, email, expires_at, created_at)
+       VALUES (?, ?, ?, ?, ?, ?)`
+    )
+      .bind(verificationId, userId, verificationToken, email.toLowerCase(), expiresAt, now)
+      .run();
+
+    // Send verification email
+    const appUrl = c.env.APP_URL || 'https://hummbl.vercel.app';
+    const verificationUrl = `${appUrl}/verify-email?token=${verificationToken}`;
+    const emailContent = generateVerificationEmail(name || email, verificationUrl);
+
+    await sendEmail(
+      {
+        to: email,
+        subject: emailContent.subject,
+        text: emailContent.text,
+        html: emailContent.html,
+      },
+      c.env
+    );
+
+    // Create session (user can use app while unverified, but with limited access)
     const token = await createSession(userId, c.env.DB);
 
-    logger.info('User registered', { userId, email });
+    logger.info('User registered, verification email sent', { userId, email });
 
     return c.json(
       {
@@ -185,13 +216,164 @@ app.post('/register', async (c) => {
           email: email.toLowerCase(),
           name,
           role: 'user',
+          emailVerified: false,
         },
+        message: 'Account created! Please check your email to verify your account.',
       },
       201
     );
   } catch (error) {
     logger.error('Registration failed', error);
     return c.json({ error: 'Registration failed' }, 500);
+  }
+});
+
+/**
+ * GET /auth/verify-email/:token
+ * Verify email address with token
+ */
+app.get('/verify-email/:token', async (c) => {
+  try {
+    const token = c.req.param('token');
+
+    if (!token) {
+      return c.json({ error: 'Verification token required' }, 400);
+    }
+
+    const now = Math.floor(Date.now() / 1000);
+
+    // Get verification record
+    const verification = await c.env.DB.prepare(
+      `SELECT id, user_id, email, expires_at, verified_at
+       FROM email_verifications
+       WHERE token = ?`
+    )
+      .bind(token)
+      .first<{
+        id: string;
+        user_id: string;
+        email: string;
+        expires_at: number;
+        verified_at: number | null;
+      }>();
+
+    if (!verification) {
+      return c.json({ error: 'Invalid verification token' }, 404);
+    }
+
+    if (verification.verified_at) {
+      return c.json({ error: 'Email already verified' }, 400);
+    }
+
+    if (verification.expires_at < now) {
+      return c.json({ error: 'Verification token expired' }, 400);
+    }
+
+    // Update user and verification record
+    await c.env.DB.batch([
+      c.env.DB.prepare(
+        `UPDATE users
+         SET email_verified = 1, email_verified_at = ?, updated_at = ?
+         WHERE id = ?`
+      ).bind(now, now, verification.user_id),
+      c.env.DB.prepare(
+        `UPDATE email_verifications
+         SET verified_at = ?
+         WHERE id = ?`
+      ).bind(now, verification.id),
+    ]);
+
+    logger.info('Email verified', { userId: verification.user_id, email: verification.email });
+
+    return c.json({
+      success: true,
+      message: 'Email verified successfully!',
+    });
+  } catch (error) {
+    logger.error('Email verification failed', error);
+    return c.json({ error: 'Verification failed' }, 500);
+  }
+});
+
+/**
+ * POST /auth/resend-verification
+ * Resend verification email
+ */
+app.post('/resend-verification', requireAuth, async (c) => {
+  try {
+    const user = c.get('user');
+
+    // Check if already verified
+    const userRecord = await c.env.DB.prepare(
+      'SELECT email_verified FROM users WHERE id = ?'
+    )
+      .bind(user.id)
+      .first<{ email_verified: number }>();
+
+    if (userRecord?.email_verified) {
+      return c.json({ error: 'Email already verified' }, 400);
+    }
+
+    // Check for recent verification emails (rate limit: 1 per 5 minutes)
+    const now = Math.floor(Date.now() / 1000);
+    const fiveMinutesAgo = now - (5 * 60);
+
+    const recentVerification = await c.env.DB.prepare(
+      `SELECT id FROM email_verifications
+       WHERE user_id = ? AND created_at > ?
+       ORDER BY created_at DESC
+       LIMIT 1`
+    )
+      .bind(user.id, fiveMinutesAgo)
+      .first();
+
+    if (recentVerification) {
+      return c.json(
+        { error: 'Please wait 5 minutes before requesting another verification email' },
+        429
+      );
+    }
+
+    // Generate new verification token
+    const verificationToken = crypto.randomUUID().replace(/-/g, '');
+    const verificationId = `verify-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const expiresAt = now + (24 * 60 * 60); // 24 hours
+
+    await c.env.DB.prepare(
+      `INSERT INTO email_verifications (id, user_id, token, email, expires_at, created_at)
+       VALUES (?, ?, ?, ?, ?, ?)`
+    )
+      .bind(verificationId, user.id, verificationToken, user.email, expiresAt, now)
+      .run();
+
+    // Send verification email
+    const appUrl = c.env.APP_URL || 'https://hummbl.vercel.app';
+    const verificationUrl = `${appUrl}/verify-email?token=${verificationToken}`;
+    const emailContent = generateVerificationEmail(user.name || user.email, verificationUrl);
+
+    const sent = await sendEmail(
+      {
+        to: user.email,
+        subject: emailContent.subject,
+        text: emailContent.text,
+        html: emailContent.html,
+      },
+      c.env
+    );
+
+    if (!sent) {
+      return c.json({ error: 'Failed to send verification email' }, 500);
+    }
+
+    logger.info('Verification email resent', { userId: user.id, email: user.email });
+
+    return c.json({
+      success: true,
+      message: 'Verification email sent! Please check your inbox.',
+    });
+  } catch (error) {
+    logger.error('Failed to resend verification email', error);
+    return c.json({ error: 'Failed to send verification email' }, 500);
   }
 });
 

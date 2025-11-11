@@ -12,6 +12,7 @@ import { usePageTracking } from './hooks/usePageTracking';
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 const MentalModels = lazy(() => import('./pages/MentalModels'));
 const WorkflowList = lazy(() => import('./pages/WorkflowList'));
 const WorkflowDetail = lazy(() => import('./pages/WorkflowDetail'));
@@ -62,6 +63,7 @@ const AppContent: React.FC = () => {
           {/* Public routes (no layout) */}
           <Route path="/login" element={<PageErrorBoundary pageName="Login"><Login /></PageErrorBoundary>} />
           <Route path="/register" element={<PageErrorBoundary pageName="Register"><Register /></PageErrorBoundary>} />
+          <Route path="/verify-email" element={<PageErrorBoundary pageName="Verify Email"><VerifyEmail /></PageErrorBoundary>} />
           
           {/* Protected routes (with layout) */}
           <Route path="/*" element={

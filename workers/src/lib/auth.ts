@@ -19,6 +19,7 @@ export interface User {
   name?: string;
   role: 'owner' | 'admin' | 'user' | 'viewer';
   is_active?: boolean;
+  email_verified?: number;
 }
 
 export interface Session {

@@ -12,6 +12,7 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   const validateForm = (): boolean => {
     setValidationError(null);
@@ -49,7 +50,11 @@ export default function Register() {
     
     try {
       await register(email, password, name);
-      navigate('/');
+      setRegistrationSuccess(true);
+      // Redirect to dashboard after 5 seconds
+      setTimeout(() => {
+        navigate('/');
+      }, 5000);
     } catch (err) {
       // Error is handled by the store
       console.error('Registration failed:', err);
@@ -84,8 +89,22 @@ export default function Register() {
             <p className="text-gray-600 mt-2">Join HUMMBL and start building workflows</p>
           </div>
 
+          {/* Success Message */}
+          {registrationSuccess && (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
+              <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-green-800 mb-1">Account created successfully!</p>
+                <p className="text-sm text-green-700">
+                  Please check your email at <strong>{email}</strong> to verify your account.
+                  You'll be redirected to the dashboard in a moment.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Error Message */}
-          {(error || validationError) && (
+          {!registrationSuccess && (error || validationError) && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
               <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">

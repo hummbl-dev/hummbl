@@ -11,6 +11,9 @@ export interface Env {
   ANTHROPIC_API_KEY: string;
   OPENAI_API_KEY: string;
   ENV: string;
+  APP_URL?: string; // Frontend URL for email links
+  FROM_EMAIL?: string; // Email sender address
+  RESEND_API_KEY?: string; // Resend API key for email sending
 }
 
 // Result type pattern (explicit success/failure)
