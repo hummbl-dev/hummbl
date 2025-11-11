@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUMMBL Debug Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .pass { background: #d4edda; border-color: #c3e6cb; }
+        .fail { background: #f8d7da; border-color: #f5c6cb; }
+        code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 HUMMBL Production Debug</h1>
+    <p>This page tests what's preventing the app from loading.</p>
+
+    <div id="tests"></div>
+
+    <script>
+        const results = [];
+        const addTest = (name, passed, message) => {
+            results.push({ name, passed, message });
+        };
+
+        // Test 1: Basic JavaScript
+        addTest('JavaScript Execution', true, 'This script is running');
+
+        // Test 2: Fetch API
+        fetch('/assets/index-bysPFlnr.js')
+            .then(r => {
+                addTest('Main Bundle Fetch', r.ok, `Status: ${r.status}`);
+                return r.text();
+            })
+            .then(content => {
+                addTest('Bundle Size', content.length > 10000, `${Math.round(content.length/1024)}KB loaded`);
+                
+                // Test 3: Check for common errors in bundle
+                if (content.includes('import.meta')) {
+                    addTest('import.meta check', false, 'Bundle contains import.meta which may not work');
+                } else {
+                    addTest('import.meta check', true, 'No import.meta found');
+                }
+
+                // Test 4: Check for ES modules
+                addTest('ES Module support', typeof(import) !== 'undefined', 'Browser supports ES modules');
+
+                renderResults();
+            })
+            .catch(e => {
+                addTest('Main Bundle Fetch', false, e.message);
+                renderResults();
+            });
+
+        // Test 5: Check root element
+        setTimeout(() => {
+            const root = document.getElementById('root');
+            addTest('Root Element', root !== null, root ? 'Found' : 'Missing');
+            
+            // Test 6: Try to load React
+            import('/assets/react-vendor-BaiXze_5.js')
+                .then(() => {
+                    addTest('React Vendor Load', true, 'React vendor loaded successfully');
+                    
+                    // Test 7: Try loading main
+                    return import('/assets/index-bysPFlnr.js');
+                })
+                .then(() => {
+                    addTest('Main App Load', true, 'Main app module loaded');
+                    renderResults();
+                    
+                    // Check if React actually rendered
+                    setTimeout(() => {
+                        const root = document.getElementById('root');
+                        const hasContent = root && root.children.length > 0;
+                        addTest('React Rendered', hasContent, hasContent ? 'App rendered!' : 'No content in root');
+                        renderResults();
+                    }, 1000);
+                })
+                .catch(e => {
+                    addTest('Module Loading', false, `Error: ${e.message}`);
+                    addTest('Error Stack', false, e.stack || 'No stack trace');
+                    renderResults();
+                });
+        }, 500);
+
+        function renderResults() {
+            const container = document.getElementById('tests');
+            container.innerHTML = results.map(r => `
+                <div class="test ${r.passed ? 'pass' : 'fail'}">
+                    <strong>${r.passed ? '✅' : '❌'} ${r.name}</strong><br>
+                    <code>${r.message}</code>
+                </div>
+            `).join('');
+        }
+
+        // Show initial results
+        renderResults();
+    </script>
+
+    <div style="margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+        <h2>Expected Behavior</h2>
+        <p>All tests should pass with ✅. If any fail:</p>
+        <ul>
+            <li><strong>Bundle Fetch fails</strong>: Vercel routing issue</li>
+            <li><strong>Module Loading fails</strong>: JavaScript error in bundle</li>
+            <li><strong>React Rendered fails</strong>: App initialization error</li>
+        </ul>
+        <p><strong>Next step:</strong> Open browser console (F12) for detailed error messages</p>
+    </div>
+
+    <!-- Add the actual root div for testing -->
+    <div style="margin-top: 40px; padding: 20px; border: 2px dashed #007bff;">
+        <h3>Actual App Root (below):</h3>
+        <div id="root"></div>
+    </div>
+</body>
+</html>
