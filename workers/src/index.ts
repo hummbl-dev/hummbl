@@ -18,6 +18,7 @@ import notifications from './routes/notifications';
 import keys from './routes/keys';
 import users from './routes/users';
 import invites from './routes/invites';
+import docs from './routes/docs';
 
 // Create Hono app with environment bindings
 const app = new Hono<{ Bindings: Env }>();
@@ -89,6 +90,7 @@ app.route('/api/notifications', notifications);
 app.route('/api/keys', keys);
 app.route('/api/users', users);
 app.route('/api/invites', invites);
+app.route('/api/docs', docs);
 
 // 404 handler
 app.notFound((c) => {

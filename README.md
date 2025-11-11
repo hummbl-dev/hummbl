@@ -18,13 +18,34 @@ HUMMBL is an intuitive workflow management system that allows you to create, con
 
 ## Tech Stack
 
-- **Frontend Framework**: React 18 with TypeScript
+### Frontend
+- **Framework**: React 18 with TypeScript
 - **Build Tool**: Vite
 - **Routing**: React Router v6
 - **State Management**: Zustand
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
 - **Date Utilities**: date-fns
+
+### Backend
+- **Runtime**: Cloudflare Workers
+- **Framework**: Hono.js
+- **Database**: Cloudflare D1 (SQLite)
+- **Cache**: Cloudflare KV
+- **API Documentation**: OpenAPI 3.0 + Swagger UI
+
+## Quick Links
+
+- **Live App**: [https://hummbl.vercel.app](https://hummbl.vercel.app)
+- **Backend API**: [https://hummbl-backend.hummbl.workers.dev](https://hummbl-backend.hummbl.workers.dev)
+- **API Documentation**: [https://hummbl-backend.hummbl.workers.dev/api/docs](https://hummbl-backend.hummbl.workers.dev/api/docs) (Swagger UI)
+- **OpenAPI Spec**: [View YAML](https://hummbl-backend.hummbl.workers.dev/api/docs/openapi.yaml)
+
+## Documentation
+
+- **API Documentation**: See `workers/API_DOCUMENTATION.md` for complete API reference
+- **Testing Guide**: See `TESTING_AGENTS.md` for production testing
+- **Workflow Guide**: See `WORKFLOW_USAGE_GUIDE.md` for workflow concepts
 
 ## Getting Started
 
