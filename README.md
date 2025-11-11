@@ -8,6 +8,7 @@ HUMMBL is an intuitive workflow management system that allows you to create, con
 
 ## Features
 
+- **Authentication**: Secure sign in/sign up with session management and JWT tokens
 - **Workflow Management**: Create, edit, delete, and monitor workflows
 - **Agent Configuration**: Configure AI agents with specific roles, capabilities, and models
 - **Task Orchestration**: Define tasks with dependencies and execution flow
@@ -43,6 +44,7 @@ HUMMBL is an intuitive workflow management system that allows you to create, con
 
 ## Documentation
 
+- **Authentication Guide**: See `AUTHENTICATION_GUIDE.md` for sign in/sign up implementation
 - **API Documentation**: See `workers/API_DOCUMENTATION.md` for complete API reference
 - **Testing Guide**: See `TESTING_AGENTS.md` for production testing
 - **Workflow Guide**: See `WORKFLOW_USAGE_GUIDE.md` for workflow concepts
