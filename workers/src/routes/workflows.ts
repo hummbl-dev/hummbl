@@ -9,6 +9,7 @@ import type { Env, ExecuteWorkflowRequest, Task, Agent } from '../types';
 import { createExecution, createTaskResult, updateTaskResult, updateExecutionStatus } from '../lib/db';
 import { callAI, createAIProvider } from '../services/ai';
 import { rateLimit, RATE_LIMITS } from '../lib/rateLimit';
+import { requireAuth, getAuthenticatedUserId } from '../lib/auth';
 
 const workflows = new Hono<{ Bindings: Env }>();
 
@@ -296,7 +297,7 @@ ${Object.keys(context).length > 0 ? `\nYou have access to outputs from previous 
  * Share workflow with team member
  * POST /api/workflows/:id/share
  */
-workflows.post('/:id/share', async (c) => {
+workflows.post('/:id/share', requireAuth, async (c) => {
   try {
     const workflowId = c.req.param('id');
     const shareData = await c.req.json<{
@@ -304,7 +305,7 @@ workflows.post('/:id/share', async (c) => {
       permissionLevel: 'view' | 'edit' | 'admin';
     }>();
 
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+    const currentUserId = getAuthenticatedUserId(c);
 
     // Check if current user owns the workflow or has admin permissions
     const workflowOwner = await c.env.DB.prepare(`
@@ -376,9 +377,9 @@ workflows.post('/:id/share', async (c) => {
  * Get workflows shared with current user
  * GET /api/workflows/shared
  */
-workflows.get('/shared', async (c) => {
+workflows.get('/shared', requireAuth, async (c) => {
   try {
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+    const currentUserId = getAuthenticatedUserId(c);
 
     const sharedWorkflows = await c.env.DB.prepare(`
       SELECT
@@ -417,11 +418,11 @@ workflows.get('/shared', async (c) => {
  * Remove workflow sharing
  * DELETE /api/workflows/:id/share/:userId
  */
-workflows.delete('/:id/share/:userId', async (c) => {
+workflows.delete('/:id/share/:userId', requireAuth, async (c) => {
   try {
     const workflowId = c.req.param('id');
     const targetUserId = c.req.param('userId');
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+    const currentUserId = getAuthenticatedUserId(c);
 
     // Check permissions
     const workflowOwner = await c.env.DB.prepare(`
@@ -459,10 +460,10 @@ workflows.delete('/:id/share/:userId', async (c) => {
  * Get workflow sharing permissions
  * GET /api/workflows/:id/sharing
  */
-workflows.get('/:id/sharing', async (c) => {
+workflows.get('/:id/sharing', requireAuth, async (c) => {
   try {
     const workflowId = c.req.param('id');
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+    const currentUserId = getAuthenticatedUserId(c);
 
     // Check permissions
     const workflowOwner = await c.env.DB.prepare(`

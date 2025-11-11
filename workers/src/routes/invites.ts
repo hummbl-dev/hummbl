@@ -13,6 +13,7 @@
 
 import { Hono } from 'hono';
 import type { Env } from '../types';
+import { requireAuth, requireRole, getAuthenticatedUserId } from '../lib/auth';
 
 const invites = new Hono<{ Bindings: Env }>();
 
@@ -20,18 +21,9 @@ const invites = new Hono<{ Bindings: Env }>();
  * Get pending invitations
  * GET /api/invites
  */
-invites.get('/', async (c) => {
+invites.get('/', requireAuth, requireRole('owner', 'admin'), async (c) => {
   try {
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
-
-    // Check permissions
-    const currentUser = await c.env.DB.prepare(`
-      SELECT role FROM users WHERE id = ?
-    `).bind(currentUserId).first();
-
-    if (!currentUser || !['owner', 'admin'].includes(currentUser.role as string)) {
-      return c.json({ error: 'Insufficient permissions' }, 403);
-    }
+    const currentUserId = getAuthenticatedUserId(c);
 
     const result = await c.env.DB.prepare(`
       SELECT
@@ -69,23 +61,14 @@ invites.get('/', async (c) => {
  * Send invitation
  * POST /api/invites
  */
-invites.post('/', async (c) => {
+invites.post('/', requireAuth, requireRole('owner', 'admin'), async (c) => {
   try {
     const inviteData = await c.req.json<{
       email: string;
       role: string;
     }>();
 
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
-
-    // Check permissions
-    const currentUser = await c.env.DB.prepare(`
-      SELECT role FROM users WHERE id = ?
-    `).bind(currentUserId).first();
-
-    if (!currentUser || !['owner', 'admin'].includes(currentUser.role as string)) {
-      return c.json({ error: 'Insufficient permissions' }, 403);
-    }
+    const currentUserId = getAuthenticatedUserId(c);
 
     // Check if user already exists
     const existingUser = await c.env.DB.prepare(`
@@ -215,19 +198,10 @@ invites.post('/:token/accept', async (c) => {
  * Cancel invitation
  * DELETE /api/invites/:id
  */
-invites.delete('/:id', async (c) => {
+invites.delete('/:id', requireAuth, requireRole('owner', 'admin'), async (c) => {
   try {
     const id = c.req.param('id');
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
-
-    // Check permissions
-    const currentUser = await c.env.DB.prepare(`
-      SELECT role FROM users WHERE id = ?
-    `).bind(currentUserId).first();
-
-    if (!currentUser || !['owner', 'admin'].includes(currentUser.role as string)) {
-      return c.json({ error: 'Insufficient permissions' }, 403);
-    }
+    const currentUserId = getAuthenticatedUserId(c);
 
     const result = await c.env.DB.prepare(`
       DELETE FROM invites WHERE id = ? AND accepted = 0
@@ -251,19 +225,10 @@ invites.delete('/:id', async (c) => {
  * Resend invitation
  * POST /api/invites/:id/resend
  */
-invites.post('/:id/resend', async (c) => {
+invites.post('/:id/resend', requireAuth, requireRole('owner', 'admin'), async (c) => {
   try {
     const id = c.req.param('id');
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
-
-    // Check permissions
-    const currentUser = await c.env.DB.prepare(`
-      SELECT role FROM users WHERE id = ?
-    `).bind(currentUserId).first();
-
-    if (!currentUser || !['owner', 'admin'].includes(currentUser.role as string)) {
-      return c.json({ error: 'Insufficient permissions' }, 403);
-    }
+    const currentUserId = getAuthenticatedUserId(c);
 
     const now = Math.floor(Date.now() / 1000);
     const newExpiresAt = now + (7 * 24 * 60 * 60); // 7 days from now

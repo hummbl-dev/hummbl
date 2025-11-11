@@ -17,7 +17,7 @@ export interface User {
   id: string;
   email: string;
   name?: string;
-  role: 'admin' | 'user' | 'viewer';
+  role: 'owner' | 'admin' | 'user' | 'viewer';
   is_active?: boolean;
 }
 
@@ -114,9 +114,32 @@ export async function requireAuth(
 }
 
 /**
+ * Get authenticated user from context
+ * Returns user object or throws error if not authenticated
+ */
+export function getAuthenticatedUser(c: Context<{ Bindings: Env }>): User {
+  const user = c.get('user');
+  
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
+  
+  return user;
+}
+
+/**
+ * Get authenticated user ID from context
+ * Returns user ID or throws error if not authenticated
+ */
+export function getAuthenticatedUserId(c: Context<{ Bindings: Env }>): string {
+  const user = getAuthenticatedUser(c);
+  return user.id;
+}
+
+/**
  * Role-based authorization middleware
  */
-export function requireRole(...allowedRoles: Array<'admin' | 'user' | 'viewer'>) {
+export function requireRole(...allowedRoles: Array<'owner' | 'admin' | 'user' | 'viewer'>) {
   return async (c: Context<{ Bindings: Env }>, next: () => Promise<void>) => {
     const user = c.get('user') as User | undefined;
 

@@ -13,6 +13,7 @@
 
 import { Hono } from 'hono';
 import type { Env } from '../types';
+import { requireAuth, getAuthenticatedUserId } from '../lib/auth';
 
 const keys = new Hono<{ Bindings: Env }>();
 
@@ -20,9 +21,9 @@ const keys = new Hono<{ Bindings: Env }>();
  * Get user's API keys
  * GET /api/keys
  */
-keys.get('/', async (c) => {
+keys.get('/', requireAuth, async (c) => {
   try {
-    const userId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+    const userId = getAuthenticatedUserId(c);
 
     const result = await c.env.DB.prepare(`
       SELECT
@@ -57,7 +58,7 @@ keys.get('/', async (c) => {
  * Create new API key
  * POST /api/keys
  */
-keys.post('/', async (c) => {
+keys.post('/', requireAuth, async (c) => {
   try {
     const keyData = await c.req.json<{
       name: string;
@@ -65,7 +66,7 @@ keys.post('/', async (c) => {
       key: string; // Plain text key to encrypt
     }>();
 
-    const userId = c.req.query('userId') || 'user-default';
+    const userId = getAuthenticatedUserId(c);
     const id = crypto.randomUUID();
     const now = Math.floor(Date.now() / 1000);
 
@@ -190,9 +191,9 @@ keys.delete('/:id', async (c) => {
  * Get API key usage stats
  * GET /api/keys/stats
  */
-keys.get('/stats', async (c) => {
+keys.get('/stats', requireAuth, async (c) => {
   try {
-    const userId = c.req.query('userId') || 'user-default';
+    const userId = getAuthenticatedUserId(c);
 
     const stats = await c.env.DB.prepare(`
       SELECT

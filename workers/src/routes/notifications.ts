@@ -13,6 +13,7 @@
 
 import { Hono } from 'hono';
 import type { Env } from '../types';
+import { requireAuth, getAuthenticatedUserId } from '../lib/auth';
 
 const notifications = new Hono<{ Bindings: Env }>();
 
@@ -20,12 +21,12 @@ const notifications = new Hono<{ Bindings: Env }>();
  * Get user notifications
  * GET /api/notifications?unreadOnly=true&category=workflow&limit=50
  */
-notifications.get('/', async (c) => {
+notifications.get('/', requireAuth, async (c) => {
   try {
     const unreadOnly = c.req.query('unreadOnly') === 'true';
     const category = c.req.query('category'); // workflow, system, team, billing
     const limit = Number(c.req.query('limit')) || 50;
-    const userId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+    const userId = getAuthenticatedUserId(c);
 
     let query = `
       SELECT id, user_id, type, category, title, message, 
@@ -162,9 +163,9 @@ notifications.patch('/:id/read', async (c) => {
  * Mark all notifications as read
  * PATCH /api/notifications/read-all
  */
-notifications.patch('/read-all', async (c) => {
+notifications.patch('/read-all', requireAuth, async (c) => {
   try {
-    const userId = c.req.query('userId') || 'user-default';
+    const userId = getAuthenticatedUserId(c);
     const now = Math.floor(Date.now() / 1000);
 
     await c.env.DB.prepare(`
@@ -213,9 +214,9 @@ notifications.delete('/:id', async (c) => {
  * Clear read notifications
  * DELETE /api/notifications/clear-read
  */
-notifications.delete('/clear-read', async (c) => {
+notifications.delete('/clear-read', requireAuth, async (c) => {
   try {
-    const userId = c.req.query('userId') || 'user-default';
+    const userId = getAuthenticatedUserId(c);
 
     await c.env.DB.prepare(`
       DELETE FROM notifications

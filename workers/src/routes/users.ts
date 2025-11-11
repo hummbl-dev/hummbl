@@ -13,6 +13,7 @@
 
 import { Hono } from 'hono';
 import type { Env } from '../types';
+import { requireAuth, requireRole, getAuthenticatedUserId } from '../lib/auth';
 
 const users = new Hono<{ Bindings: Env }>();
 
@@ -20,18 +21,9 @@ const users = new Hono<{ Bindings: Env }>();
  * Get all users in the organization
  * GET /api/users
  */
-users.get('/', async (c) => {
+users.get('/', requireAuth, requireRole('owner', 'admin'), async (c) => {
   try {
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
-
-    // Only owners and admins can see all users
-    const currentUser = await c.env.DB.prepare(`
-      SELECT role FROM users WHERE id = ?
-    `).bind(currentUserId).first();
-
-    if (!currentUser || !['owner', 'admin'].includes(currentUser.role as string)) {
-      return c.json({ error: 'Insufficient permissions' }, 403);
-    }
+    const currentUserId = getAuthenticatedUserId(c);
 
     const result = await c.env.DB.prepare(`
       SELECT
@@ -69,9 +61,9 @@ users.get('/', async (c) => {
  * Get current user profile
  * GET /api/users/me
  */
-users.get('/me', async (c) => {
+users.get('/me', requireAuth, async (c) => {
   try {
-    const userId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+    const userId = getAuthenticatedUserId(c);
 
     const result = await c.env.DB.prepare(`
       SELECT
@@ -113,7 +105,7 @@ users.get('/me', async (c) => {
  * Update user (role, status, etc.)
  * PATCH /api/users/:id
  */
-users.patch('/:id', async (c) => {
+users.patch('/:id', requireAuth, async (c) => {
   try {
     const id = c.req.param('id');
     const updates = await c.req.json<{
@@ -122,7 +114,7 @@ users.patch('/:id', async (c) => {
       status?: string;
     }>();
 
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+    const currentUserId = getAuthenticatedUserId(c);
 
     // Check permissions
     const currentUser = await c.env.DB.prepare(`
@@ -190,10 +182,10 @@ users.patch('/:id', async (c) => {
  * Remove user from organization
  * DELETE /api/users/:id
  */
-users.delete('/:id', async (c) => {
+users.delete('/:id', requireAuth, requireRole('owner', 'admin'), async (c) => {
   try {
     const id = c.req.param('id');
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
+    const currentUserId = getAuthenticatedUserId(c);
 
     // Check permissions
     const currentUser = await c.env.DB.prepare(`
@@ -237,18 +229,9 @@ users.delete('/:id', async (c) => {
  * Get team statistics
  * GET /api/users/stats
  */
-users.get('/stats', async (c) => {
+users.get('/stats', requireAuth, requireRole('owner', 'admin'), async (c) => {
   try {
-    const currentUserId = c.req.query('userId') || 'user-default'; // TODO: Get from auth
-
-    // Check permissions
-    const currentUser = await c.env.DB.prepare(`
-      SELECT role FROM users WHERE id = ?
-    `).bind(currentUserId).first();
-
-    if (!currentUser || !['owner', 'admin'].includes(currentUser.role as string)) {
-      return c.json({ error: 'Insufficient permissions' }, 403);
-    }
+    const currentUserId = getAuthenticatedUserId(c);
 
     const stats = await c.env.DB.prepare(`
       SELECT
