@@ -39,12 +39,27 @@
             log('Root element NOT found', false);
         }
 
-        // Test 3: Try to load React
+        // Test 3: Try to load React - extract from main HTML
         setTimeout(() => {
-            import('/assets/react-vendor-BaiXze_5.js')
-                .then(() => {
-                    log('React vendor loaded');
-                    return import('/assets/index-CtUthwXc.js');
+            fetch('/')
+                .then(r => r.text())
+                .then(html => {
+                    const reactMatch = html.match(/assets\/(react-vendor-[^"]+\.js)/);
+                    const indexMatch = html.match(/assets\/(index-[^"]+\.js)/);
+                    
+                    if (!reactMatch || !indexMatch) {
+                        log('Could not find script tags in HTML', false);
+                        return Promise.reject(new Error('Script tags not found'));
+                    }
+                    
+                    log(`Found react-vendor: ${reactMatch[1]}`);
+                    log(`Found index: ${indexMatch[1]}`);
+                    
+                    return import(`/assets/${reactMatch[1]}`)
+                        .then(() => {
+                            log('React vendor loaded');
+                            return import(`/assets/${indexMatch[1]}`);
+                        });
                 })
                 .then(() => {
                     log('Main app module loaded');
