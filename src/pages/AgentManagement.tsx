@@ -5,12 +5,23 @@ import { AgentRole } from '../types/workflow';
 
 export default function AgentManagement() {
   const agents = useWorkflowStore((state) => state.agents);
+  const workflows = useWorkflowStore((state) => state.workflows);
   const addAgent = useWorkflowStore((state) => state.addAgent);
   const updateAgent = useWorkflowStore((state) => state.updateAgent);
   const deleteAgent = useWorkflowStore((state) => state.deleteAgent);
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [showWorkflowAgents, setShowWorkflowAgents] = useState(true);
+
+  // Get all agents embedded in workflows
+  const workflowAgents = workflows.flatMap((w) => 
+    (w.agents || []).map(agent => ({
+      ...agent,
+      workflowName: w.name,
+      workflowId: w.id,
+    }))
+  );
   const [formData, setFormData] = useState({
     name: '',
     role: 'custom' as AgentRole,
@@ -280,15 +291,75 @@ export default function AgentManagement() {
         </form>
       )}
 
-      {/* Agent List */}
-      {agents.length === 0 ? (
+      {/* Workflow Agents Section */}
+      {workflowAgents.length > 0 && (
+        <div className="card">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-gray-900">Agents in Workflows</h2>
+            <button
+              onClick={() => setShowWorkflowAgents(!showWorkflowAgents)}
+              className="text-sm text-primary-600 hover:text-primary-700"
+            >
+              {showWorkflowAgents ? 'Hide' : 'Show'} ({workflowAgents.length})
+            </button>
+          </div>
+          {showWorkflowAgents && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {workflowAgents.map((agent, index) => (
+                <div key={`${agent.workflowId}-${agent.id || index}`} className="border border-blue-200 bg-blue-50 p-4 rounded-lg">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{agent.name}</h3>
+                      <span className="px-2 py-0.5 bg-blue-200 text-blue-800 text-xs rounded mt-1 inline-block">
+                        {agent.role}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-700 mb-2">{agent.description}</p>
+                  <div className="text-xs text-gray-600 border-t border-blue-200 pt-2 mt-2">
+                    <div className="flex items-center justify-between">
+                      <span>Workflow:</span>
+                      <a
+                        href={`/workflows/${agent.workflowId}`}
+                        className="font-medium text-primary-600 hover:text-primary-700 truncate max-w-[180px]"
+                        title={agent.workflowName}
+                      >
+                        {agent.workflowName}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Global Agent List */}
+      {agents.length === 0 && workflowAgents.length === 0 ? (
         <div className="card text-center py-12">
-          <p className="text-gray-600">No agents configured yet</p>
+          <p className="text-gray-600 mb-2">No agents configured yet</p>
+          <p className="text-sm text-gray-500 mb-4">
+            Agents can be created globally here or embedded within workflows
+          </p>
           <button
             onClick={() => setShowForm(true)}
-            className="text-primary-600 hover:text-primary-700 mt-2 inline-block"
+            className="text-primary-600 hover:text-primary-700 inline-block"
           >
-            Create your first agent
+            Create your first global agent
+          </button>
+        </div>
+      ) : agents.length === 0 ? (
+        <div className="card text-center py-12">
+          <p className="text-gray-600 mb-2">No global agents configured yet</p>
+          <p className="text-sm text-gray-500 mb-4">
+            You have {workflowAgents.length} agent(s) embedded in workflows above
+          </p>
+          <button
+            onClick={() => setShowForm(true)}
+            className="text-primary-600 hover:text-primary-700 inline-block"
+          >
+            Create a global agent
           </button>
         </div>
       ) : (
@@ -306,12 +377,14 @@ export default function AgentManagement() {
                   <button
                     onClick={() => handleEdit(agent.id)}
                     className="p-2 hover:bg-gray-100 rounded"
+                    title="Edit agent"
                   >
                     <Edit className="h-4 w-4 text-gray-600" />
                   </button>
                   <button
                     onClick={() => handleDelete(agent.id)}
                     className="p-2 hover:bg-gray-100 rounded"
+                    title="Delete agent"
                   >
                     <Trash2 className="h-4 w-4 text-red-600" />
                   </button>
