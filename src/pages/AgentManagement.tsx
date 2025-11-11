@@ -216,9 +216,11 @@ export default function AgentManagement() {
                     <button
                       type="button"
                       onClick={() => handleRemoveCapability(capability)}
+                      aria-label={`Remove ${capability} capability`}
+                      title={`Remove ${capability}`}
                       className="hover:text-primary-900"
                     >
-                      <X className="h-3 w-3" />
+                      <X className="h-3 w-3" aria-hidden="true" />
                     </button>
                   </span>
                 ))}

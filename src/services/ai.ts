@@ -2,13 +2,16 @@
  * AI Service Layer
  * 
  * @module services/ai
- * @version 1.0.0
- * @description Integrations with AI providers (Claude, OpenAI)
+ * @version 2.0.0 - SECURITY UPDATE
+ * @description API key management for AI providers
+ * 
+ * ⚠️ SECURITY NOTICE:
+ * Direct AI API calls from frontend have been disabled.
+ * All AI execution must go through backend proxy for security.
+ * Use executeWorkflow() from services/api.ts instead.
  * 
  * HUMMBL Systems
  */
-
-import { fetchWithTimeout } from '../utils/http';
 
 export interface AIProvider {
   name: string;
@@ -77,113 +80,67 @@ export const callAI = async (
 /**
  * Call Claude (Anthropic) API
  * 
- * IMPORTANT: This will fail in the browser due to CORS!
- * Anthropic API does not allow direct browser calls.
+ * ⚠️ DEPRECATED: Direct browser calls are disabled for security.
+ * ⚠️ Use the backend API proxy instead: POST /api/workflows/:id/execute
  * 
- * TODO: Move to Cloudflare Workers backend for production.
+ * SECURITY: API keys should never be exposed in the browser.
+ * Anthropic API does not allow direct browser calls (CORS blocked).
+ * All AI calls must go through Cloudflare Workers backend.
  */
 const callClaude = async (
-  provider: AIProvider,
-  prompt: string,
-  context?: Record<string, unknown>,
-  temperature?: number,
-  maxTokens?: number
+  _provider: AIProvider,
+  _prompt: string,
+  _context?: Record<string, unknown>,
+  _temperature?: number,
+  _maxTokens?: number
 ): Promise<AIResponse> => {
-  const response = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': provider.apiKey || '',
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: provider.model,
-      max_tokens: maxTokens,
-      temperature,
-      messages: [
-        {
-          role: 'user',
-          content: context
-            ? `Context: ${JSON.stringify(context, null, 2)}\n\n${prompt}`
-            : prompt,
-        },
-      ],
-    }),
-  }, 60000);
-
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Claude API error: ${error}`);
-  }
-
-  const data = await response.json();
-  
-  return {
-    content: data.content[0].text,
-    provider: 'anthropic',
-    model: provider.model,
-    tokensUsed: data.usage?.total_tokens,
-  };
+  throw new Error(
+    'Direct AI calls from frontend are disabled for security. ' +
+    'Use executeWorkflow() from services/api.ts instead, which routes through backend proxy.'
+  );
 };
 
 /**
  * Call OpenAI API
+ * 
+ * ⚠️ DEPRECATED: Direct browser calls are disabled for security.
+ * ⚠️ Use the backend API proxy instead: POST /api/workflows/:id/execute
+ * 
+ * SECURITY: API keys should never be exposed in the browser.
+ * All AI calls must go through Cloudflare Workers backend.
  */
 const callOpenAI = async (
-  provider: AIProvider,
-  prompt: string,
-  context?: Record<string, unknown>,
-  temperature?: number,
-  maxTokens?: number
+  _provider: AIProvider,
+  _prompt: string,
+  _context?: Record<string, unknown>,
+  _temperature?: number,
+  _maxTokens?: number
 ): Promise<AIResponse> => {
-  const response = await fetchWithTimeout('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${provider.apiKey}`,
-    },
-    body: JSON.stringify({
-      model: provider.model,
-      max_tokens: maxTokens,
-      temperature,
-      messages: [
-        {
-          role: 'user',
-          content: context
-            ? `Context: ${JSON.stringify(context, null, 2)}\n\n${prompt}`
-            : prompt,
-        },
-      ],
-    }),
-  }, 60000);
-
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`OpenAI API error: ${error}`);
-  }
-
-  const data = await response.json();
-  
-  return {
-    content: data.choices[0].message.content,
-    provider: 'openai',
-    model: provider.model,
-    tokensUsed: data.usage?.total_tokens,
-  };
+  throw new Error(
+    'Direct AI calls from frontend are disabled for security. ' +
+    'Use executeWorkflow() from services/api.ts instead, which routes through backend proxy.'
+  );
 };
 
 /**
- * Get API key from environment or localStorage
+ * Get API key from localStorage
+ * 
+ * ⚠️ SECURITY: Environment variables are NOT used for API keys in production.
+ * Keys stored here are only for Settings page display and backend submission.
+ * Never expose API keys in frontend environment variables or source code.
  */
 export const getAPIKey = (provider: 'anthropic' | 'openai'): string | undefined => {
-  // Try environment variable first (for production)
-  const envKey = provider === 'anthropic' 
-    ? import.meta.env.VITE_ANTHROPIC_API_KEY 
-    : import.meta.env.VITE_OPENAI_API_KEY;
-  
-  if (envKey) return envKey;
+  // WARNING: Do NOT use environment variables for API keys
+  // They would be exposed in the browser bundle
+  if (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.VITE_OPENAI_API_KEY) {
+    console.error(
+      '⚠️ SECURITY WARNING: API keys detected in environment variables! ' +
+      'Remove VITE_ANTHROPIC_API_KEY and VITE_OPENAI_API_KEY from .env files. ' +
+      'API keys should only be stored in backend secrets.'
+    );
+  }
 
-  // Fall back to localStorage (for local development)
+  // Get from localStorage (submitted to backend for workflow execution)
   const storageKey = provider === 'anthropic' ? 'anthropic_api_key' : 'openai_api_key';
   return localStorage.getItem(storageKey) || undefined;
 };

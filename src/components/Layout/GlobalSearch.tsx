@@ -149,9 +149,11 @@ export default function GlobalSearch() {
         {query && (
           <button
             onClick={handleClear}
+            aria-label="Clear search"
+            title="Clear search"
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </button>
         )}
       </div>
