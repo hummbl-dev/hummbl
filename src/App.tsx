@@ -10,6 +10,8 @@ import { usePageTracking } from './hooks/usePageTracking';
 
 // Lazy load pages for code splitting and improved initial load time
 const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
 const MentalModels = lazy(() => import('./pages/MentalModels'));
 const WorkflowList = lazy(() => import('./pages/WorkflowList'));
 const WorkflowDetail = lazy(() => import('./pages/WorkflowDetail'));
@@ -55,28 +57,37 @@ const AppContent: React.FC = () => {
   return (
     <>
       <ErrorNotification />
-      <Layout>
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            <Route path="/" element={<PageErrorBoundary pageName="Dashboard"><Dashboard /></PageErrorBoundary>} />
-            <Route path="/mental-models" element={<PageErrorBoundary pageName="Mental Models"><MentalModels /></PageErrorBoundary>} />
-            <Route path="/workflows" element={<PageErrorBoundary pageName="Workflows"><WorkflowList /></PageErrorBoundary>} />
-            <Route path="/workflows/new" element={<PageErrorBoundary pageName="Workflow Editor"><WorkflowEditorFull /></PageErrorBoundary>} />
-            <Route path="/workflows/:id" element={<PageErrorBoundary pageName="Workflow Details"><WorkflowDetail /></PageErrorBoundary>} />
-            <Route path="/agents" element={<PageErrorBoundary pageName="Agents"><AgentManagement /></PageErrorBoundary>} />
-            <Route path="/templates" element={<PageErrorBoundary pageName="Templates"><Templates /></PageErrorBoundary>} />
-            <Route path="/analytics" element={<PageErrorBoundary pageName="Analytics"><Analytics /></PageErrorBoundary>} />
-            <Route path="/execution-monitor" element={<PageErrorBoundary pageName="Execution Monitor"><ExecutionMonitor /></PageErrorBoundary>} />
-            <Route path="/error-logs" element={<PageErrorBoundary pageName="Error Logs"><ErrorLogs /></PageErrorBoundary>} />
-            <Route path="/team" element={<PageErrorBoundary pageName="Team"><TeamMembers /></PageErrorBoundary>} />
-            <Route path="/token-usage" element={<PageErrorBoundary pageName="Token Usage"><TokenUsage /></PageErrorBoundary>} />
-            <Route path="/settings/api-keys" element={<PageErrorBoundary pageName="API Keys"><APIKeys /></PageErrorBoundary>} />
-            <Route path="/notifications" element={<PageErrorBoundary pageName="Notifications"><Notifications /></PageErrorBoundary>} />
-            <Route path="/settings" element={<PageErrorBoundary pageName="Settings"><Settings /></PageErrorBoundary>} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </Layout>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          {/* Public routes (no layout) */}
+          <Route path="/login" element={<PageErrorBoundary pageName="Login"><Login /></PageErrorBoundary>} />
+          <Route path="/register" element={<PageErrorBoundary pageName="Register"><Register /></PageErrorBoundary>} />
+          
+          {/* Protected routes (with layout) */}
+          <Route path="/*" element={
+            <Layout>
+              <Routes>
+                <Route path="/" element={<PageErrorBoundary pageName="Dashboard"><Dashboard /></PageErrorBoundary>} />
+                <Route path="/mental-models" element={<PageErrorBoundary pageName="Mental Models"><MentalModels /></PageErrorBoundary>} />
+                <Route path="/workflows" element={<PageErrorBoundary pageName="Workflows"><WorkflowList /></PageErrorBoundary>} />
+                <Route path="/workflows/new" element={<PageErrorBoundary pageName="Workflow Editor"><WorkflowEditorFull /></PageErrorBoundary>} />
+                <Route path="/workflows/:id" element={<PageErrorBoundary pageName="Workflow Details"><WorkflowDetail /></PageErrorBoundary>} />
+                <Route path="/agents" element={<PageErrorBoundary pageName="Agents"><AgentManagement /></PageErrorBoundary>} />
+                <Route path="/templates" element={<PageErrorBoundary pageName="Templates"><Templates /></PageErrorBoundary>} />
+                <Route path="/analytics" element={<PageErrorBoundary pageName="Analytics"><Analytics /></PageErrorBoundary>} />
+                <Route path="/execution-monitor" element={<PageErrorBoundary pageName="Execution Monitor"><ExecutionMonitor /></PageErrorBoundary>} />
+                <Route path="/error-logs" element={<PageErrorBoundary pageName="Error Logs"><ErrorLogs /></PageErrorBoundary>} />
+                <Route path="/team" element={<PageErrorBoundary pageName="Team"><TeamMembers /></PageErrorBoundary>} />
+                <Route path="/token-usage" element={<PageErrorBoundary pageName="Token Usage"><TokenUsage /></PageErrorBoundary>} />
+                <Route path="/settings/api-keys" element={<PageErrorBoundary pageName="API Keys"><APIKeys /></PageErrorBoundary>} />
+                <Route path="/notifications" element={<PageErrorBoundary pageName="Notifications"><Notifications /></PageErrorBoundary>} />
+                <Route path="/settings" element={<PageErrorBoundary pageName="Settings"><Settings /></PageErrorBoundary>} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Layout>
+          } />
+        </Routes>
+      </Suspense>
     </>
   );
 };
