@@ -11,6 +11,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { telemetry } from '../services/telemetry-enhanced';
+import { listExecutions } from '../services/api';
 import {
   Activity,
   Clock,
@@ -57,76 +58,30 @@ export default function ExecutionMonitor() {
   useEffect(() => {
     const fetchExecutions = async () => {
       try {
-        // Mock data for now - will be real once backend API is called
-        const mockExecutions: Execution[] = [
-          {
-            id: 'exec-001',
-            workflowId: 'wf-001',
-            workflowName: 'Content Generation Pipeline',
-            status: 'running',
-            progress: 65,
-            startedAt: Date.now() - 45000,
-            completedAt: null,
-            duration: null,
-            tasksTotal: 5,
-            tasksCompleted: 3,
-            error: null,
-          },
-          {
-            id: 'exec-002',
-            workflowId: 'wf-002',
-            workflowName: 'Research & Analysis',
-            status: 'completed',
-            progress: 100,
-            startedAt: Date.now() - 180000,
-            completedAt: Date.now() - 60000,
-            duration: 120000,
-            tasksTotal: 4,
-            tasksCompleted: 4,
-            error: null,
-          },
-          {
-            id: 'exec-003',
-            workflowId: 'wf-003',
-            workflowName: 'Data Processing',
-            status: 'failed',
-            progress: 40,
-            startedAt: Date.now() - 300000,
-            completedAt: Date.now() - 240000,
-            duration: 60000,
-            tasksTotal: 10,
-            tasksCompleted: 4,
-            error: 'API rate limit exceeded',
-          },
-          {
-            id: 'exec-004',
-            workflowId: 'wf-004',
-            workflowName: 'Email Campaign',
-            status: 'pending',
-            progress: 0,
-            startedAt: Date.now() - 5000,
-            completedAt: null,
-            duration: null,
-            tasksTotal: 3,
-            tasksCompleted: 0,
-            error: null,
-          },
-          {
-            id: 'exec-005',
-            workflowId: 'wf-001',
-            workflowName: 'Content Generation Pipeline',
-            status: 'completed',
-            progress: 100,
-            startedAt: Date.now() - 600000,
-            completedAt: Date.now() - 480000,
-            duration: 120000,
-            tasksTotal: 5,
-            tasksCompleted: 5,
-            error: null,
-          },
-        ];
+        const response = await listExecutions(20, 0);
+        
+        // Transform API response to match component interface
+        const transformedExecutions: Execution[] = response.executions.map((exec) => {
+          const startedAt = new Date(exec.started_at).getTime();
+          const completedAt = exec.completed_at ? new Date(exec.completed_at).getTime() : null;
+          const duration = completedAt ? completedAt - startedAt : null;
+          
+          return {
+            id: exec.id,
+            workflowId: exec.workflow_id,
+            workflowName: exec.workflow_name,
+            status: exec.status,
+            progress: exec.progress,
+            startedAt,
+            completedAt,
+            duration,
+            tasksTotal: 0, // Will be populated from execution details
+            tasksCompleted: 0, // Will be populated from execution details
+            error: exec.error,
+          };
+        });
 
-        setExecutions(mockExecutions);
+        setExecutions(transformedExecutions);
       } catch (error) {
         console.error('Failed to fetch executions:', error);
       } finally {
@@ -141,20 +96,32 @@ export default function ExecutionMonitor() {
   useEffect(() => {
     if (!autoRefresh) return;
 
-    const interval = setInterval(() => {
-      // In production, this would fetch from API
-      // For now, just update progress for running executions
-      setExecutions((prev) =>
-        prev.map((exec) => {
-          if (exec.status === 'running' && exec.progress < 100) {
-            return {
-              ...exec,
-              progress: Math.min(exec.progress + Math.random() * 15, 100),
-            };
-          }
-          return exec;
-        })
-      );
+    const interval = setInterval(async () => {
+      try {
+        const response = await listExecutions(20, 0);
+        const transformedExecutions: Execution[] = response.executions.map((exec) => {
+          const startedAt = new Date(exec.started_at).getTime();
+          const completedAt = exec.completed_at ? new Date(exec.completed_at).getTime() : null;
+          const duration = completedAt ? completedAt - startedAt : null;
+          
+          return {
+            id: exec.id,
+            workflowId: exec.workflow_id,
+            workflowName: exec.workflow_name,
+            status: exec.status,
+            progress: exec.progress,
+            startedAt,
+            completedAt,
+            duration,
+            tasksTotal: 0,
+            tasksCompleted: 0,
+            error: exec.error,
+          };
+        });
+        setExecutions(transformedExecutions);
+      } catch (error) {
+        console.error('Auto-refresh error:', error);
+      }
     }, 5000);
 
     return () => clearInterval(interval);

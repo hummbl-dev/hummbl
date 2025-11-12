@@ -53,11 +53,10 @@ export async function executeWorkflow(
   },
   input?: Record<string, unknown>
 ): Promise<{ executionId: string; status: string; message: string }> {
-  const response = await fetch(`${API_URL}/api/workflows/${workflow.id}/execute`, {
+  const headers = getAuthHeaders();
+  const response = await fetch(`${API_URL}/api/executions`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({
       workflowData: {
         id: workflow.id,
@@ -103,7 +102,8 @@ export async function getExecutionStatus(executionId: string): Promise<{
   completedAt: number | null;
   error: string | null;
 }> {
-  const response = await fetch(`${API_URL}/api/executions/${executionId}`);
+  const headers = getAuthHeaders();
+  const response = await fetch(`${API_URL}/api/executions/${executionId}`, { headers });
 
   if (!response.ok) {
     const error = await response.json();
@@ -155,6 +155,44 @@ export function pollExecutionStatus(
   return () => {
     isPolling = false;
   };
+}
+
+/**
+ * List user's executions
+ * @param limit - Maximum number of executions to return (default: 20)
+ * @param offset - Offset for pagination (default: 0)
+ */
+export async function listExecutions(
+  limit: number = 20,
+  offset: number = 0
+): Promise<{
+  executions: Array<{
+    id: string;
+    workflow_id: string;
+    workflow_name: string;
+    user_id: string;
+    status: 'pending' | 'running' | 'completed' | 'failed';
+    progress: number;
+    started_at: string;
+    completed_at: string | null;
+    error: string | null;
+    input: string | null;
+  }>;
+  limit: number;
+  offset: number;
+}> {
+  const headers = getAuthHeaders();
+  const response = await fetch(
+    `${API_URL}/api/executions?limit=${limit}&offset=${offset}`,
+    { headers }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to list executions');
+  }
+
+  return response.json();
 }
 
 /**
