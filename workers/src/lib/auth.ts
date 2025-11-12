@@ -75,8 +75,11 @@ export async function verifyToken(
       return null;
     }
 
+    // Use user_id from the session (column name in DB)
+    const userId = (session as any).user_id || session.userId;
+    
     return {
-      id: session.userId,
+      id: userId,
       email: session.email,
       name: session.name,
       role: session.role,

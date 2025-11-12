@@ -76,6 +76,13 @@ export default function WorkflowDetail() {
       const anthropicKey = localStorage.getItem('anthropic_api_key') || '';
       const openaiKey = localStorage.getItem('openai_api_key') || '';
 
+      // Check if at least one API key is configured
+      if (!anthropicKey && !openaiKey) {
+        setExecutionError('No AI API keys configured. Please add your Anthropic or OpenAI API key in Settings → API Keys first.');
+        setIsRunning(false);
+        return;
+      }
+
       // Execute workflow via backend API (NO MORE CORS!)
       const { executionId } = await executeWorkflow(
         workflow,

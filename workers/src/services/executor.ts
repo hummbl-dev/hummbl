@@ -56,25 +56,31 @@ export async function executeWorkflow(
   env: Env,
   userId: string,
   workflowData: WorkflowData,
-  input?: Record<string, unknown>
+  input?: Record<string, unknown>,
+  apiKeys?: { anthropic?: string; openai?: string }
 ): Promise<ExecutionResult> {
   const executionId = crypto.randomUUID();
-  const startedAt = Math.floor(Date.now() / 1000);
+  const startedAt = Date.now();
 
   logger.info('Starting workflow execution', { executionId, workflowId: workflowData.id, userId });
 
   // Save execution record
-  await env.DB.prepare(`
-    INSERT INTO executions (id, workflow_id, workflow_name, user_id, status, started_at, input)
-    VALUES (?, ?, ?, ?, 'running', ?, ?)
-  `).bind(
-    executionId,
-    workflowData.id,
-    workflowData.name,
-    userId,
-    startedAt,
-    JSON.stringify(input || {})
-  ).run();
+  try {
+    await env.DB.prepare(`
+      INSERT INTO executions (id, workflow_id, workflow_name, user_id, status, started_at, input)
+      VALUES (?, ?, ?, ?, 'running', ?, ?)
+    `).bind(
+      executionId,
+      workflowData.id,
+      workflowData.name,
+      userId,
+      startedAt,
+      JSON.stringify(input || {})
+    ).run();
+  } catch (error) {
+    logger.error('Failed to insert execution record', error as Error);
+    throw error;
+  }
 
   const taskResults: TaskResult[] = [];
   const taskOutputs: Record<string, any> = {}; // Store outputs for dependencies
@@ -96,7 +102,7 @@ export async function executeWorkflow(
 
       // Execute ready tasks in parallel
       const results = await Promise.all(
-        readyTasks.map(task => executeTask(env, executionId, task, workflowData.agents, taskOutputs, input))
+        readyTasks.map(task => executeTask(env, executionId, task, workflowData.agents, taskOutputs, input, apiKeys))
       );
 
       results.forEach((result, index) => {
@@ -111,7 +117,7 @@ export async function executeWorkflow(
     }
 
     // Update execution as completed
-    const completedAt = Math.floor(Date.now() / 1000);
+    const completedAt = Date.now();
     await env.DB.prepare(`
       UPDATE executions 
       SET status = 'completed', completed_at = ?, progress = 100
@@ -130,7 +136,7 @@ export async function executeWorkflow(
     logger.error('Workflow execution failed', error as Error, { executionId });
 
     // Update execution as failed
-    const completedAt = Math.floor(Date.now() / 1000);
+    const completedAt = Date.now();
     await env.DB.prepare(`
       UPDATE executions 
       SET status = 'failed', completed_at = ?, error = ?
@@ -159,10 +165,11 @@ async function executeTask(
   task: WorkflowTask,
   agents: WorkflowAgent[],
   taskOutputs: Record<string, any>,
-  input?: Record<string, unknown>
+  input?: Record<string, unknown>,
+  apiKeys?: { anthropic?: string; openai?: string }
 ): Promise<TaskResult> {
   const taskResultId = crypto.randomUUID();
-  const startedAt = Math.floor(Date.now() / 1000);
+  const startedAt = Date.now();
 
   const agent = agents.find(a => a.id === task.agentId);
   if (!agent) {
@@ -202,10 +209,10 @@ async function executeTask(
     }
 
     // Call AI provider
-    const result = await callAIProvider(env, agent, prompt);
+    const result = await callAIProvider(env, agent, prompt, apiKeys);
 
-    const completedAt = Math.floor(Date.now() / 1000);
-    const duration = (completedAt - startedAt) * 1000;
+    const completedAt = Date.now();
+    const duration = completedAt - startedAt;
 
     // Update task as completed
     await env.DB.prepare(`
@@ -236,8 +243,8 @@ async function executeTask(
   } catch (error) {
     logger.error('Task failed', error as Error, { executionId, taskId: task.id });
 
-    const completedAt = Math.floor(Date.now() / 1000);
-    const duration = (completedAt - startedAt) * 1000;
+    const completedAt = Date.now();
+    const duration = completedAt - startedAt;
 
     // Update task as failed
     await env.DB.prepare(`
@@ -270,7 +277,8 @@ async function executeTask(
 async function callAIProvider(
   env: Env,
   agent: WorkflowAgent,
-  prompt: string
+  prompt: string,
+  apiKeys?: { anthropic?: string; openai?: string }
 ): Promise<{ output: any; tokensUsed: number; cost: number }> {
   
   // Determine provider from model name
@@ -278,9 +286,9 @@ async function callAIProvider(
   const isOpenAI = agent.model.includes('gpt');
 
   if (isAnthropic) {
-    return await callAnthropic(env, agent, prompt);
+    return await callAnthropic(env, agent, prompt, apiKeys?.anthropic);
   } else if (isOpenAI) {
-    return await callOpenAI(env, agent, prompt);
+    return await callOpenAI(env, agent, prompt, apiKeys?.openai);
   } else {
     throw new Error(`Unknown model: ${agent.model}`);
   }
@@ -292,11 +300,13 @@ async function callAIProvider(
 async function callAnthropic(
   env: Env,
   agent: WorkflowAgent,
-  prompt: string
+  prompt: string,
+  apiKey?: string
 ): Promise<{ output: any; tokensUsed: number; cost: number }> {
   
-  if (!env.ANTHROPIC_API_KEY) {
-    throw new Error('ANTHROPIC_API_KEY not configured');
+  const key = apiKey || env.ANTHROPIC_API_KEY;
+  if (!key) {
+    throw new Error('ANTHROPIC_API_KEY not configured. Please add your API key in Settings.');
   }
 
   const messages = [
@@ -312,7 +322,7 @@ async function callAnthropic(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': env.ANTHROPIC_API_KEY!,
+        'x-api-key': key,
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
@@ -346,11 +356,13 @@ async function callAnthropic(
 async function callOpenAI(
   env: Env,
   agent: WorkflowAgent,
-  prompt: string
+  prompt: string,
+  apiKey?: string
 ): Promise<{ output: any; tokensUsed: number; cost: number }> {
   
-  if (!env.OPENAI_API_KEY) {
-    throw new Error('OPENAI_API_KEY not configured');
+  const key = apiKey || env.OPENAI_API_KEY;
+  if (!key) {
+    throw new Error('OPENAI_API_KEY not configured. Please add your API key in Settings.');
   }
 
   const messages: any[] = [
@@ -366,7 +378,7 @@ async function callOpenAI(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${key}`,
       },
       body: JSON.stringify({
         model: agent.model,
