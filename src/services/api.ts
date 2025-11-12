@@ -12,6 +12,34 @@ const API_URL = import.meta.env.DEV
   : 'https://hummbl-backend.hummbl.workers.dev';
 
 /**
+ * Get auth token from localStorage
+ */
+function getAuthToken(): string | null {
+  try {
+    const authStorage = localStorage.getItem('auth-storage');
+    if (!authStorage) return null;
+    const parsed = JSON.parse(authStorage);
+    return parsed.state?.token || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Get auth headers for API requests
+ */
+function getAuthHeaders(): Record<string, string> {
+  const token = getAuthToken();
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
+/**
  * Execute workflow via backend
  * @param workflow - Workflow to execute
  * @param apiKeys - User's API keys (optional, falls back to server secrets)
@@ -436,7 +464,9 @@ export interface WorkflowSharing {
  * Get all users (admin/owner only)
  */
 export async function getUsers(): Promise<{ users: User[] }> {
-  const response = await fetch(`${API_URL}/api/users`);
+  const response = await fetch(`${API_URL}/api/users`, {
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Failed to fetch users' }));
@@ -500,7 +530,9 @@ export async function deleteUser(id: string): Promise<{ success: boolean }> {
  * Get user statistics (admin/owner only)
  */
 export async function getUserStats(): Promise<{ stats: UserStats }> {
-  const response = await fetch(`${API_URL}/api/users/stats`);
+  const response = await fetch(`${API_URL}/api/users/stats`, {
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Failed to fetch user stats' }));
@@ -514,7 +546,9 @@ export async function getUserStats(): Promise<{ stats: UserStats }> {
  * Get pending invitations (admin/owner only)
  */
 export async function getInvites(): Promise<{ invites: Invite[] }> {
-  const response = await fetch(`${API_URL}/api/invites`);
+  const response = await fetch(`${API_URL}/api/invites`, {
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Failed to fetch invites' }));

@@ -44,7 +44,7 @@ app.use('/*', async (c, next) => {
 
 // CORS middleware - Allow frontend to call backend
 app.use('/*', cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://hummbl.io', 'https://*.hummbl.io', 'https://hummbl.vercel.app', 'https://*.vercel.app'],
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://hummbl.io', 'https://www.hummbl.io', 'https://*.hummbl.io', 'https://hummbl.vercel.app', 'https://*.vercel.app'],
   allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
   exposeHeaders: ['Content-Length'],
