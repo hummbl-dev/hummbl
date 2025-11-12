@@ -284,11 +284,14 @@ async function callAIProvider(
   // Determine provider from model name
   const isAnthropic = agent.model.includes('claude');
   const isOpenAI = agent.model.includes('gpt');
+  const isXAI = agent.model.includes('grok');
 
   if (isAnthropic) {
     return await callAnthropic(env, agent, prompt, apiKeys?.anthropic);
   } else if (isOpenAI) {
     return await callOpenAI(env, agent, prompt, apiKeys?.openai);
+  } else if (isXAI) {
+    return await callXAI(env, agent, prompt, apiKeys?.xai);
   } else {
     throw new Error(`Unknown model: ${agent.model}`);
   }
@@ -400,6 +403,60 @@ async function callOpenAI(
   
   // Rough cost calculation (adjust per model pricing)
   const cost = (tokensUsed / 1000000) * 2.0; // $2 per million tokens (approximate)
+
+  return { output, tokensUsed, cost };
+}
+
+/**
+ * Call xAI Grok API
+ */
+async function callXAI(
+  env: Env,
+  agent: WorkflowAgent,
+  prompt: string,
+  apiKey?: string
+): Promise<{ output: any; tokensUsed: number; cost: number }> {
+  
+  const key = apiKey || env.XAI_API_KEY;
+  if (!key) {
+    throw new Error('XAI_API_KEY not configured. Please add your API key in Settings.');
+  }
+
+  const messages = [
+    { role: 'user', content: prompt }
+  ];
+
+  if (agent.systemPrompt) {
+    messages.unshift({ role: 'system', content: agent.systemPrompt });
+  }
+
+  const response = await retryWithBackoff(() =>
+    fetchWithTimeout('https://api.x.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${key}`,
+      },
+      body: JSON.stringify({
+        model: agent.model,
+        messages,
+        temperature: agent.temperature ?? 0.7,
+        max_tokens: 4096,
+      }),
+    }, 60000)
+  );
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`xAI API error: ${error}`);
+  }
+
+  const data = await response.json() as any;
+  const output = data.choices[0].message.content;
+  const tokensUsed = data.usage.total_tokens;
+  
+  // Rough cost calculation (xAI pricing not public yet, using placeholder)
+  const cost = 0; // Update when pricing is available
 
   return { output, tokensUsed, cost };
 }

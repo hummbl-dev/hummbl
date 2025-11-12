@@ -11,7 +11,7 @@
  * HUMMBL Systems
  */
 
-export type AIProvider = 'anthropic' | 'openai';
+export type AIProvider = 'anthropic' | 'openai' | 'xai';
 
 export interface AIModel {
   id: string;
@@ -311,17 +311,51 @@ export const OPENAI_MODELS: AIModel[] = [
 ];
 
 /**
+ * Grok Models (xAI)
+ * Updated: November 2024
+ */
+export const GROK_MODELS: AIModel[] = [
+  {
+    id: 'grok-1',
+    name: 'Grok-1',
+    provider: 'xai',
+    family: 'Grok',
+    description: 'xAI\'s flagship model with advanced reasoning',
+    contextWindow: 128000,
+    inputCost: 0, // Free for now, update when pricing available
+    outputCost: 0,
+    speed: 'medium',
+    capabilities: ['reasoning', 'coding', 'analysis', 'writing'],
+    released: '2024-03',
+  },
+  {
+    id: 'grok-beta',
+    name: 'Grok Beta',
+    provider: 'xai',
+    family: 'Grok',
+    description: 'Beta version of Grok with improved performance',
+    contextWindow: 128000,
+    inputCost: 0,
+    outputCost: 0,
+    speed: 'fast',
+    capabilities: ['reasoning', 'coding', 'analysis'],
+    released: '2024-11',
+    recommended: true,
+  },
+];
+
+/**
  * Get all models for a provider
  */
 export const getModelsByProvider = (provider: AIProvider): AIModel[] => {
-  return provider === 'anthropic' ? CLAUDE_MODELS : OPENAI_MODELS;
+  return provider === 'anthropic' ? CLAUDE_MODELS : provider === 'openai' ? OPENAI_MODELS : GROK_MODELS;
 };
 
 /**
  * Get all models
  */
 export const getAllModels = (): AIModel[] => {
-  return [...CLAUDE_MODELS, ...OPENAI_MODELS];
+  return [...CLAUDE_MODELS, ...OPENAI_MODELS, ...GROK_MODELS];
 };
 
 /**
