@@ -10,7 +10,7 @@
 
 import { useState, useEffect } from 'react';
 import { telemetry } from '../services/telemetry-enhanced';
-import { getUsers, getUserStats, getInvites, createInvite, type User, type UserStats, type Invite } from '../services/api';
+import { getUsers, getUserStats, getInvites, createInvite, updateUser, deleteUser, type User, type UserStats, type Invite } from '../services/api';
 import {
   Users,
   UserPlus,
@@ -23,6 +23,10 @@ import {
   CheckCircle,
   Clock,
   XCircle,
+  Edit,
+  Ban,
+  Trash2,
+  AlertTriangle,
 } from 'lucide-react';
 
 type RoleFilter = 'all' | 'owner' | 'admin' | 'member' | 'viewer';
@@ -45,6 +49,11 @@ export default function TeamMembers() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<User | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
 
   // Track page view
   useEffect(() => {
@@ -77,6 +86,64 @@ export default function TeamMembers() {
   useEffect(() => {
     loadData();
   }, []);
+
+  // Handle role change
+  const handleEditRole = async (newRole: string) => {
+    if (!selectedMember) return;
+
+    try {
+      setActionLoading(true);
+      await updateUser(selectedMember.id, { role: newRole });
+      await loadData(); // Reload data
+      setShowEditModal(false);
+      setSelectedMember(null);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to update role');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Handle suspend/activate
+  const handleToggleStatus = async (member: User) => {
+    const newStatus = member.status === 'active' ? 'suspended' : 'active';
+    
+    try {
+      setActionLoading(true);
+      await updateUser(member.id, { status: newStatus });
+      await loadData(); // Reload data
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to update status');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Handle delete user
+  const handleDeleteUser = async () => {
+    if (!selectedMember) return;
+
+    try {
+      setActionLoading(true);
+      await deleteUser(selectedMember.id);
+      await loadData(); // Reload data
+      setShowDeleteModal(false);
+      setSelectedMember(null);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to delete user');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => setOpenMenuId(null);
+    if (openMenuId) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [openMenuId]);
 
   // Filter members
   const filteredMembers = members.filter((member) => {
@@ -296,7 +363,16 @@ export default function TeamMembers() {
               </thead>
               <tbody className="divide-y">
                 {filteredMembers.map((member) => (
-                  <MemberRow key={member.id} member={member} />
+                  <MemberRow 
+                    key={member.id} 
+                    member={member}
+                    openMenuId={openMenuId}
+                    setOpenMenuId={setOpenMenuId}
+                    setSelectedMember={setSelectedMember}
+                    setShowEditModal={setShowEditModal}
+                    setShowDeleteModal={setShowDeleteModal}
+                    handleToggleStatus={handleToggleStatus}
+                  />
                 ))}
               </tbody>
             </table>
@@ -352,6 +428,80 @@ export default function TeamMembers() {
           />
         </div>
       </div>
+
+      {/* Edit Role Modal */}
+      {showEditModal && selectedMember && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Edit Role</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Change role for {selectedMember.name} ({selectedMember.email})
+            </p>
+            <div className="space-y-2 mb-6">
+              {['owner', 'admin', 'member', 'viewer'].map((role) => (
+                <button
+                  key={role}
+                  onClick={() => handleEditRole(role)}
+                  disabled={actionLoading}
+                  className={`w-full px-4 py-2 text-left rounded-lg border transition-colors ${
+                    selectedMember.role === role
+                      ? 'border-primary-500 bg-primary-50 text-primary-700'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } ${actionLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <div className="font-medium capitalize">{role}</div>
+                </button>
+              ))}
+            </div>
+            <div className="flex space-x-3">
+              <button
+                onClick={() => {
+                  setShowEditModal(false);
+                  setSelectedMember(null);
+                }}
+                disabled={actionLoading}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && selectedMember && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center space-x-3 mb-4">
+              <AlertTriangle className="h-6 w-6 text-red-600" />
+              <h3 className="text-lg font-semibold text-gray-900">Remove User</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-6">
+              Are you sure you want to remove {selectedMember.name} ({selectedMember.email})? This action cannot be undone.
+            </p>
+            <div className="flex space-x-3">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setSelectedMember(null);
+                }}
+                disabled={actionLoading}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteUser}
+                disabled={actionLoading}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+              >
+                {actionLoading ? 'Removing...' : 'Remove User'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -382,7 +532,23 @@ function StatCard({
 }
 
 // Member Row Component
-function MemberRow({ member }: { member: User }) {
+function MemberRow({ 
+  member,
+  openMenuId,
+  setOpenMenuId,
+  setSelectedMember,
+  setShowEditModal,
+  setShowDeleteModal,
+  handleToggleStatus,
+}: { 
+  member: User;
+  openMenuId: string | null;
+  setOpenMenuId: (id: string | null) => void;
+  setSelectedMember: (member: User) => void;
+  setShowEditModal: (show: boolean) => void;
+  setShowDeleteModal: (show: boolean) => void;
+  handleToggleStatus: (member: User) => void;
+}) {
   const roleConfig = {
     owner: { bg: 'bg-amber-50', text: 'text-amber-700', icon: <Crown className="h-4 w-4" /> },
     admin: { bg: 'bg-purple-50', text: 'text-purple-700', icon: <Shield className="h-4 w-4" /> },
@@ -459,21 +625,65 @@ function MemberRow({ member }: { member: User }) {
       </td>
 
       {/* Actions */}
-      <td className="p-4 text-right">
+      <td className="p-4 text-right relative">
         <button
           aria-label="Member actions menu"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             telemetry.track({
               component: 'team-members',
               action: 'click_member_menu',
               properties: { memberId: member.id },
             });
-            alert('Member actions menu - Coming soon!');
+            setOpenMenuId(openMenuId === member.id ? null : member.id);
           }}
           className="p-2 hover:bg-gray-100 rounded transition-colors"
         >
           <MoreVertical className="h-4 w-4 text-gray-600" />
         </button>
+
+        {/* Dropdown Menu */}
+        {openMenuId === member.id && (
+          <div className="absolute right-0 top-12 z-10 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedMember(member);
+                setShowEditModal(true);
+                setOpenMenuId(null);
+              }}
+              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+            >
+              <Edit className="h-4 w-4" />
+              <span>Edit Role</span>
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToggleStatus(member);
+                setOpenMenuId(null);
+              }}
+              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+            >
+              <Ban className="h-4 w-4" />
+              <span>{member.status === 'active' ? 'Suspend' : 'Activate'}</span>
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedMember(member);
+                setShowDeleteModal(true);
+                setOpenMenuId(null);
+              }}
+              className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2"
+            >
+              <Trash2 className="h-4 w-4" />
+              <span>Remove</span>
+            </button>
+          </div>
+        )}
       </td>
     </tr>
   );
