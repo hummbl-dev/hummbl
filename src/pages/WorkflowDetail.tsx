@@ -221,7 +221,16 @@ export default function WorkflowDetail() {
         <div className="card">
           <p className="text-sm text-gray-600 mb-1">Last Updated</p>
           <p className="font-medium text-gray-900">
-            {workflow.updatedAt.toLocaleString()}
+            {(() => {
+              try {
+                const date = workflow.updatedAt instanceof Date 
+                  ? workflow.updatedAt 
+                  : new Date(workflow.updatedAt);
+                return date.toLocaleString();
+              } catch {
+                return 'Unknown';
+              }
+            })()}
           </p>
         </div>
       </div>
@@ -384,7 +393,16 @@ export default function WorkflowDetail() {
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-gray-900">{log.message}</span>
                   <span className="text-xs text-gray-500">
-                    {log.timestamp.toLocaleTimeString()}
+                    {(() => {
+                      try {
+                        const date = log.timestamp instanceof Date 
+                          ? log.timestamp 
+                          : new Date(log.timestamp);
+                        return date.toLocaleTimeString();
+                      } catch {
+                        return 'Unknown time';
+                      }
+                    })()}
                   </span>
                 </div>
               </div>
