@@ -15,6 +15,9 @@ export default function WorkflowEditor() {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
 
+  // Preview mode notice
+  const [showPreviewNotice] = useState(true);
+
   useEffect(() => {
     if (id) {
       const workflow = getWorkflow(id);
@@ -72,6 +75,15 @@ export default function WorkflowEditor() {
           </p>
         </div>
       </div>
+
+      {showPreviewNotice && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p className="text-sm text-blue-900">
+            <strong>Preview Mode:</strong> Changes are stored in browser localStorage only and will not persist. 
+            Full backend persistence coming in production release.
+          </p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="card space-y-6">
         <div>

@@ -64,7 +64,8 @@ export default function WorkflowDetail() {
     }
   };
 
-  // Execute workflow via backend API
+  // Execute workflow via backend API (DISABLED IN PREVIEW)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleRun = async () => {
     if (!workflow || isRunning) return;
 
@@ -122,8 +123,8 @@ export default function WorkflowDetail() {
   // Calculate progress from execution or workflow state
   const progress = execution ? execution.progress : 0;
   
-  // Calculate completed tasks count
-  const completedTasks = execution
+  // Calculate completed tasks count - handle undefined arrays
+  const completedTasks = execution?.taskResults
     ? execution.taskResults.filter(r => r.status === 'completed').length
     : (workflow?.tasks?.filter(t => t.status === 'completed').length || 0);
 
@@ -144,29 +145,24 @@ export default function WorkflowDetail() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <button
-            onClick={handleRun}
-            disabled={isRunning}
-            className="btn-success flex items-center space-x-2"
-          >
-            {isRunning ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Running...</span>
-              </>
-            ) : (
-              <>
-                <Play className="h-4 w-4" />
-                <span>Run Workflow</span>
-              </>
-            )}
-          </button>
+          <div className="relative group">
+            <button
+              disabled
+              className="btn-secondary flex items-center space-x-2 opacity-60 cursor-not-allowed"
+            >
+              <Play className="h-4 w-4" />
+              <span>Run Workflow</span>
+            </button>
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+              Coming in production release
+            </div>
+          </div>
           <Link
             to={`/workflows/${workflow.id}/edit`}
             className="btn-secondary flex items-center space-x-2"
           >
             <Edit className="h-4 w-4" />
-            <span>Edit</span>
+            <span>Edit (Preview Only)</span>
           </Link>
           <button
             onClick={handleDelete}
@@ -215,7 +211,7 @@ export default function WorkflowDetail() {
             </span>
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            {completedTasks} of {workflow.tasks.length} tasks completed
+            {completedTasks} of {workflow?.tasks?.length || 0} tasks completed
           </p>
         </div>
         <div className="card">
@@ -238,14 +234,14 @@ export default function WorkflowDetail() {
       {/* Tasks */}
       <div className="card">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Tasks</h2>
-        {workflow.tasks.length === 0 ? (
+        {(workflow?.tasks?.length || 0) === 0 ? (
           <div className="text-center py-8 text-gray-600">
             No tasks configured yet
           </div>
         ) : (
           <div className="space-y-3">
-            {workflow.tasks.map((task, index) => {
-              const taskResult = execution?.taskResults.find(r => r.taskId === task.id);
+            {workflow?.tasks?.map((task, index) => {
+              const taskResult = execution?.taskResults?.find(r => r.taskId === task.id);
               const taskStatus = taskResult?.status || task.status;
               
               return (

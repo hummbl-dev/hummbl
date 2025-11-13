@@ -2,6 +2,19 @@
 
 A comprehensive dashboard for managing agentic workflows with AI-powered agents, built with React, TypeScript, and modern web technologies.
 
+> **🚧 Preview Build Notice**
+> 
+> This is a **preview demonstration** of the HUMMBL interface and design system. The current deployment showcases:
+> - ✅ Full UI/UX design and navigation
+> - ✅ Workflow creation and editing interfaces (localStorage-based)
+> - ✅ 120+ mental model framework database
+> - ✅ Agent configuration and template system
+> - ⏳ Workflow execution (coming in production release)
+> - ⏳ Backend data persistence (coming in production release)
+> - ⏳ Team collaboration features (coming in production release)
+>
+> **Try it now**: [https://hummbl.vercel.app](https://hummbl.vercel.app)
+
 ## Overview
 
 HUMMBL is an intuitive workflow management system that allows you to create, configure, and monitor complex agentic workflows. Each workflow can contain multiple AI agents with specific roles and capabilities working together to accomplish tasks.
