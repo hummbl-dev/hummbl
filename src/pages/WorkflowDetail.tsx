@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useWorkflowStore } from '../store/workflowStore';
-import { executeWorkflow, pollExecutionStatus } from '../services/api';
 import {
   ArrowLeft,
   Play,
@@ -13,7 +12,7 @@ import {
   Loader2,
 } from 'lucide-react';
 
-// Type for execution state from backend
+// Type for execution state from backend (PREVIEW MODE: Not used in current build)
 interface ExecutionState {
   id: string;
   status: 'pending' | 'running' | 'completed' | 'failed';
@@ -41,10 +40,9 @@ export default function WorkflowDetail() {
   const workflow = id ? getWorkflow(id) : undefined;
   const logs = id ? getWorkflowLogs(id) : [];
 
-  // Execution state
-  const [execution, setExecution] = useState<ExecutionState | null>(null);
-  const [isRunning, setIsRunning] = useState(false);
-  const [executionError, setExecutionError] = useState<string | null>(null);
+  // Execution state (PREVIEW MODE: Disabled until production release)
+  const [execution] = useState<ExecutionState | null>(null);
+  const [executionError] = useState<string | null>(null);
 
   if (!workflow) {
     return (
@@ -64,61 +62,8 @@ export default function WorkflowDetail() {
     }
   };
 
-  // Execute workflow via backend API (DISABLED IN PREVIEW)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleRun = async () => {
-    if (!workflow || isRunning) return;
-
-    setIsRunning(true);
-    setExecutionError(null);
-
-    try {
-      // Get API keys from localStorage (from Settings page)
-      const anthropicKey = localStorage.getItem('anthropic_api_key') || '';
-      const openaiKey = localStorage.getItem('openai_api_key') || '';
-
-      // Check if at least one API key is configured
-      if (!anthropicKey && !openaiKey) {
-        setExecutionError('No AI API keys configured. Please add your Anthropic or OpenAI API key in Settings → API Keys first.');
-        setIsRunning(false);
-        return;
-      }
-
-      // Execute workflow via backend API (NO MORE CORS!)
-      const { executionId } = await executeWorkflow(
-        workflow,
-        {
-          anthropic: anthropicKey,
-          openai: openaiKey,
-        }
-      );
-
-      // Start polling for status updates
-      const stopPolling = pollExecutionStatus(executionId, (status) => {
-        setExecution({
-          id: status.id,
-          status: status.status,
-          progress: status.progress,
-          taskResults: status.taskResults,
-          error: status.error,
-        });
-
-        // Stop running state when complete
-        if (status.status === 'completed' || status.status === 'failed') {
-          setIsRunning(false);
-          if (status.error) {
-            setExecutionError(status.error);
-          }
-        }
-      });
-
-      // Clean up polling on unmount
-      return () => stopPolling();
-    } catch (error) {
-      setExecutionError(error instanceof Error ? error.message : 'Unknown error');
-      setIsRunning(false);
-    }
-  };
+  // NOTE: Workflow execution disabled in preview mode
+  // Will be re-enabled in production release with full backend integration
 
   // Calculate progress from execution or workflow state
   const progress = execution ? execution.progress : 0;
