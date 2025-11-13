@@ -6,10 +6,11 @@
 
 import type { Workflow } from '../types/workflow';
 
-// API URL - switches between local dev and production
-const API_URL = import.meta.env.DEV
-  ? 'http://localhost:8787'
-  : 'https://hummbl-backend.hummbl.workers.dev';
+// API URL - can be overridden with VITE_API_URL env var
+const API_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.DEV
+    ? 'http://localhost:8787'
+    : 'https://hummbl-backend.hummbl.workers.dev');
 
 /**
  * Get auth token from localStorage
