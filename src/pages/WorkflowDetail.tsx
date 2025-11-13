@@ -125,7 +125,7 @@ export default function WorkflowDetail() {
   // Calculate completed tasks count
   const completedTasks = execution
     ? execution.taskResults.filter(r => r.status === 'completed').length
-    : workflow.tasks.filter(t => t.status === 'completed').length;
+    : (workflow?.tasks?.filter(t => t.status === 'completed').length || 0);
 
   return (
     <div className="space-y-6">
