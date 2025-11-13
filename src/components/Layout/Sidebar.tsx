@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard,
   Workflow,
@@ -9,18 +10,33 @@ import {
   Settings as SettingsIcon,
   Users
 } from 'lucide-react';
+import { useAuthStore } from '../../store/authStore';
 
-const navigation = [
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: LucideIcon;
+  adminOnly?: boolean;
+}
+
+const navigation: NavigationItem[] = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Mental Models', href: '/mental-models', icon: Brain },
   { name: 'Workflows', href: '/workflows', icon: Workflow },
   { name: 'Agents', href: '/agents', icon: Bot },
   { name: 'Templates', href: '/templates', icon: FileText },
-  { name: 'Team Members', href: '/team', icon: Users },
+  { name: 'Team Members', href: '/team', icon: Users, adminOnly: true },
   { name: 'Settings', href: '/settings', icon: SettingsIcon },
 ];
 
 export default function Sidebar() {
+  const user = useAuthStore((state) => state.user);
+  const isAdmin = user?.role === 'admin' || user?.role === 'owner';
+
+  // Filter navigation based on role
+  const visibleNavigation = navigation.filter(
+    (item) => !item.adminOnly || isAdmin
+  );
   return (
     <div className="w-64 bg-gray-900 text-white">
       <div className="p-4 border-b border-gray-800" role="complementary" aria-label="Application branding">
@@ -33,7 +49,7 @@ export default function Sidebar() {
         </div>
       </div>
       <nav className="p-4 space-y-2" role="navigation" aria-label="Main navigation">
-        {navigation.map((item) => (
+        {visibleNavigation.map((item) => (
           <NavLink
             key={item.name}
             to={item.href}
