@@ -14,6 +14,7 @@ export interface Env {
   APP_URL?: string; // Frontend URL for email links
   FROM_EMAIL?: string; // Email sender address
   RESEND_API_KEY?: string; // Resend API key for email sending
+  XAI_API_KEY?: string; // xAI/Grok API key (optional)
 }
 
 // Result type pattern (explicit success/failure)

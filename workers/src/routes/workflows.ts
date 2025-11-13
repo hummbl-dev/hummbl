@@ -10,6 +10,7 @@ import { createExecution, createTaskResult, updateTaskResult, updateExecutionSta
 import { callAI, createAIProvider } from '../services/ai';
 import { rateLimit, RATE_LIMITS } from '../lib/rateLimit';
 import { requireAuth, getAuthenticatedUserId } from '../lib/auth';
+// Note: Execution logic is implemented in this routes file. Do not import executeWorkflow implementation here.
 
 const workflows = new Hono<{ Bindings: Env }>();
 
@@ -43,12 +44,46 @@ workflows.post('/:id/execute', async (c) => {
     // Generate execution ID
     const executionId = crypto.randomUUID();
 
+    // Ensure workflow has an ID and normalize task/agent data for executor
+    const workflowId = workflowData.id || crypto.randomUUID();
+    
+    // Normalize incoming workflow to backend Task/Agent types
+    const normalizedTasks: Task[] = workflowData.tasks.map(task => ({
+      id: task.id,
+      name: task.name,
+      description: task.description || '',
+      agentId: task.agentId,
+      dependencies: task.dependencies || [],
+      status: 'pending',
+      input: task.input || {},
+      retryCount: 0,
+      maxRetries: (task.maxRetries as number) || 3,
+      error: undefined,
+    }));
+
+    const normalizedAgents: Agent[] = workflowData.agents.map(agent => ({
+      id: agent.id,
+      name: agent.name,
+      role: (agent.role as string) || 'executor',
+      description: agent.description || '',
+      capabilities: agent.capabilities || [],
+      model: agent.model,
+      temperature: agent.temperature ?? 1.0,
+    }));
+
+    const workflowWithId = {
+      id: workflowId,
+      name: workflowData.name,
+      tasks: normalizedTasks,
+      agents: normalizedAgents,
+    };
+
     // Insert workflow into D1 if it doesn't exist (to satisfy foreign key)
     const workflowInsert = await c.env.DB.prepare(`
       INSERT OR IGNORE INTO workflows (id, name, description, status, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?)
     `).bind(
-      workflowData.id,
+      workflowId,
       workflowData.name || 'Unnamed Workflow',
       workflowData.description || '',
       'active',
@@ -64,7 +99,7 @@ workflows.post('/:id/execute', async (c) => {
     const executionResult = await createExecution(
       c.env.DB,
       executionId,
-      workflowData.id
+      workflowId
     );
 
     if (!executionResult.ok) {
@@ -72,8 +107,9 @@ workflows.post('/:id/execute', async (c) => {
     }
 
     // Start workflow execution asynchronously (don't wait)
+    // Note: executeWorkflow in this file expects (env, executionId, workflowData, apiKeys, input)
     c.executionCtx.waitUntil(
-      executeWorkflow(c.env, executionId, workflowData, apiKeys, input)
+      executeWorkflow(c.env, executionId, workflowWithId, apiKeys || {}, input)
     );
 
     return c.json({

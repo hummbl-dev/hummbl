@@ -278,7 +278,7 @@ async function callAIProvider(
   env: Env,
   agent: WorkflowAgent,
   prompt: string,
-  apiKeys?: { anthropic?: string; openai?: string }
+  apiKeys?: { anthropic?: string; openai?: string; xai?: string }
 ): Promise<{ output: any; tokensUsed: number; cost: number }> {
   
   // Determine provider from model name
@@ -295,9 +295,7 @@ async function callAIProvider(
   } else {
     throw new Error(`Unknown model: ${agent.model}`);
   }
-}
-
-/**
+}/**
  * Call Anthropic API
  */
 async function callAnthropic(

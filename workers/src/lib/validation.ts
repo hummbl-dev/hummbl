@@ -64,6 +64,7 @@ export const ExecuteWorkflowRequestSchema = z.object({
   apiKeys: z.object({
     anthropic: z.string().optional(),
     openai: z.string().optional(),
+    xai: z.string().optional(),
   }).optional(),
   input: z.record(z.string(), z.unknown()).optional(),
 });
