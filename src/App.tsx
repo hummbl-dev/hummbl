@@ -74,6 +74,7 @@ const AppContent: React.FC = () => {
                 <Route path="/workflows" element={<PageErrorBoundary pageName="Workflows"><WorkflowList /></PageErrorBoundary>} />
                 <Route path="/workflows/new" element={<PageErrorBoundary pageName="Workflow Editor"><WorkflowEditorFull /></PageErrorBoundary>} />
                 <Route path="/workflows/:id" element={<PageErrorBoundary pageName="Workflow Details"><WorkflowDetail /></PageErrorBoundary>} />
+                <Route path="/workflows/:id/edit" element={<PageErrorBoundary pageName="Workflow Editor"><WorkflowEditorFull /></PageErrorBoundary>} />
                 <Route path="/agents" element={<PageErrorBoundary pageName="Agents"><AgentManagement /></PageErrorBoundary>} />
                 <Route path="/templates" element={<PageErrorBoundary pageName="Templates"><Templates /></PageErrorBoundary>} />
                 <Route path="/analytics" element={<PageErrorBoundary pageName="Analytics"><Analytics /></PageErrorBoundary>} />
