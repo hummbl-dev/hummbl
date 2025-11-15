@@ -12,7 +12,7 @@ body {
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   font-size: 16px;
   line-height: 1.6;
-  @apply bg-white dark:bg-gray-950 text-black dark:text-white transition-colors;
+  @apply bg-gradient-to-br from-primary-50 via-white to-accent-50/30 dark:from-primary-900 dark:via-gray-950 dark:to-primary-900 text-primary-900 dark:text-primary-50 transition-colors;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -20,16 +20,13 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.025em;
   line-height: 1.2;
   margin-bottom: 0.75em;
-  color: black;
-}
-
-.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-  color: white;
+  @apply text-primary-900 dark:text-primary-50;
 }
 
 p {
   margin-bottom: 1em;
   line-height: 1.7;
+  @apply text-primary-700 dark:text-primary-200;
 }
 
 code {
@@ -39,53 +36,55 @@ code {
 
 @layer components {
   .btn-primary {
-    @apply bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 
-           text-white dark:text-black font-semibold py-2 px-4 rounded-lg text-sm md:text-base
-           transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]
-           border border-black dark:border-white
-           min-h-[44px] flex items-center justify-center;
+    @apply bg-gradient-to-r from-accent-600 to-accent-700 hover:from-accent-700 hover:to-accent-800
+           dark:from-accent-500 dark:to-accent-600 dark:hover:from-accent-600 dark:hover:to-accent-700
+           text-white font-semibold py-2.5 px-5 rounded-lg text-sm md:text-base
+           transition-all duration-200 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]
+           border-0 shadow-soft
+           min-h-[44px] flex items-center justify-center gap-2;
   }
 
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 
-           text-black dark:text-white font-semibold py-2 px-4 rounded-lg text-sm md:text-base
-           border border-gray-300 dark:border-gray-700
-           transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]
-           min-h-[44px] flex items-center justify-center;
+    @apply bg-white hover:bg-primary-50 dark:bg-primary-800 dark:hover:bg-primary-700 
+           text-primary-700 dark:text-primary-100 font-semibold py-2.5 px-5 rounded-lg text-sm md:text-base
+           border border-primary-200 dark:border-primary-700
+           transition-all duration-200 hover:scale-[1.02] hover:shadow-soft active:scale-[0.98]
+           min-h-[44px] flex items-center justify-center gap-2;
   }
 
   .btn-danger {
-    @apply bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 
-           text-white dark:text-black font-semibold py-2 px-4 rounded-lg 
-           border border-black dark:border-white
-           transition-all duration-200 hover:scale-[1.02] active:scale-[0.98];
+    @apply bg-gradient-to-r from-danger-500 to-danger-600 hover:from-danger-600 hover:to-danger-700
+           text-white font-semibold py-2.5 px-5 rounded-lg 
+           border-0 shadow-soft
+           transition-all duration-200 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98];
   }
 
   .btn-success {
-    @apply bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 
-           text-white dark:text-black font-semibold py-2 px-4 rounded-lg 
-           border border-black dark:border-white
-           transition-all duration-200 hover:scale-[1.02] active:scale-[0.98];
+    @apply bg-gradient-to-r from-success-500 to-success-600 hover:from-success-600 hover:to-success-700
+           text-white font-semibold py-2.5 px-5 rounded-lg 
+           border-0 shadow-soft
+           transition-all duration-200 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98];
   }
 
   .card {
-    @apply bg-white dark:bg-gray-900 rounded-lg shadow-card p-6 
-           border border-gray-200 dark:border-gray-800
-           hover:shadow-card-hover hover:-translate-y-0.5 
+    @apply bg-white/80 dark:bg-primary-800/50 backdrop-blur-sm rounded-xl shadow-card p-6 md:p-8
+           border border-primary-100 dark:border-primary-700/50
+           hover:shadow-card-hover hover:-translate-y-1 hover:border-primary-200 dark:hover:border-primary-600
            transition-all duration-300;
   }
 
   .input-field {
-    @apply w-full px-3 py-2 
-           border border-gray-300 dark:border-gray-700 
-           bg-white dark:bg-gray-900 text-black dark:text-white
+    @apply w-full px-4 py-2.5 
+           border border-primary-200 dark:border-primary-700 
+           bg-white/90 dark:bg-primary-800/90 text-primary-900 dark:text-primary-50
            rounded-lg 
-           focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent
+           focus:outline-none focus:ring-2 focus:ring-accent-500 dark:focus:ring-accent-400 focus:border-accent-500 dark:focus:border-accent-400
+           placeholder:text-primary-400 dark:placeholder:text-primary-500
            transition-all duration-200;
   }
 
   .label {
-    @apply block text-sm font-semibold text-black dark:text-white mb-2;
+    @apply block text-sm font-semibold text-primary-700 dark:text-primary-200 mb-2;
     letter-spacing: 0.01em;
   }
 }
