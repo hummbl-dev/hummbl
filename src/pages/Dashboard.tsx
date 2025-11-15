@@ -128,10 +128,10 @@ export default function Dashboard() {
                       {workflow.description}
                     </p>
                     <div className="flex items-center space-x-4 mt-3">
-                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                      <span className="text-xs font-medium text-gray-900 dark:text-gray-100 bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">
                         {workflow.tasks.length} tasks
                       </span>
-                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                      <span className="text-xs font-medium text-gray-900 dark:text-gray-100 bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">
                         {workflow.agents.length} agents
                       </span>
                     </div>
