@@ -69,7 +69,7 @@ export default function EmailVerificationBanner() {
             <button
               onClick={handleResendEmail}
               disabled={resending}
-              className="flex items-center space-x-2 px-3 py-1.5 bg-yellow-600 text-white text-sm rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center space-x-2 px-3 py-1.5 bg-gray-800 text-white text-sm rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Mail className="h-4 w-4" />
               <span>{resending ? 'Sending...' : 'Resend Email'}</span>

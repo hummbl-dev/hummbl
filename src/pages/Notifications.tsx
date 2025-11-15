@@ -186,7 +186,7 @@ export default function Notifications() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <AlertCircle className="h-12 w-12 text-gray-700 dark:text-gray-300 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Notifications</h3>
           <p className="text-gray-600 mb-4">{error}</p>
           <button

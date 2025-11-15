@@ -25,7 +25,7 @@ export function FormField({
     <div className="space-y-1">
       <label className="label">
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="text-gray-700 dark:text-gray-300 ml-1">*</span>}
       </label>
       <div className="relative">
         {children}
@@ -42,13 +42,13 @@ export function FormField({
         </p>
       )}
       {hasError && (
-        <p className="text-xs text-black dark:text-white dark:text-red-400 flex items-start gap-1 animate-fade-in">
+        <p className="text-xs text-black dark:text-white dark:text-gray-400 flex items-start gap-1 animate-fade-in">
           <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
           <span>{error}</span>
         </p>
       )}
       {hasSuccess && (
-        <p className="text-xs text-black dark:text-white dark:text-green-400 flex items-start gap-1 animate-fade-in">
+        <p className="text-xs text-black dark:text-white dark:text-gray-400 flex items-start gap-1 animate-fade-in">
           <CheckCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
           <span>{success}</span>
         </p>

@@ -80,8 +80,8 @@ export const callAI = async (
 /**
  * Call Claude (Anthropic) API
  * 
- * ⚠️ DEPRECATED: Direct browser calls are disabled for security.
- * ⚠️ Use the backend API proxy instead: POST /api/workflows/:id/execute
+ * [!] DEPRECATED: Direct browser calls are disabled for security.
+ * [!] Use the backend API proxy instead: POST /api/workflows/:id/execute
  * 
  * SECURITY: API keys should never be exposed in the browser.
  * Anthropic API does not allow direct browser calls (CORS blocked).
@@ -135,7 +135,7 @@ export const getAPIKey = (provider: 'anthropic' | 'openai'): string | undefined 
   // They would be exposed in the browser bundle
   if (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.VITE_OPENAI_API_KEY) {
       '[!] SECURITY WARNING: API keys detected in environment variables! ' +
-      '⚠️ SECURITY WARNING: API keys detected in environment variables! ' +
+      '[!] SECURITY WARNING: API keys detected in environment variables! ' +
       'Remove VITE_ANTHROPIC_API_KEY and VITE_OPENAI_API_KEY from .env files. ' +
       'API keys should only be stored in backend secrets.'
     );

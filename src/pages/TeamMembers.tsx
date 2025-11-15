@@ -494,7 +494,7 @@ export default function TeamMembers() {
               <button
                 onClick={handleDeleteUser}
                 disabled={actionLoading}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors disabled:opacity-50"
               >
                 {actionLoading ? 'Removing...' : 'Remove User'}
               </button>

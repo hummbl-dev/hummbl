@@ -302,11 +302,11 @@ export default function TokenUsage() {
                   <td className="p-3 text-right">${costs.output.toFixed(2)}</td>
                   <td className="p-3 text-right">
                     {model.includes('haiku') ? (
-                      <span className="text-green-600 font-medium">Fast</span>
+                      <span className="text-gray-900 dark:text-gray-100 font-medium">Fast</span>
                     ) : model.includes('opus') ? (
                       <span className="text-gray-800 dark:text-gray-200 font-medium">Slow</span>
                     ) : (
-                      <span className="text-blue-600 font-medium">Medium</span>
+                      <span className="text-gray-900 dark:text-gray-100 font-medium">Medium</span>
                     )}
                   </td>
                 </tr>
@@ -343,11 +343,11 @@ function MetricCard({
       {change !== null && (
         <div className="flex items-center space-x-1">
           {change < 0 ? (
-            <TrendingDown className="h-4 w-4 text-green-600" />
+            <TrendingDown className="h-4 w-4 text-gray-900 dark:text-gray-100" />
           ) : (
-            <TrendingUp className="h-4 w-4 text-red-600" />
+            <TrendingUp className="h-4 w-4 text-gray-900 dark:text-gray-100" />
           )}
-          <span className={`text-sm font-medium ${change < 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <span className={`text-sm font-medium ${change < 0 ? 'text-gray-900 dark:text-gray-100' : 'text-gray-900 dark:text-gray-100'}`}>
             {Math.abs(change)}% {change < 0 ? 'decrease' : 'increase'}
           </span>
         </div>
@@ -378,17 +378,17 @@ function OptimizationTip({
   impact: 'none' | 'minimal' | 'low' | 'medium';
 }) {
   const impactColors = {
-    none: 'bg-green-100 text-green-800',
-    minimal: 'bg-green-100 text-green-800',
-    low: 'bg-yellow-100 text-yellow-800',
-    medium: 'bg-orange-100 text-orange-800',
+    none: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+    minimal: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+    low: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+    medium: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
   };
 
   return (
     <li className="flex items-center justify-between p-3 bg-white rounded-lg">
       <span className="text-gray-700">{tip}</span>
       <div className="flex items-center space-x-2">
-        <span className="font-medium text-green-600">{savings}</span>
+        <span className="font-medium text-gray-900 dark:text-gray-100">{savings}</span>
         <span className={`text-xs px-2 py-1 rounded ${impactColors[impact]}`}>
           {impact} impact
         </span>
