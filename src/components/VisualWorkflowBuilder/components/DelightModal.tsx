@@ -100,7 +100,7 @@ export const DelightModal: React.FC<DelightModalProps> = ({
                 marginBottom: '8px',
               }}
             >
-              🎉 Workflow Complete!
+              Workflow Complete!
             </h2>
             <p style={{ fontSize: '14px', color: '#6b7280' }}>
               Help us improve <strong>{workflowName}</strong>
@@ -138,11 +138,7 @@ export const DelightModal: React.FC<DelightModalProps> = ({
                     transition: 'all 0.2s',
                   }}
                 >
-                  {rating === 1 && '😞'}
-                  {rating === 2 && '😐'}
-                  {rating === 3 && '🙂'}
-                  {rating === 4 && '😊'}
-                  {rating === 5 && '🤩'}
+                  {rating}
                 </button>
               ))}
             </div>

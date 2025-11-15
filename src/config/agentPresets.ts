@@ -41,7 +41,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
   researcher: {
     role: 'researcher',
     displayName: 'Researcher',
-    icon: '🔍',
+    icon: 'R',
     description: 'Gathers information, conducts research, summarizes findings',
     model: DEFAULT_MODELS.fast, // claude-4-haiku
     temperature: 0.3,
@@ -56,7 +56,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
   analyst: {
     role: 'analyst',
     displayName: 'Analyst',
-    icon: '📊',
+    icon: 'A',
     description: 'Analyzes data, identifies patterns, provides insights',
     model: DEFAULT_MODELS.general, // claude-4-sonnet
     temperature: 0.5,
@@ -71,7 +71,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
   executor: {
     role: 'executor',
     displayName: 'Executor',
-    icon: '⚡',
+    icon: 'E',
     description: 'Executes tasks, performs actions, generates outputs',
     model: DEFAULT_MODELS.fast, // claude-4-haiku
     temperature: 0.7,
@@ -86,7 +86,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
   reviewer: {
     role: 'reviewer',
     displayName: 'Reviewer',
-    icon: '✅',
+    icon: 'V',
     description: 'Reviews work, provides feedback, ensures quality',
     model: DEFAULT_MODELS.general, // claude-4-sonnet
     temperature: 0.4,
@@ -101,7 +101,7 @@ export const AGENT_PRESETS: Record<AgentRole, AgentPreset> = {
   custom: {
     role: 'custom',
     displayName: 'Custom',
-    icon: '🎨',
+    icon: 'C',
     description: 'Fully customizable agent for specialized tasks',
     model: DEFAULT_MODELS.fast, // claude-4-haiku
     temperature: 0.7,

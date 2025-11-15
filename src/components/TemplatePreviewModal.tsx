@@ -64,7 +64,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
 
           {/* Sample Input */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">📥 Sample Input</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Sample Input</h3>
             <p className="text-sm text-gray-600 mb-2">{sample.sampleInput.description}</p>
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 font-mono text-sm">
               <pre className="whitespace-pre-wrap text-gray-800">
@@ -75,7 +75,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
 
           {/* Expected Output */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">📤 Expected Output</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Expected Output</h3>
             <p className="text-sm text-gray-600 mb-2">{sample.expectedOutput.description}</p>
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
               <pre className="whitespace-pre-wrap text-gray-800 text-sm font-sans">
@@ -102,7 +102,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
 
           {/* Best For */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">✨ Best For</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Best For</h3>
             <div className="flex flex-wrap gap-2">
               {sample.bestFor.map((use, index) => (
                 <span

@@ -130,7 +130,7 @@ Company X reduced manual data entry by 90%...
       description: 'Detailed code review with security, performance, and style feedback',
       example: `## Code Review: Payment Processing Function
 
-### 🔴 Critical Issues (Must Fix)
+### [CRITICAL] Critical Issues (Must Fix)
 1. **SQL Injection Vulnerability** - Line 2
    - Using string concatenation for SQL queries
    - **Fix:** Use parameterized queries
@@ -142,12 +142,12 @@ Company X reduced manual data entry by 90%...
    - No transaction wrapping, balance check and update not atomic
    - **Fix:** Use database transaction
 
-### 🟡 Improvements (Should Fix)
+### [IMPROVE] Improvements (Should Fix)
 1. **Error Handling** - Missing try/catch blocks
 2. **Type Safety** - No input validation for amount/userId
 3. **Logging** - No audit trail for payments
 
-### ✅ Good Practices Found
+### [GOOD] Good Practices Found
 - Clear function naming
 - Simple, readable logic flow
 
@@ -235,7 +235,7 @@ Company X reduced manual data entry by 90%...
       description: 'Personalized email copy for each segment with A/B test variants',
       example: `## Segment: Existing Customers
 
-**Subject Line A:** You asked, we built it: Visual Workflow Builder is here 🎨
+**Subject Line A:** You asked, we built it: Visual Workflow Builder is here
 **Subject Line B:** [Customer Name], design workflows in minutes (not hours)
 
 **Email Body:**
@@ -246,9 +246,9 @@ Remember when you told us workflows were too complex to set up?
 We listened. Today, we're thrilled to announce the Visual Workflow Builder - the feature you've been asking for.
 
 **What's new:**
-✨ Drag-and-drop workflow design
-⚡ 10x faster setup (seriously)
-🎯 No coding required
+- Drag-and-drop workflow design
+- 10x faster setup (seriously)
+- No coding required
 
 [CTA Button: Try It Now]
 
@@ -286,13 +286,13 @@ P.S. Existing customers get 30 days free trial of premium features.`,
       description: 'Platform-optimized posts with hashtags and timing recommendations',
       example: `## Twitter Thread (5 tweets)
 
-1/ 🚀 Big news: Visual Workflow Builder is LIVE
+1/ Big news: Visual Workflow Builder is LIVE
 
    Build AI workflows by dragging boxes. No code. No friction.
    
-   We analyzed 100+ user requests and this was #1. Here's what we built: 🧵
+   We analyzed 100+ user requests and this was #1. Here's what we built:
 
-2/ ⚡ Before: 15 min to create a workflow
+2/ Before: 15 min to create a workflow
    After: 2 min
    
    That's not incremental. That's transformational.
@@ -305,13 +305,13 @@ P.S. Existing customers get 30 days free trial of premium features.`,
 
 5/ Free for all users. Try it: [link]
    
-   What will you build first? 👇
+   What will you build first?
 
 ---
 
 ## LinkedIn Post
 
-🎨 Visual Workflow Builder: From Concept to Production in 90 Days
+Visual Workflow Builder: From Concept to Production in 90 Days
 
 We shipped the #1 requested feature by applying our own workflow automation to the development process...
 

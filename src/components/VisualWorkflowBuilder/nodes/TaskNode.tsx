@@ -53,12 +53,11 @@ const TaskNode: React.FC<NodeProps<TaskNodeData>> = ({ data }) => {
       />
 
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-        <span style={{ fontSize: '24px', marginRight: '8px' }}>📋</span>
         <div>
           <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{task.name}</div>
           {assignedAgent && (
             <div style={{ fontSize: '11px', opacity: 0.9 }}>
-              → {assignedAgent.name}
+              {assignedAgent.name}
             </div>
           )}
         </div>

@@ -5,7 +5,7 @@
  * @version 2.0.0 - SECURITY UPDATE
  * @description API key management for AI providers
  * 
- * ⚠️ SECURITY NOTICE:
+ * [!] SECURITY NOTICE:
  * Direct AI API calls from frontend have been disabled.
  * All AI execution must go through backend proxy for security.
  * Use executeWorkflow() from services/api.ts instead.
@@ -103,8 +103,8 @@ const callClaude = async (
 /**
  * Call OpenAI API
  * 
- * ⚠️ DEPRECATED: Direct browser calls are disabled for security.
- * ⚠️ Use the backend API proxy instead: POST /api/workflows/:id/execute
+ * [!] DEPRECATED: Direct browser calls are disabled for security.
+ * [!] Use the backend API proxy instead: POST /api/workflows/:id/execute
  * 
  * SECURITY: API keys should never be exposed in the browser.
  * All AI calls must go through Cloudflare Workers backend.
@@ -125,7 +125,8 @@ const callOpenAI = async (
 /**
  * Get API key from localStorage
  * 
- * ⚠️ SECURITY: Environment variables are NOT used for API keys in production.
+ * /**
+ * [!] SECURITY: Environment variables are NOT used for API keys in production.
  * Keys stored here are only for Settings page display and backend submission.
  * Never expose API keys in frontend environment variables or source code.
  */
@@ -133,7 +134,7 @@ export const getAPIKey = (provider: 'anthropic' | 'openai'): string | undefined 
   // WARNING: Do NOT use environment variables for API keys
   // They would be exposed in the browser bundle
   if (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.VITE_OPENAI_API_KEY) {
-    console.error(
+      '[!] SECURITY WARNING: API keys detected in environment variables! ' +
       '⚠️ SECURITY WARNING: API keys detected in environment variables! ' +
       'Remove VITE_ANTHROPIC_API_KEY and VITE_OPENAI_API_KEY from .env files. ' +
       'API keys should only be stored in backend secrets.'
