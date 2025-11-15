@@ -5,7 +5,6 @@ import {
   Workflow,
   Bot,
   FileText,
-  Activity,
   Brain,
   Settings as SettingsIcon,
   Users
@@ -40,11 +39,13 @@ export default function Sidebar() {
   return (
     <div className="w-64 bg-gray-900 text-white">
       <div className="p-4 border-b border-gray-800" role="complementary" aria-label="Application branding">
-        <div className="flex items-center space-x-2">
-          <Activity className="h-8 w-8 text-primary-400" />
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg">
+            <Brain className="h-6 w-6 text-white" />
+          </div>
           <div>
-            <h1 className="text-xl font-bold">HUMMBL</h1>
-            <p className="text-xs text-gray-400">Workflow Dashboard</p>
+            <h1 className="text-xl font-bold tracking-tight">HUMMBL</h1>
+            <p className="text-xs text-gray-400 font-medium">Base120 Framework</p>
           </div>
         </div>
       </div>
