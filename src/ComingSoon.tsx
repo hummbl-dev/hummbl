@@ -264,7 +264,7 @@ const ComingSoon: React.FC = () => {
             </p>
 
             <p style={styles.p}>
-              Currently serving as Dynamic Personal Trainer at Life Time Fitness while building
+              Currently serving as Dynamic Personal Trainer at Life Time, Inc. while building
               HUMMBL's commercialization infrastructure.
             </p>
 
@@ -288,7 +288,7 @@ const ComingSoon: React.FC = () => {
               >
                 GitHub
               </a>
-              <span style={styles.location}>Brookhaven, GA</span>
+              <span style={styles.location}>Atlanta, GA</span>
             </div>
           </div>
         </section>
