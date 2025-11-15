@@ -120,8 +120,8 @@ export default function APIKeys() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <AlertCircle className="h-8 w-8 text-red-600 mx-auto mb-2" />
-          <p className="text-red-600 font-medium">Failed to load API keys</p>
+          <AlertCircle className="h-8 w-8 text-gray-900 dark:text-gray-100 mx-auto mb-2" />
+          <p className="text-gray-900 dark:text-gray-100 font-medium">Failed to load API keys</p>
           <p className="text-gray-600 text-sm mt-1">{error}</p>
           <button
             onClick={loadData}
@@ -163,13 +163,13 @@ export default function APIKeys() {
           label="Active"
           value={stats.active}
           icon={<CheckCircle2 className="h-5 w-5" />}
-          color="text-green-600"
+          color="text-gray-900 dark:text-gray-100"
         />
         <StatCard
           label="Total Usage"
           value={stats.totalUsage.toLocaleString()}
           icon={<Settings className="h-5 w-5" />}
-          color="text-blue-600"
+          color="text-gray-900 dark:text-gray-100"
         />
         <StatCard
           label="Services"
@@ -301,7 +301,7 @@ function APIKeyCard({
   const statusConfig = {
     active: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <CheckCircle2 className="h-4 w-4" /> },
     expired: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <Clock className="h-4 w-4" /> },
-    revoked: { bg: 'bg-red-50', text: 'text-red-700', icon: <AlertCircle className="h-4 w-4" /> },
+    revoked: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-100', icon: <AlertCircle className="h-4 w-4" /> },
   };
 
   const service = serviceConfig[apiKey.service as keyof typeof serviceConfig] || serviceConfig.custom;
@@ -356,7 +356,7 @@ function APIKeyCard({
 
         <button
           onClick={onDelete}
-          className="text-red-600 hover:bg-red-50 p-2 rounded transition-colors"
+          className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:bg-gray-800 p-2 rounded transition-colors"
           title="Delete key"
         >
           <Trash2 className="h-4 w-4" />

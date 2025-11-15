@@ -174,9 +174,9 @@ export default function Templates() {
       )}
 
       {/* Info Box */}
-      <div className="card bg-blue-50 border-blue-200">
-        <h3 className="font-medium text-blue-900 mb-2">About Templates</h3>
-        <p className="text-sm text-blue-800">
+      <div className="card bg-gray-50 border-gray-300">
+        <h3 className="font-medium text-black dark:text-white mb-2">About Templates</h3>
+        <p className="text-sm text-gray-900 dark:text-gray-100">
           Templates provide pre-configured workflows with agents and tasks already set up.
           When you use a template, a new workflow is created based on the template configuration.
           You can then customize it to fit your specific needs.

@@ -55,8 +55,8 @@ export default function VerifyEmail() {
         <div className="flex flex-col items-center text-center">
           {status === 'verifying' && (
             <>
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                <Loader2 className="h-8 w-8 text-black dark:text-white animate-spin" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Verifying Your Email</h1>
               <p className="text-gray-600">Please wait while we verify your email address...</p>
@@ -65,8 +65,8 @@ export default function VerifyEmail() {
 
           {status === 'success' && (
             <>
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <Check className="h-8 w-8 text-green-600" />
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                <Check className="h-8 w-8 text-black dark:text-white" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Email Verified!</h1>
               <p className="text-gray-600 mb-4">{message}</p>
@@ -76,8 +76,8 @@ export default function VerifyEmail() {
 
           {status === 'error' && (
             <>
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                <X className="h-8 w-8 text-red-600" />
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                <X className="h-8 w-8 text-black dark:text-white" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Verification Failed</h1>
               <p className="text-gray-600 mb-6">{message}</p>

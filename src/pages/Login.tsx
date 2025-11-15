@@ -38,10 +38,10 @@ export default function Login() {
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
-              <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 bg-gray-50 border border-gray-300 rounded-lg flex items-start space-x-3">
+              <AlertCircle className="h-5 w-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm text-red-800">{error}</p>
+                <p className="text-sm text-gray-900 dark:text-gray-100">{error}</p>
               </div>
             </div>
           )}
@@ -122,13 +122,13 @@ export default function Login() {
 
           {/* Demo Mode Note */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
+            <div className="bg-gray-50 border border-gray-300 rounded-lg p-4">
+              <p className="text-sm text-gray-900 dark:text-gray-100">
                 <strong>Demo Mode:</strong> You can explore the app without signing in, but some features may be limited.
               </p>
               <button
                 onClick={() => navigate('/')}
-                className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="mt-2 text-sm text-black dark:text-white hover:text-gray-900 dark:text-gray-100 font-medium"
               >
                 Continue without signing in →
               </button>

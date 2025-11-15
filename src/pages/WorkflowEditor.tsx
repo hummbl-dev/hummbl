@@ -77,8 +77,8 @@ export default function WorkflowEditor() {
       </div>
 
       {showPreviewNotice && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <p className="text-sm text-blue-900">
+        <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-4">
+          <p className="text-sm text-black dark:text-white">
             <strong>Preview Mode:</strong> Changes are stored in browser localStorage only and will not persist. 
             Full backend persistence coming in production release.
           </p>
@@ -172,9 +172,9 @@ export default function WorkflowEditor() {
         </div>
       </form>
 
-      <div className="card bg-blue-50 border-blue-200">
-        <h3 className="font-medium text-blue-900 mb-2">Next Steps</h3>
-        <p className="text-sm text-blue-800">
+      <div className="card bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600">
+        <h3 className="font-medium text-black dark:text-white mb-2">Next Steps</h3>
+        <p className="text-sm text-gray-900 dark:text-gray-100">
           After creating your workflow, you can add agents and tasks from the workflow detail page.
           You can also start with a template from the Templates page.
         </p>

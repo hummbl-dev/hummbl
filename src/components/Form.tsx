@@ -31,7 +31,7 @@ export function FormField({
         {children}
         {hasSuccess && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <CheckCircle className="h-5 w-5 text-green-500" />
+            <CheckCircle className="h-5 w-5 text-gray-600 dark:text-gray-400" />
           </div>
         )}
       </div>
@@ -42,13 +42,13 @@ export function FormField({
         </p>
       )}
       {hasError && (
-        <p className="text-xs text-red-600 dark:text-red-400 flex items-start gap-1 animate-fade-in">
+        <p className="text-xs text-black dark:text-white dark:text-red-400 flex items-start gap-1 animate-fade-in">
           <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
           <span>{error}</span>
         </p>
       )}
       {hasSuccess && (
-        <p className="text-xs text-green-600 dark:text-green-400 flex items-start gap-1 animate-fade-in">
+        <p className="text-xs text-black dark:text-white dark:text-green-400 flex items-start gap-1 animate-fade-in">
           <CheckCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
           <span>{success}</span>
         </p>

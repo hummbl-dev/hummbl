@@ -281,8 +281,8 @@ export default function WorkflowEditorFull() {
               onAgentsChange={setAgents}
               onTasksChange={setTasks}
             />
-            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-800">
+            <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg">
+              <p className="text-sm text-gray-900 dark:text-gray-100">
                 <strong>Tip:</strong> Connect agents to tasks by dragging from the agent node to the task node. 
                 Connect tasks to create dependencies.
               </p>
@@ -317,7 +317,7 @@ export default function WorkflowEditorFull() {
                     <button
                       type="button"
                       onClick={() => handleDeleteAgent(agent.id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-gray-900 dark:text-gray-100 hover:text-black"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -438,7 +438,7 @@ export default function WorkflowEditorFull() {
                     <button
                       type="button"
                       onClick={() => handleDeleteTask(task.id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-gray-900 dark:text-gray-100 hover:text-black"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

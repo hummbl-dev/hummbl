@@ -310,13 +310,13 @@ function MetricCard({ title, value, change, changeLabel, icon, trend }: MetricCa
       {change !== undefined && (
         <div className="flex items-center space-x-1">
           {trend === 'up' ? (
-            <ArrowUpRight className="h-4 w-4 text-green-600" />
+            <ArrowUpRight className="h-4 w-4 text-black dark:text-white" />
           ) : trend === 'down' ? (
-            <ArrowDownRight className="h-4 w-4 text-red-600" />
+            <ArrowDownRight className="h-4 w-4 text-black dark:text-white" />
           ) : null}
           <span
             className={`text-sm font-medium ${
-              trend === 'up' ? 'text-green-600' : trend === 'down' ? 'text-red-600' : 'text-gray-600'
+              trend === 'up' ? 'text-black dark:text-white' : trend === 'down' ? 'text-black dark:text-white' : 'text-gray-600'
             }`}
           >
             {change > 0 ? '+' : ''}

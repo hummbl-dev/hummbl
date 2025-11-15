@@ -72,8 +72,8 @@ class ErrorBoundary extends Component<Props, State> {
           <div className="max-w-lg w-full">
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="p-3 bg-red-100 rounded-full">
-                  <AlertTriangle className="h-6 w-6 text-red-600" />
+                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-full">
+                  <AlertTriangle className="h-6 w-6 text-black dark:text-white" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900">
                   Something Went Wrong
@@ -90,7 +90,7 @@ class ErrorBoundary extends Component<Props, State> {
                     Error Details
                   </summary>
                   <div className="bg-gray-50 p-4 rounded border border-gray-200 text-sm font-mono">
-                    <p className="text-red-600 font-semibold mb-2">
+                    <p className="text-black dark:text-white font-semibold mb-2">
                       {this.state.error.toString()}
                     </p>
                     {this.state.errorInfo && (

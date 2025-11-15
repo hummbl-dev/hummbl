@@ -203,7 +203,7 @@ export default function ErrorLogs() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <AlertTriangle className="h-8 w-8 animate-pulse text-amber-600 mx-auto mb-2" />
+          <AlertTriangle className="h-8 w-8 animate-pulse text-gray-800 dark:text-gray-200 mx-auto mb-2" />
           <p className="text-gray-600">Loading error logs...</p>
         </div>
       </div>
@@ -239,7 +239,7 @@ export default function ErrorLogs() {
           label="Unresolved"
           value={stats.unresolved}
           icon={<XCircle className="h-5 w-5" />}
-          color="text-red-600"
+          color="text-gray-900 dark:text-gray-100"
         />
         <StatCard
           label="Critical"
@@ -257,7 +257,7 @@ export default function ErrorLogs() {
           label="Resolved (24h)"
           value={stats.resolved24h}
           icon={<CheckCircle className="h-5 w-5" />}
-          color="text-green-600"
+          color="text-gray-900 dark:text-gray-100"
         />
       </div>
 
@@ -314,7 +314,7 @@ export default function ErrorLogs() {
       <div className="space-y-3">
         {filteredErrors.length === 0 ? (
           <div className="card text-center py-12">
-            <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-3" />
+            <CheckCircle className="h-12 w-12 text-gray-900 dark:text-gray-100 mx-auto mb-3" />
             <p className="text-gray-600 font-medium">No errors found</p>
             <p className="text-sm text-gray-500 mt-1">
               {searchQuery || severityFilter !== 'all' || statusFilter !== 'all'
@@ -388,26 +388,26 @@ function ErrorCard({
 }) {
   const severityConfig = {
     low: {
-      bg: 'bg-blue-50',
-      text: 'text-blue-700',
+      bg: 'bg-gray-100 dark:bg-gray-800',
+      text: 'text-gray-900 dark:text-gray-100',
       border: 'border-blue-200',
       label: 'Low',
     },
     medium: {
-      bg: 'bg-yellow-50',
-      text: 'text-yellow-700',
+      bg: 'bg-gray-100 dark:bg-gray-800',
+      text: 'text-gray-900 dark:text-gray-100',
       border: 'border-yellow-200',
       label: 'Medium',
     },
     high: {
-      bg: 'bg-orange-50',
-      text: 'text-orange-700',
+      bg: 'bg-gray-100 dark:bg-gray-800',
+      text: 'text-gray-900 dark:text-gray-100',
       border: 'border-orange-200',
       label: 'High',
     },
     critical: {
-      bg: 'bg-red-50',
-      text: 'text-red-700',
+      bg: 'bg-gray-100 dark:bg-gray-800',
+      text: 'text-gray-900 dark:text-gray-100',
       border: 'border-red-200',
       label: 'Critical',
     },
@@ -428,7 +428,7 @@ function ErrorCard({
               {error.errorType}
             </span>
             {error.resolved && (
-              <span className="px-2 py-1 rounded text-xs font-medium bg-green-50 text-green-700 flex items-center space-x-1">
+              <span className="px-2 py-1 rounded text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 flex items-center space-x-1">
                 <CheckCircle className="h-3 w-3" />
                 <span>Resolved</span>
               </span>
@@ -515,11 +515,11 @@ function ErrorCard({
 
           {/* Resolution Notes */}
           {error.resolved && error.notes && (
-            <div className="p-3 bg-green-50 rounded-lg">
-              <p className="text-sm font-medium text-green-900 mb-1">Resolution Notes</p>
-              <p className="text-sm text-green-700">{error.notes}</p>
+            <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+              <p className="text-sm font-medium text-black dark:text-white mb-1">Resolution Notes</p>
+              <p className="text-sm text-gray-900 dark:text-gray-100">{error.notes}</p>
               {error.resolvedAt && (
-                <p className="text-xs text-green-600 mt-2">
+                <p className="text-xs text-gray-900 dark:text-gray-100 mt-2">
                   Resolved {formatTimestamp(error.resolvedAt)}
                 </p>
               )}

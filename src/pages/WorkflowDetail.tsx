@@ -121,12 +121,12 @@ export default function WorkflowDetail() {
 
       {/* Execution Error */}
       {executionError && (
-        <div className="card bg-red-50 border-red-200">
+        <div className="card bg-gray-50 border-gray-300">
           <div className="flex items-start space-x-3">
-            <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
+            <XCircle className="h-5 w-5 text-black dark:text-white mt-0.5" />
             <div>
-              <h3 className="font-medium text-red-900">Execution Error</h3>
-              <p className="text-sm text-red-800 mt-1">{executionError}</p>
+              <h3 className="font-medium text-black dark:text-white">Execution Error</h3>
+              <p className="text-sm text-gray-900 dark:text-gray-100 mt-1">{executionError}</p>
             </div>
           </div>
         </div>
@@ -198,13 +198,13 @@ export default function WorkflowDetail() {
                     <div className="flex items-start space-x-3 flex-1">
                       <div className="mt-1">
                         {taskStatus === 'completed' && (
-                          <CheckCircle2 className="h-5 w-5 text-green-600" />
+                          <CheckCircle2 className="h-5 w-5 text-black dark:text-white" />
                         )}
                         {taskStatus === 'running' && (
-                          <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
+                          <Loader2 className="h-5 w-5 text-black dark:text-white animate-spin" />
                         )}
                         {taskStatus === 'failed' && (
-                          <XCircle className="h-5 w-5 text-red-600" />
+                          <XCircle className="h-5 w-5 text-black dark:text-white" />
                         )}
                         {taskStatus === 'pending' && (
                           <AlertCircle className="h-5 w-5 text-gray-400" />
@@ -226,9 +226,9 @@ export default function WorkflowDetail() {
                         
                         {/* Show execution result */}
                         {taskResult && taskResult.status === 'completed' && taskResult.output !== undefined && (
-                          <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded">
-                            <p className="text-xs font-medium text-green-900 mb-1">Result:</p>
-                            <pre className="text-xs text-green-800 whitespace-pre-wrap overflow-auto max-h-40">
+                          <div className="mt-3 p-3 bg-gray-50 border border-gray-300 rounded">
+                            <p className="text-xs font-medium text-black dark:text-white mb-1">Result:</p>
+                            <pre className="text-xs text-gray-900 dark:text-gray-100 whitespace-pre-wrap overflow-auto max-h-40">
                               {(() => {
                                 try {
                                   return typeof taskResult.output === 'string'
@@ -244,7 +244,7 @@ export default function WorkflowDetail() {
                         
                         {/* Show execution error */}
                         {(taskResult?.error || task.error) && (
-                          <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-800">
+                          <div className="mt-2 p-2 bg-gray-50 border border-gray-300 rounded text-sm text-gray-900 dark:text-gray-100">
                             {taskResult?.error || task.error}
                           </div>
                         )}
@@ -283,7 +283,7 @@ export default function WorkflowDetail() {
                 <h3 className="font-medium text-gray-900">{agent.name}</h3>
                 <p className="text-sm text-gray-600 mt-1">{agent.description}</p>
                 <div className="flex items-center space-x-2 mt-2">
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
+                  <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-xs rounded">
                     {agent.role}
                   </span>
                   {agent.model && (
@@ -391,10 +391,10 @@ function StatusBadge({ status }: { status: string }) {
 function TaskStatusBadge({ status }: { status: string }) {
   const colors = {
     pending: 'bg-gray-100 text-gray-800',
-    running: 'bg-blue-100 text-blue-800',
-    completed: 'bg-green-100 text-green-800',
-    failed: 'bg-red-100 text-red-800',
-    skipped: 'bg-yellow-100 text-yellow-800',
+    running: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+    completed: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+    failed: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+    skipped: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
   };
 
   return (

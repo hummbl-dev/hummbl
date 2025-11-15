@@ -291,7 +291,7 @@ export default function Notifications() {
       <div className="space-y-3">
         {filteredNotifications.length === 0 ? (
           <div className="card text-center py-12">
-            <CheckCircle2 className="h-12 w-12 text-green-600 mx-auto mb-3" />
+            <CheckCircle2 className="h-12 w-12 text-black dark:text-white mx-auto mb-3" />
             <p className="text-gray-600 font-medium">No notifications</p>
             <p className="text-sm text-gray-500 mt-1">
               {filter === 'unread'

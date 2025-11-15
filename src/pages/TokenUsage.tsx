@@ -79,7 +79,7 @@ export default function TokenUsage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <AlertCircle className="h-12 w-12 text-gray-700 dark:text-gray-300 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Token Usage</h3>
           <p className="text-gray-600 mb-4">{error}</p>
           <button
@@ -255,8 +255,8 @@ export default function TokenUsage() {
       {/* Optimization Tips */}
       <div className="card bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
         <div className="flex items-start space-x-4">
-          <div className="p-3 bg-amber-100 rounded-lg">
-            <Lightbulb className="h-6 w-6 text-amber-600" />
+          <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg">
+            <Lightbulb className="h-6 w-6 text-gray-800 dark:text-gray-200" />
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-semibold mb-2">Cost Optimization Suggestions</h3>
@@ -304,7 +304,7 @@ export default function TokenUsage() {
                     {model.includes('haiku') ? (
                       <span className="text-green-600 font-medium">Fast</span>
                     ) : model.includes('opus') ? (
-                      <span className="text-amber-600 font-medium">Slow</span>
+                      <span className="text-gray-800 dark:text-gray-200 font-medium">Slow</span>
                     ) : (
                       <span className="text-blue-600 font-medium">Medium</span>
                     )}

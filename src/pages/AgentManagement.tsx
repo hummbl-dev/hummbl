@@ -308,17 +308,17 @@ export default function AgentManagement() {
           {showWorkflowAgents && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {workflowAgents.map((agent, index) => (
-                <div key={`${agent.workflowId}-${agent.id || index}`} className="border border-blue-200 bg-blue-50 p-4 rounded-lg">
+                <div key={`${agent.workflowId}-${agent.id || index}`} className="border border-gray-300 bg-gray-50 p-4 rounded-lg">
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <h3 className="font-semibold text-gray-900">{agent.name}</h3>
-                      <span className="px-2 py-0.5 bg-blue-200 text-blue-800 text-xs rounded mt-1 inline-block">
+                      <span className="px-2 py-0.5 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100 text-xs rounded mt-1 inline-block">
                         {agent.role}
                       </span>
                     </div>
                   </div>
                   <p className="text-sm text-gray-700 mb-2">{agent.description}</p>
-                  <div className="text-xs text-gray-600 border-t border-blue-200 pt-2 mt-2">
+                  <div className="text-xs text-gray-600 border-t border-gray-300 pt-2 mt-2">
                     <div className="flex items-center justify-between">
                       <span>Workflow:</span>
                       <a
@@ -371,7 +371,7 @@ export default function AgentManagement() {
               <div className="flex justify-between items-start mb-3">
                 <div className="flex-1">
                   <h3 className="font-bold text-gray-900">{agent.name}</h3>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded mt-1 inline-block">
+                  <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-xs rounded mt-1 inline-block">
                     {agent.role}
                   </span>
                 </div>
@@ -388,7 +388,7 @@ export default function AgentManagement() {
                     className="p-2 hover:bg-gray-100 rounded"
                     title="Delete agent"
                   >
-                    <Trash2 className="h-4 w-4 text-red-600" />
+                    <Trash2 className="h-4 w-4 text-black dark:text-white" />
                   </button>
                 </div>
               </div>

@@ -131,7 +131,7 @@ export default function Settings() {
         <div className="flex items-center justify-between pt-4 border-t border-gray-200">
           <div>
             {saved && (
-              <p className="text-sm text-green-600 font-medium">
+              <p className="text-sm text-black dark:text-white font-medium">
                 ✓ API keys saved successfully
               </p>
             )}
@@ -147,9 +147,9 @@ export default function Settings() {
       </div>
 
       {/* Info Box */}
-      <div className="card bg-blue-50 border-blue-200">
-        <h3 className="font-medium text-blue-900 mb-2">About API Keys</h3>
-        <ul className="text-sm text-blue-800 space-y-1">
+      <div className="card bg-gray-50 border-gray-300">
+        <h3 className="font-medium text-black dark:text-white mb-2">About API Keys</h3>
+        <ul className="text-sm text-gray-900 dark:text-gray-100 space-y-1">
           <li>• API keys are stored locally in your browser (localStorage)</li>
           <li>• Keys are never sent to HUMMBL servers</li>
           <li>• You only need keys for the models you want to use</li>

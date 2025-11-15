@@ -87,13 +87,13 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
           {/* Benefits */}
           <div>
             <div className="flex items-center space-x-2 mb-3">
-              <Zap className="h-5 w-5 text-amber-600" />
+              <Zap className="h-5 w-5 text-gray-800 dark:text-gray-200" />
               <h3 className="text-lg font-semibold text-gray-900">Benefits</h3>
             </div>
             <ul className="space-y-2">
               {sample.benefits.map((benefit, index) => (
                 <li key={index} className="flex items-start space-x-2">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="h-5 w-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span className="text-gray-700">{benefit}</span>
                 </li>
               ))}
@@ -107,7 +107,7 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
               {sample.bestFor.map((use, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                  className="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-full text-sm font-medium"
                 >
                   {use}
                 </span>

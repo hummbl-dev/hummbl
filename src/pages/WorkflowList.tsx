@@ -146,7 +146,7 @@ export default function WorkflowList() {
                       </Link>
                       <button
                         onClick={() => handleDelete(workflow.id)}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 text-red-600"
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 text-black dark:text-white"
                       >
                         <Trash2 className="h-4 w-4" />
                         <span>Delete</span>

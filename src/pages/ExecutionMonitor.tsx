@@ -419,11 +419,11 @@ function ExecutionCard({ execution }: { execution: Execution }) {
 
       {/* Error */}
       {execution.error && (
-        <div className="mt-3 flex items-start space-x-2 p-3 bg-red-50 rounded-lg">
-          <AlertCircle className="h-4 w-4 text-red-600 mt-0.5" />
+        <div className="mt-3 flex items-start space-x-2 p-3 bg-gray-50 rounded-lg">
+          <AlertCircle className="h-4 w-4 text-black dark:text-white mt-0.5" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-red-900">Error</p>
-            <p className="text-sm text-red-700">{execution.error}</p>
+            <p className="text-sm font-medium text-black dark:text-white">Error</p>
+            <p className="text-sm text-gray-900 dark:text-gray-100">{execution.error}</p>
           </div>
         </div>
       )}

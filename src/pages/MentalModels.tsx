@@ -140,12 +140,12 @@ export default function MentalModels() {
       )}
 
       {/* Info Box */}
-      <div className="card bg-blue-50 border-blue-200">
+      <div className="card bg-gray-50 border-gray-300">
         <div className="flex items-start space-x-3">
-          <BookOpen className="h-5 w-5 text-blue-600 mt-0.5" />
+          <BookOpen className="h-5 w-5 text-black dark:text-white mt-0.5" />
           <div>
-            <h3 className="font-medium text-blue-900 mb-2">About HUMMBL Base120</h3>
-            <p className="text-sm text-blue-800">
+            <h3 className="font-medium text-black dark:text-white mb-2">About HUMMBL Base120</h3>
+            <p className="text-sm text-gray-900 dark:text-gray-100">
               The Base120 framework organizes 120 mental models across 6 core transformations:
               Perspective (P), Inversion (IN), Composition (CO), Decomposition (DE), 
               Recursion (RE), and Systems (SY). Each transformation contains 20 models

@@ -174,9 +174,9 @@ export default function TeamMembers() {
     if (isAuthError) {
       return (
         <div className="max-w-4xl mx-auto">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-8">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-8">
             <div className="flex items-center space-x-3 mb-4">
-              <Shield className="h-8 w-8 text-blue-600" />
+              <Shield className="h-8 w-8 text-black dark:text-white" />
               <h2 className="text-xl font-bold text-gray-900">Team Collaboration (Preview Mode)</h2>
             </div>
             
@@ -188,26 +188,26 @@ export default function TeamMembers() {
               <h3 className="font-semibold text-gray-900 mb-3">Available Features:</h3>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start space-x-2">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="h-5 w-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span><strong>Invite team members</strong> via email with role-based access</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="h-5 w-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span><strong>Manage permissions</strong> with Owner, Admin, Member, and Viewer roles</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="h-5 w-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span><strong>Share workflows</strong> and collaborate on complex projects</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="h-5 w-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span><strong>Track activity</strong> with audit logs and team statistics</span>
                 </li>
               </ul>
             </div>
             
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-              <p className="text-sm text-yellow-800">
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+              <p className="text-sm text-gray-900 dark:text-gray-100">
                 <strong>Note:</strong> Authentication is available but not enforced in this demo. 
                 To enable team features, configure authentication in Settings → API Keys.
               </p>
@@ -235,8 +235,8 @@ export default function TeamMembers() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <XCircle className="h-8 w-8 text-red-600 mx-auto mb-2" />
-          <p className="text-red-600 font-medium">Failed to load team members</p>
+          <XCircle className="h-8 w-8 text-black dark:text-white mx-auto mb-2" />
+          <p className="text-black dark:text-white font-medium">Failed to load team members</p>
           <p className="text-gray-600 text-sm mt-1">{error}</p>
           <button
             onClick={loadData}
@@ -403,22 +403,22 @@ export default function TeamMembers() {
       )}
 
       {/* Permissions Guide */}
-      <div className="card bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+      <div className="card bg-gradient-to-r from-blue-50 to-indigo-50 border-gray-200">
         <h3 className="text-lg font-semibold mb-3">Role Permissions</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <PermissionCard
             role="Owner"
-            icon={<Crown className="h-5 w-5 text-amber-600" />}
+            icon={<Crown className="h-5 w-5 text-black dark:text-white" />}
             permissions={['Full access', 'Billing', 'Delete workspace']}
           />
           <PermissionCard
             role="Admin"
-            icon={<Shield className="h-5 w-5 text-purple-600" />}
+            icon={<Shield className="h-5 w-5 text-black dark:text-white" />}
             permissions={['Manage members', 'All workflows', 'Settings']}
           />
           <PermissionCard
             role="Member"
-            icon={<UserIcon className="h-5 w-5 text-blue-600" />}
+            icon={<UserIcon className="h-5 w-5 text-black dark:text-white" />}
             permissions={['Create workflows', 'Run workflows', 'View analytics']}
           />
           <PermissionCard
@@ -474,7 +474,7 @@ export default function TeamMembers() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <div className="flex items-center space-x-3 mb-4">
-              <AlertTriangle className="h-6 w-6 text-red-600" />
+              <AlertTriangle className="h-6 w-6 text-black dark:text-white" />
               <h3 className="text-lg font-semibold text-gray-900">Remove User</h3>
             </div>
             <p className="text-sm text-gray-600 mb-6">
@@ -677,7 +677,7 @@ function MemberRow({
                 setShowDeleteModal(true);
                 setOpenMenuId(null);
               }}
-              className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2"
+              className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-gray-50 flex items-center space-x-2"
             >
               <Trash2 className="h-4 w-4" />
               <span>Remove</span>
@@ -776,7 +776,7 @@ function PermissionCard({
       <ul className="space-y-1">
         {permissions.map((perm, index) => (
           <li key={index} className="text-sm text-gray-600 flex items-center space-x-2">
-            <CheckCircle className="h-3 w-3 text-green-600" />
+            <CheckCircle className="h-3 w-3 text-black dark:text-white" />
             <span>{perm}</span>
           </li>
         ))}

@@ -68,10 +68,10 @@ export default function Register() {
     if (pwd.match(/[0-9]/)) strength++;
     if (pwd.match(/[^a-zA-Z0-9]/)) strength++;
     
-    if (strength <= 1) return { strength, label: 'Weak', color: 'bg-red-500' };
-    if (strength === 2) return { strength, label: 'Fair', color: 'bg-yellow-500' };
-    if (strength === 3) return { strength, label: 'Good', color: 'bg-blue-500' };
-    return { strength, label: 'Strong', color: 'bg-green-500' };
+    if (strength <= 1) return { strength, label: 'Weak', color: 'bg-gray-500' };
+    if (strength === 2) return { strength, label: 'Fair', color: 'bg-gray-500' };
+    if (strength === 3) return { strength, label: 'Good', color: 'bg-gray-500' };
+    return { strength, label: 'Strong', color: 'bg-gray-500' };
   };
 
   const strength = password ? passwordStrength(password) : null;
@@ -91,11 +91,11 @@ export default function Register() {
 
           {/* Success Message */}
           {registrationSuccess && (
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
-              <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 bg-gray-50 border border-gray-300 rounded-lg flex items-start space-x-3">
+              <CheckCircle className="h-5 w-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm font-medium text-green-800 mb-1">Account created successfully!</p>
-                <p className="text-sm text-green-700">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">Account created successfully!</p>
+                <p className="text-sm text-gray-900 dark:text-gray-100">
                   Please check your email at <strong>{email}</strong> to verify your account.
                   You'll be redirected to the dashboard in a moment.
                 </p>
@@ -105,10 +105,10 @@ export default function Register() {
 
           {/* Error Message */}
           {!registrationSuccess && (error || validationError) && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
-              <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 bg-gray-50 border border-gray-300 rounded-lg flex items-start space-x-3">
+              <AlertCircle className="h-5 w-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm text-red-800">{error || validationError}</p>
+                <p className="text-sm text-gray-900 dark:text-gray-100">{error || validationError}</p>
               </div>
             </div>
           )}
@@ -207,7 +207,7 @@ export default function Register() {
                   disabled={isLoading}
                 />
                 {confirmPassword && password === confirmPassword && (
-                  <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-500" />
+                  <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-600 dark:text-gray-400" />
                 )}
               </div>
             </div>

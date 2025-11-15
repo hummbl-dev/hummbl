@@ -103,7 +103,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
                           logout();
                           navigate('/login');
                         }}
-                        className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center space-x-2"
+                        className="w-full px-4 py-2 text-left text-sm text-black dark:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
                       >
                         <LogOut className="h-4 w-4" />
                         <span>Sign Out</span>
