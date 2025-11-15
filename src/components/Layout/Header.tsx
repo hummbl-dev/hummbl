@@ -1,21 +1,34 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Settings, User, LogOut, Moon, Sun } from 'lucide-react';
+import { Bell, Settings, User, LogOut, Moon, Sun, Menu } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useTheme } from '../../contexts/ThemeContext';
 import GlobalSearch from './GlobalSearch';
 
-export default function Header() {
+interface HeaderProps {
+  onMenuClick: () => void;
+}
+
+export default function Header({ onMenuClick }: HeaderProps) {
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { user, isAuthenticated, logout } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-6 py-4 shadow-sm transition-colors" role="banner">
-      <div className="flex items-center justify-between">
+    <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-4 md:px-6 py-3 md:py-4 shadow-sm transition-colors" role="banner">
+      <div className="flex items-center justify-between gap-2">
+        {/* Mobile menu button */}
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+          aria-label="Open menu"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        
         <GlobalSearch />
-        <div className="flex items-center space-x-4 ml-4">
+        <div className="flex items-center space-x-2 md:space-x-4 ml-2 md:ml-4">
           <button
             onClick={toggleTheme}
             className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"

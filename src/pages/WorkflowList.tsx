@@ -37,39 +37,39 @@ export default function WorkflowList() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Workflows</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Workflows</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">
             Manage and monitor your agentic workflows
           </p>
         </div>
-        <Link to="/workflows/new" className="btn-primary flex items-center space-x-2">
+        <Link to="/workflows/new" className="btn-primary flex items-center space-x-2 self-start sm:self-auto whitespace-nowrap">
           <Plus className="h-5 w-5" />
           <span>New Workflow</span>
         </Link>
       </div>
 
       {/* Filters */}
-      <div className="card">
-        <div className="flex flex-col md:flex-row gap-4">
+      <div className="card p-4">
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
             <input
               type="text"
               placeholder="Search workflows..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full pl-9 md:pl-10 pr-4 py-2 text-sm md:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
-          <div className="flex items-center space-x-2">
-            <Filter className="h-5 w-5 text-gray-400" />
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <Filter className="h-4 w-4 md:h-5 md:w-5 text-gray-400" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               aria-label="Filter workflows by status"
             >
               <option value="all">All Status</option>
@@ -98,32 +98,32 @@ export default function WorkflowList() {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filteredWorkflows.map((workflow) => (
-            <div key={workflow.id} className="card hover:shadow-lg transition-shadow">
+            <div key={workflow.id} className="card p-4 md:p-6 hover:shadow-lg transition-shadow">
               <div className="flex justify-between items-start mb-3">
                 <Link
                   to={`/workflows/${workflow.id}`}
                   className="flex-1 min-w-0"
                 >
-                  <h3 className="font-bold text-gray-900 truncate hover:text-primary-600">
+                  <h3 className="font-bold text-gray-900 dark:text-white text-base md:text-lg truncate hover:text-primary-600 dark:hover:text-primary-400">
                     {workflow.name}
                   </h3>
                 </Link>
                 <div className="relative">
                   <button
                     onClick={() => setShowMenu(showMenu === workflow.id ? null : workflow.id)}
-                    className="p-1 hover:bg-gray-100 rounded"
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                     aria-label="Open workflow menu"
                   >
-                    <MoreVertical className="h-5 w-5 text-gray-600" />
+                    <MoreVertical className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                   </button>
                   {showMenu === workflow.id && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
                       {workflow.status === 'draft' || workflow.status === 'paused' ? (
                         <button
                           onClick={() => handleStart(workflow.id)}
-                          className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 text-gray-700 dark:text-gray-300"
                         >
                           <Play className="h-4 w-4" />
                           <span>Start</span>
@@ -132,7 +132,7 @@ export default function WorkflowList() {
                       {workflow.status === 'active' && (
                         <button
                           onClick={() => handlePause(workflow.id)}
-                          className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 text-gray-700 dark:text-gray-300"
                         >
                           <Pause className="h-4 w-4" />
                           <span>Pause</span>

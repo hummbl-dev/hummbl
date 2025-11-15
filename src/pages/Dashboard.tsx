@@ -45,39 +45,39 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">
             Welcome to your agentic workflow management system
           </p>
         </div>
         <Link
           to="/workflows/new"
-          className="btn-primary"
+          className="btn-primary whitespace-nowrap self-start sm:self-auto"
         >
           Create Workflow
         </Link>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 animate-fade-in">
         {stats.map((stat, index) => (
           <div 
             key={stat.name} 
-            className="card group"
+            className="card group p-4 md:p-6"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3">
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-600 mb-2">{stat.name}</p>
-                <p className="text-4xl font-bold text-gray-900 tracking-tight">
+                <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 md:mb-2">{stat.name}</p>
+                <p className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
                   {stat.value}
                 </p>
               </div>
-              <div className={`${stat.color} p-3 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                <stat.icon className="h-6 w-6 text-white" />
+              <div className={`${stat.color} p-2 md:p-3 rounded-lg md:rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-white" />
               </div>
             </div>
           </div>
@@ -111,22 +111,22 @@ export default function Dashboard() {
                 to={`/workflows/${workflow.id}`}
                 className="block p-4 border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition-all"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{workflow.name}</h3>
-                    <p className="text-sm text-gray-600 mt-1">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-gray-900 dark:text-white truncate">{workflow.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                       {workflow.description}
                     </p>
-                    <div className="flex items-center space-x-4 mt-2">
-                      <span className="text-xs text-gray-500">
+                    <div className="flex items-center space-x-3 md:space-x-4 mt-2">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         {workflow.tasks.length} tasks
                       </span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         {workflow.agents.length} agents
                       </span>
                     </div>
                   </div>
-                  <div className="ml-4">
+                  <div className="flex-shrink-0 self-start sm:self-auto">
                     <StatusBadge status={workflow.status} />
                   </div>
                 </div>

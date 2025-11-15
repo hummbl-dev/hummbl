@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, X } from 'lucide-react';
 import {
   LayoutDashboard,
   Workflow,
@@ -18,6 +18,11 @@ interface NavigationItem {
   adminOnly?: boolean;
 }
 
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 const navigation: NavigationItem[] = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Mental Models', href: '/mental-models', icon: Brain },
@@ -28,7 +33,7 @@ const navigation: NavigationItem[] = [
   { name: 'Settings', href: '/settings', icon: SettingsIcon },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const user = useAuthStore((state) => state.user);
   const isAdmin = user?.role === 'admin' || user?.role === 'owner';
 
@@ -36,37 +41,64 @@ export default function Sidebar() {
   const visibleNavigation = navigation.filter(
     (item) => !item.adminOnly || isAdmin
   );
+  
   return (
-    <div className="w-64 bg-gray-900 dark:bg-black text-white transition-colors">
-      <div className="p-4 border-b border-gray-800" role="complementary" aria-label="Application branding">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg">
-            <Brain className="h-6 w-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">HUMMBL</h1>
-            <p className="text-xs text-gray-400 font-medium">Base120 Framework</p>
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={`
+        fixed lg:static inset-y-0 left-0 z-50
+        w-64 bg-gray-900 dark:bg-black text-white transition-transform duration-300
+        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        <div className="p-4 border-b border-gray-800" role="complementary" aria-label="Application branding">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg">
+                <Brain className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold tracking-tight">HUMMBL</h1>
+                <p className="text-xs text-gray-400 font-medium">Base120 Framework</p>
+              </div>
+            </div>
+            {/* Close button for mobile */}
+            <button
+              onClick={onClose}
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-800 transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
         </div>
+        <nav className="p-4 space-y-2" role="navigation" aria-label="Main navigation">
+          {visibleNavigation.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.href}
+              onClick={() => onClose()}
+              className={({ isActive }) =>
+                `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  isActive
+                    ? 'bg-primary-600 text-white'
+                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                }`
+              }
+            >
+              <item.icon className="h-5 w-5" />
+              <span>{item.name}</span>
+            </NavLink>
+          ))}
+        </nav>
       </div>
-      <nav className="p-4 space-y-2" role="navigation" aria-label="Main navigation">
-        {visibleNavigation.map((item) => (
-          <NavLink
-            key={item.name}
-            to={item.href}
-            className={({ isActive }) =>
-              `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                isActive
-                  ? 'bg-primary-600 text-white'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-              }`
-            }
-          >
-            <item.icon className="h-5 w-5" />
-            <span>{item.name}</span>
-          </NavLink>
-        ))}
-      </nav>
-    </div>
+    </>
   );
 }
