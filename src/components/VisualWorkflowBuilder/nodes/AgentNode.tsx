@@ -30,7 +30,6 @@ const AgentNode: React.FC<NodeProps<AgentNodeData>> = ({ data }) => {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-        <span style={{ fontSize: '24px', marginRight: '8px' }}>🤖</span>
         <div>
           <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{agent.name}</div>
           <div style={{ fontSize: '11px', opacity: 0.9 }}>{agent.role}</div>

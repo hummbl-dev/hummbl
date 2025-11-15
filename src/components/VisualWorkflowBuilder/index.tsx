@@ -208,7 +208,6 @@ const VisualWorkflowBuilder: React.FC<VisualWorkflowBuilderProps> = ({
             gap: '8px',
           }}
         >
-          <span>🤖</span>
           <span>Add Agent</span>
         </button>
         <button

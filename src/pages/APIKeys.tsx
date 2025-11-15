@@ -235,7 +235,6 @@ export default function APIKeys() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <ServiceGuide
             service="Anthropic Claude"
-            logo="🤖"
             steps={[
               'Visit console.anthropic.com',
               'Navigate to API Keys section',
@@ -246,7 +245,6 @@ export default function APIKeys() {
           />
           <ServiceGuide
             service="OpenAI GPT"
-            logo="🧠"
             steps={[
               'Visit platform.openai.com',
               'Go to API keys section',
@@ -295,9 +293,9 @@ function APIKeyCard({
   onDelete: () => void;
 }) {
   const serviceConfig = {
-    anthropic: { name: 'Anthropic Claude', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300', logo: 'A' },
-    openai: { name: 'OpenAI GPT', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300', logo: 'O' },
-    custom: { name: 'Custom API', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300', logo: 'C' },
+    anthropic: { name: 'Anthropic Claude', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300' },
+    openai: { name: 'OpenAI GPT', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300' },
+    custom: { name: 'Custom API', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300' },
   };
 
   const statusConfig = {
@@ -313,10 +311,9 @@ function APIKeyCard({
     <div className={`card ${apiKey.status !== 'active' ? 'opacity-60' : ''}`}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start space-x-3 flex-1">
-          <div className="text-3xl">{service.logo}</div>
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="font-medium text-gray-900">{apiKey.name}</h3>
+              <h3 className="font-medium text-gray-900 dark:text-white">{apiKey.name}</h3>
               <span className={`px-2 py-1 rounded text-xs font-medium ${service.bg} ${service.text}`}>
                 {service.name}
               </span>
@@ -449,20 +446,17 @@ function AddKeyModal({
 // Service Guide Component
 function ServiceGuide({
   service,
-  logo,
   steps,
   docsUrl,
 }: {
   service: string;
-  logo: string;
   steps: string[];
   docsUrl: string;
 }) {
   return (
-    <div className="p-4 bg-gray-50 rounded-lg">
+    <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
       <div className="flex items-center space-x-2 mb-3">
-        <span className="text-2xl">{logo}</span>
-        <h4 className="font-medium text-gray-900">{service}</h4>
+        <h4 className="font-medium text-gray-900 dark:text-white">{service}</h4>
       </div>
       <ol className="space-y-2 mb-3">
         {steps.map((step, index) => (
