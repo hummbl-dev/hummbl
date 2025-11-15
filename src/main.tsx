@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { App } from './App.tsx'
 import ErrorBoundary from './components/ErrorBoundary.tsx'
+import { ThemeProvider } from './contexts/ThemeContext.tsx'
+import { ToastProvider } from './contexts/ToastContext.tsx'
 import { Analytics } from '@vercel/analytics/react'
 import './index.css'
 
@@ -50,10 +52,14 @@ if (!rootElement) {
 try {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <ErrorBoundary>
-        <App />
-        <Analytics />
-      </ErrorBoundary>
+      <ThemeProvider>
+        <ToastProvider>
+          <ErrorBoundary>
+            <App />
+            <Analytics />
+          </ErrorBoundary>
+        </ToastProvider>
+      </ThemeProvider>
     </React.StrictMode>,
   );
 } catch (error) {

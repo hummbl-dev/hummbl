@@ -37,7 +37,7 @@ export default function Sidebar() {
     (item) => !item.adminOnly || isAdmin
   );
   return (
-    <div className="w-64 bg-gray-900 text-white">
+    <div className="w-64 bg-gray-900 dark:bg-black text-white transition-colors">
       <div className="p-4 border-b border-gray-800" role="complementary" aria-label="Application branding">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg">
