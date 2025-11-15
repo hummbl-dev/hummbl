@@ -6,7 +6,6 @@
  * @module TaskNode
  */
 
-/* eslint-disable react/forbid-dom-props */
 import React from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { Task, Agent } from '../../../types/workflow';

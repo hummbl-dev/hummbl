@@ -6,7 +6,6 @@
  * @module AgentNode
  */
 
-/* eslint-disable react/forbid-dom-props */
 import React from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { Agent } from '../../../types/workflow';

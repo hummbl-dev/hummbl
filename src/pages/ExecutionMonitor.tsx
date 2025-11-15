@@ -396,7 +396,6 @@ function ExecutionCard({ execution }: { execution: Execution }) {
             <span className="font-medium">{Math.round(execution.progress)}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            {/* eslint-disable-next-line react/forbid-dom-props */}
             <div
               className="bg-primary-600 h-2 rounded-full transition-all duration-500"
               style={{ width: `${execution.progress}%` }}

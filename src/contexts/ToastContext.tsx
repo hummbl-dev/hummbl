@@ -114,7 +114,6 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
   }[toast.type];
 
   return (
-    // eslint-disable-next-line jsx-a11y/aria-props
     <div
       className={`${styles[toast.type]} border rounded-lg shadow-lg p-4 flex items-start space-x-3 animate-slide-in-right`}
       role="alert"

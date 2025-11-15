@@ -147,7 +147,6 @@ export default function WorkflowDetail() {
           <p className="text-sm text-gray-900 mb-1">Progress</p>
           <div className="flex items-center space-x-3">
             <div className="flex-1 bg-gray-200 rounded-full h-2">
-              {/* eslint-disable-next-line react/forbid-dom-props */}
               <div
                 className="bg-primary-600 h-2 rounded-full transition-all"
                 style={{ width: `${progress}%` }}
@@ -320,7 +319,6 @@ export default function WorkflowDetail() {
         <div className="card">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Execution Logs</h2>
           <div className="space-y-2 max-h-96 overflow-y-auto">
-            {/* eslint-disable-next-line react/forbid-dom-props */}
             {logs.map((log) => (
               <div
                 key={log.id}
