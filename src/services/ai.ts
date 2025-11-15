@@ -134,7 +134,7 @@ export const getAPIKey = (provider: 'anthropic' | 'openai'): string | undefined 
   // WARNING: Do NOT use environment variables for API keys
   // They would be exposed in the browser bundle
   if (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.VITE_OPENAI_API_KEY) {
-      '[!] SECURITY WARNING: API keys detected in environment variables! ' +
+    console.warn(
       '[!] SECURITY WARNING: API keys detected in environment variables! ' +
       'Remove VITE_ANTHROPIC_API_KEY and VITE_OPENAI_API_KEY from .env files. ' +
       'API keys should only be stored in backend secrets.'
