@@ -37,11 +37,11 @@ export default function WorkflowList() {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="space-y-6 md:space-y-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Workflows</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">
+          <h1 className="text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">Workflows</h1>
+          <p className="text-gray-700 dark:text-gray-300 mt-2 text-base md:text-lg leading-relaxed">
             Manage and monitor your agentic workflows
           </p>
         </div>

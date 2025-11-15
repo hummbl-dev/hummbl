@@ -35,10 +35,10 @@ export default function Templates() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Workflow Templates</h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">Workflow Templates</h1>
+        <p className="text-gray-700 dark:text-gray-300 mt-2 text-base md:text-lg leading-relaxed">
           Start quickly with pre-configured workflow templates
         </p>
       </div>
