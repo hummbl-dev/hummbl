@@ -32,9 +32,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     (type: ToastType, message: string, description?: string, duration: number = 5000) => {
       const id = Math.random().toString(36).substring(7);
       const newToast: Toast = { id, type, message, description, duration };
-      
+
       setToasts((prev) => [...prev, newToast]);
-      
+
       if (duration > 0) {
         setTimeout(() => removeToast(id), duration);
       }
@@ -113,13 +113,12 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
     warning: 'Warning notification',
   }[toast.type];
 
-  const ariaLive: 'assertive' | 'polite' = toast.type === 'error' ? 'assertive' : 'polite';
-
   return (
+    // eslint-disable-next-line jsx-a11y/aria-props
     <div
       className={`${styles[toast.type]} border rounded-lg shadow-lg p-4 flex items-start space-x-3 animate-slide-in-right`}
       role="alert"
-      aria-live={ariaLive}
+      aria-live={toast.type === 'error' ? 'assertive' : 'polite'}
       aria-label={ariaLabel}
     >
       <Icon className={`h-5 w-5 ${iconStyles[toast.type]} flex-shrink-0 mt-0.5`} aria-hidden="true" />

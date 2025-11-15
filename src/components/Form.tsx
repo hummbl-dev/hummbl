@@ -67,13 +67,11 @@ export function Input({ error, success, className = '', ...props }: InputProps) 
   // Monochrome validation states with thickness and shadow variations
   const errorClasses = error ? 'border-2 border-gray-600 dark:border-gray-400 focus:ring-gray-700 focus:ring-2 shadow-md bg-gray-100 dark:bg-gray-800' : '';
   const successClasses = success ? 'border-2 border-gray-500 dark:border-gray-500 focus:ring-gray-600 focus:ring-1 bg-gray-50 dark:bg-gray-850' : '';
-  
-  const ariaInvalid = error ? ('true' as const) : ('false' as const);
-  
+
   return (
     <input
       className={`${baseClasses} ${errorClasses} ${successClasses} ${className}`}
-      aria-invalid={ariaInvalid}
+      aria-invalid={error ? 'true' : 'false'}
       {...props}
     />
   );
@@ -89,13 +87,11 @@ export function TextArea({ error, success, className = '', ...props }: TextAreaP
   // Monochrome validation states with thickness and shadow variations
   const errorClasses = error ? 'border-2 border-gray-600 dark:border-gray-400 focus:ring-gray-700 focus:ring-2 shadow-md bg-gray-100 dark:bg-gray-800' : '';
   const successClasses = success ? 'border-2 border-gray-500 dark:border-gray-500 focus:ring-gray-600 focus:ring-1 bg-gray-50 dark:bg-gray-850' : '';
-  
-  const ariaInvalid = error ? ('true' as const) : ('false' as const);
-  
+
   return (
     <textarea
       className={`${baseClasses} ${errorClasses} ${successClasses} ${className}`}
-      aria-invalid={ariaInvalid}
+      aria-invalid={error ? 'true' : 'false'}
       {...props}
     />
   );
@@ -111,13 +107,11 @@ export function Select({ error, success, className = '', children, ...props }: S
   // Monochrome validation states with thickness and shadow variations
   const errorClasses = error ? 'border-2 border-gray-600 dark:border-gray-400 focus:ring-gray-700 focus:ring-2 shadow-md bg-gray-100 dark:bg-gray-800' : '';
   const successClasses = success ? 'border-2 border-gray-500 dark:border-gray-500 focus:ring-gray-600 focus:ring-1 bg-gray-50 dark:bg-gray-850' : '';
-  
-  const ariaInvalid = error ? ('true' as const) : ('false' as const);
-  
+
   return (
     <select
       className={`${baseClasses} ${errorClasses} ${successClasses} ${className}`}
-      aria-invalid={ariaInvalid}
+      aria-invalid={error ? 'true' : 'false'}
       {...props}
     >
       {children}
