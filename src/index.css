@@ -12,7 +12,7 @@ body {
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   font-size: 16px;
   line-height: 1.6;
-  @apply bg-gradient-to-br from-primary-50 via-white to-accent-50/30 dark:from-primary-900 dark:via-gray-950 dark:to-primary-900 text-primary-900 dark:text-primary-50 transition-colors;
+  @apply bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-gray-900 dark:text-gray-50 transition-colors;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -20,13 +20,13 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.025em;
   line-height: 1.2;
   margin-bottom: 0.75em;
-  @apply text-primary-900 dark:text-primary-50;
+  @apply text-gray-900 dark:text-gray-50;
 }
 
 p {
   margin-bottom: 1em;
   line-height: 1.7;
-  @apply text-primary-700 dark:text-primary-200;
+  @apply text-gray-700 dark:text-gray-300;
 }
 
 code {
@@ -67,24 +67,24 @@ code {
   }
 
   .card {
-    @apply bg-white/80 dark:bg-primary-800/50 backdrop-blur-sm rounded-xl shadow-card p-6 md:p-8
-           border border-primary-100 dark:border-primary-700/50
-           hover:shadow-card-hover hover:-translate-y-1 hover:border-primary-200 dark:hover:border-primary-600
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-card p-6 md:p-8
+           border border-gray-200 dark:border-gray-700
+           hover:shadow-card-hover hover:-translate-y-1 hover:border-accent-300 dark:hover:border-accent-700
            transition-all duration-300;
   }
 
   .input-field {
     @apply w-full px-4 py-2.5 
-           border border-primary-200 dark:border-primary-700 
-           bg-white/90 dark:bg-primary-800/90 text-primary-900 dark:text-primary-50
+           border border-gray-300 dark:border-gray-600 
+           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50
            rounded-lg 
            focus:outline-none focus:ring-2 focus:ring-accent-500 dark:focus:ring-accent-400 focus:border-accent-500 dark:focus:border-accent-400
-           placeholder:text-primary-400 dark:placeholder:text-primary-500
+           placeholder:text-gray-400 dark:placeholder:text-gray-500
            transition-all duration-200;
   }
 
   .label {
-    @apply block text-sm font-semibold text-primary-700 dark:text-primary-200 mb-2;
+    @apply block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2;
     letter-spacing: 0.01em;
   }
 }

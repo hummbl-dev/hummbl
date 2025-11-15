@@ -46,9 +46,9 @@ export default function Dashboard() {
       name: 'Completed',
       value: completedWorkflows.length,
       icon: CheckCircle2,
-      color: 'from-primary-500 to-primary-600',
-      iconBg: 'bg-primary-100 dark:bg-primary-900/30',
-      iconColor: 'text-primary-600 dark:text-primary-400',
+      color: 'from-success-500 to-success-600',
+      iconBg: 'bg-success-100 dark:bg-success-900/30',
+      iconColor: 'text-success-600 dark:text-success-400',
     },
   ];
 
@@ -56,8 +56,8 @@ export default function Dashboard() {
     <div className="space-y-8 md:space-y-10">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary-900 to-primary-700 dark:from-primary-50 dark:to-primary-200 bg-clip-text text-transparent mb-2">Dashboard</h1>
-          <p className="text-primary-600 dark:text-primary-300 mt-2 text-base md:text-lg leading-relaxed">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-50 mb-2">Dashboard</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2 text-base md:text-lg leading-relaxed">
             Welcome to your agentic workflow management system
           </p>
         </div>
@@ -79,12 +79,12 @@ export default function Dashboard() {
           >
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <p className="text-sm md:text-base font-semibold text-primary-700 dark:text-primary-200 tracking-wide">{stat.name}</p>
+                <p className="text-sm md:text-base font-semibold text-gray-700 dark:text-gray-200 tracking-wide">{stat.name}</p>
                 <div className={`${stat.iconBg} p-2.5 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-subtle`}>
                   <stat.icon className={`h-5 w-5 ${stat.iconColor}`} />
                 </div>
               </div>
-              <p className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent tracking-tight`}>
+              <p className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-50 tracking-tight">
                 {stat.value}
               </p>
             </div>
@@ -95,7 +95,7 @@ export default function Dashboard() {
       {/* Recent Workflows */}
       <div className="card">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-primary-900 dark:text-primary-50">Recent Workflows</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50">Recent Workflows</h2>
           <Link
             to="/workflows"
             className="text-accent-600 dark:text-accent-400 hover:text-accent-700 dark:hover:text-accent-500 text-sm font-semibold transition-colors"
@@ -105,10 +105,10 @@ export default function Dashboard() {
         </div>
         {recentWorkflows.length === 0 ? (
           <div className="text-center py-16 px-4">
-            <div className="bg-primary-100 dark:bg-primary-800 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Workflow className="h-10 w-10 text-primary-600 dark:text-primary-400" />
+            <div className="bg-gray-100 dark:bg-gray-700 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Workflow className="h-10 w-10 text-gray-600 dark:text-gray-400" />
             </div>
-            <p className="text-primary-600 dark:text-primary-300 text-lg mb-3">No workflows yet</p>
+            <p className="text-gray-600 dark:text-gray-400 text-lg mb-3">No workflows yet</p>
             <Link to="/workflows/new" className="btn-primary inline-flex">
               Create your first workflow
             </Link>
@@ -119,19 +119,19 @@ export default function Dashboard() {
               <Link
                 key={workflow.id}
                 to={`/workflows/${workflow.id}`}
-                className="block p-5 border border-primary-200 dark:border-primary-700 rounded-xl hover:border-accent-400 dark:hover:border-accent-600 hover:shadow-soft transition-all bg-white/50 dark:bg-primary-800/50"
+                className="block p-5 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-accent-400 dark:hover:border-accent-600 hover:shadow-soft transition-all bg-white dark:bg-gray-800"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-primary-900 dark:text-primary-50 truncate">{workflow.name}</h3>
-                    <p className="text-sm text-primary-600 dark:text-primary-300 mt-1 line-clamp-2">
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-50 truncate">{workflow.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                       {workflow.description}
                     </p>
                     <div className="flex items-center space-x-4 mt-3">
-                      <span className="text-xs font-medium text-primary-500 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30 px-2 py-1 rounded">
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
                         {workflow.tasks.length} tasks
                       </span>
-                      <span className="text-xs font-medium text-primary-500 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30 px-2 py-1 rounded">
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
                         {workflow.agents.length} agents
                       </span>
                     </div>
