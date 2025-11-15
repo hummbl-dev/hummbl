@@ -16,7 +16,7 @@ export default function PreviewBanner() {
           <div className="min-w-0 flex-1">
             <p className="text-xs md:text-sm text-black dark:text-white truncate md:whitespace-normal">
               <span className="font-bold">Preview Mode</span>
-              <span className="text-gray-600 dark:text-gray-400 ml-1 md:ml-2 hidden sm:inline">
+              <span className="text-gray-900 dark:text-gray-700 ml-1 md:ml-2 hidden sm:inline">
                 · Interface demonstration
               </span>
             </p>
@@ -24,7 +24,7 @@ export default function PreviewBanner() {
         </div>
         <button
           onClick={() => setIsDismissed(true)}
-          className="flex-shrink-0 p-1 md:p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white"
+          className="flex-shrink-0 p-1 md:p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-gray-900 dark:text-gray-700 hover:text-black dark:hover:text-white"
           aria-label="Dismiss preview banner"
         >
           <X className="h-4 w-4" />

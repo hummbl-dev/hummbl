@@ -103,7 +103,7 @@ export default function Analytics() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Activity className="h-8 w-8 animate-spin text-primary-600 mx-auto mb-2" />
-          <p className="text-gray-600">Loading analytics...</p>
+          <p className="text-gray-900">Loading analytics...</p>
         </div>
       </div>
     );
@@ -113,9 +113,9 @@ export default function Analytics() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-gray-700 dark:text-gray-300 mx-auto mb-4" />
+          <AlertCircle className="h-12 w-12 text-gray-900 dark:text-gray-200 mx-auto mb-4" />
           <h2 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Analytics</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-gray-900 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="btn-primary"
@@ -140,7 +140,7 @@ export default function Analytics() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-900 mt-1">
             Track workflows, performance, and usage metrics
           </p>
         </div>
@@ -220,20 +220,20 @@ export default function Analytics() {
               topComponents.slice(0, 5).map((comp, index) => (
                 <div key={comp.id} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <span className="text-sm font-medium text-gray-500">#{index + 1}</span>
+                    <span className="text-sm font-medium text-gray-800">#{index + 1}</span>
                     <div>
                       <span className="font-medium">{comp.name}</span>
-                      <span className="text-xs text-gray-500 ml-2">{comp.code}</span>
+                      <span className="text-xs text-gray-800 ml-2">{comp.code}</span>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-medium">{comp.actions} actions</div>
-                    <div className="text-xs text-gray-500">{comp.views} views</div>
+                    <div className="text-xs text-gray-800">{comp.views} views</div>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 text-center py-8">
+              <p className="text-gray-800 text-center py-8">
                 No component data yet. Start using HUMMBL to see analytics!
               </p>
             )}
@@ -264,7 +264,7 @@ export default function Analytics() {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold mb-1">Ready for more insights?</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-900">
               View detailed token usage, execution logs, and error tracking
             </p>
           </div>
@@ -301,7 +301,7 @@ function MetricCard({ title, value, change, changeLabel, icon, trend }: MetricCa
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm font-medium text-gray-600">{title}</span>
+        <span className="text-sm font-medium text-gray-900">{title}</span>
         <div className="p-2 bg-primary-50 rounded-lg text-primary-600">{icon}</div>
       </div>
       <div className="mb-2">
@@ -316,13 +316,13 @@ function MetricCard({ title, value, change, changeLabel, icon, trend }: MetricCa
           ) : null}
           <span
             className={`text-sm font-medium ${
-              trend === 'up' ? 'text-black dark:text-white' : trend === 'down' ? 'text-black dark:text-white' : 'text-gray-600'
+              trend === 'up' ? 'text-black dark:text-white' : trend === 'down' ? 'text-black dark:text-white' : 'text-gray-900'
             }`}
           >
             {change > 0 ? '+' : ''}
             {change}%
           </span>
-          {changeLabel && <span className="text-sm text-gray-500">{changeLabel}</span>}
+          {changeLabel && <span className="text-sm text-gray-800">{changeLabel}</span>}
         </div>
       )}
     </div>
@@ -351,7 +351,7 @@ function SimpleLineChart({ data }: { data: ChartDataPoint[] }) {
                 {point.value} executions
               </div>
             </div>
-            <span className="text-xs text-gray-500 mt-2 truncate w-full text-center">
+            <span className="text-xs text-gray-800 mt-2 truncate w-full text-center">
               {point.date}
             </span>
           </div>
@@ -365,7 +365,7 @@ function SimpleLineChart({ data }: { data: ChartDataPoint[] }) {
 function StatItem({ label, value }: { label: string; value: string | number }) {
   return (
     <div>
-      <p className="text-sm text-gray-600 mb-1">{label}</p>
+      <p className="text-sm text-gray-900 mb-1">{label}</p>
       <p className="text-2xl font-bold text-gray-900">{value}</p>
     </div>
   );

@@ -59,7 +59,7 @@ export default function VerifyEmail() {
                 <Loader2 className="h-8 w-8 text-black dark:text-white animate-spin" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Verifying Your Email</h1>
-              <p className="text-gray-600">Please wait while we verify your email address...</p>
+              <p className="text-gray-900">Please wait while we verify your email address...</p>
             </>
           )}
 
@@ -69,8 +69,8 @@ export default function VerifyEmail() {
                 <Check className="h-8 w-8 text-black dark:text-white" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Email Verified!</h1>
-              <p className="text-gray-600 mb-4">{message}</p>
-              <p className="text-sm text-gray-500">Redirecting you to the dashboard...</p>
+              <p className="text-gray-900 mb-4">{message}</p>
+              <p className="text-sm text-gray-800">Redirecting you to the dashboard...</p>
             </>
           )}
 
@@ -80,7 +80,7 @@ export default function VerifyEmail() {
                 <X className="h-8 w-8 text-black dark:text-white" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Verification Failed</h1>
-              <p className="text-gray-600 mb-6">{message}</p>
+              <p className="text-gray-900 mb-6">{message}</p>
               <div className="flex flex-col sm:flex-row gap-3 w-full">
                 <button
                   onClick={() => navigate('/login')}
@@ -100,8 +100,8 @@ export default function VerifyEmail() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="flex items-start space-x-3 text-sm text-gray-600">
-            <Mail className="h-5 w-5 text-gray-400 flex-shrink-0 mt-0.5" />
+          <div className="flex items-start space-x-3 text-sm text-gray-900">
+            <Mail className="h-5 w-5 text-gray-700 flex-shrink-0 mt-0.5" />
             <div>
               <p className="font-medium text-gray-900 mb-1">Didn't receive the email?</p>
               <p>Check your spam folder or request a new verification email from your account settings.</p>

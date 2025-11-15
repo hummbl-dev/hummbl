@@ -159,7 +159,7 @@ export default function WorkflowEditorFull() {
           <h1 className="text-3xl font-bold text-gray-900">
             {id ? 'Edit Workflow' : 'Create New Workflow'}
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-900 mt-1">
             Configure agents, tasks, and dependencies
           </p>
         </div>
@@ -302,9 +302,9 @@ export default function WorkflowEditorFull() {
           >
             <h2 className="text-xl font-bold text-gray-900">AI Agents ({agents.length})</h2>
             {expandedSections.has('agents') ? (
-              <ChevronUp className="h-5 w-5 text-gray-500" />
+              <ChevronUp className="h-5 w-5 text-gray-800" />
             ) : (
-              <ChevronDown className="h-5 w-5 text-gray-500" />
+              <ChevronDown className="h-5 w-5 text-gray-800" />
             )}
           </button>
 
@@ -372,7 +372,7 @@ export default function WorkflowEditorFull() {
                       onChange={(e) => handleUpdateAgent(agent.id, { temperature: parseFloat(e.target.value) })}
                       className="w-full"
                     />
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <div className="flex justify-between text-xs text-gray-800 mt-1">
                       <span>Focused (0)</span>
                       <span>Creative (1)</span>
                     </div>
@@ -400,13 +400,13 @@ export default function WorkflowEditorFull() {
                           {preset.displayName}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-600 group-hover:text-gray-700">
+                      <p className="text-xs text-gray-900 group-hover:text-gray-700">
                         {preset.description}
                       </p>
                     </button>
                   ))}
                 </div>
-                <p className="text-xs text-gray-500 mt-3 italic">
+                <p className="text-xs text-gray-800 mt-3 italic">
                   Each preset includes optimized model, temperature, and capabilities
                 </p>
               </div>
@@ -423,9 +423,9 @@ export default function WorkflowEditorFull() {
           >
             <h2 className="text-xl font-bold text-gray-900">Tasks ({tasks.length})</h2>
             {expandedSections.has('tasks') ? (
-              <ChevronUp className="h-5 w-5 text-gray-500" />
+              <ChevronUp className="h-5 w-5 text-gray-800" />
             ) : (
-              <ChevronDown className="h-5 w-5 text-gray-500" />
+              <ChevronDown className="h-5 w-5 text-gray-800" />
             )}
           </button>
 
@@ -513,7 +513,7 @@ export default function WorkflowEditorFull() {
                         </label>
                       ))}
                       {tasks.filter(t => t.id !== task.id).length === 0 && (
-                        <p className="text-sm text-gray-500 italic">No other tasks available</p>
+                        <p className="text-sm text-gray-800 italic">No other tasks available</p>
                       )}
                     </div>
                   </div>
@@ -530,7 +530,7 @@ export default function WorkflowEditorFull() {
                 <span>Add Task</span>
               </button>
               {agents.length === 0 && (
-                <p className="text-sm text-gray-600 dark:text-gray-400">Add at least one agent before creating tasks</p>
+                <p className="text-sm text-gray-900 dark:text-gray-700">Add at least one agent before creating tasks</p>
               )}
             </div>
           )}

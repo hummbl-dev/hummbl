@@ -152,7 +152,7 @@ export default function ExecutionMonitor() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Activity className="h-8 w-8 animate-pulse text-primary-600 mx-auto mb-2" />
-          <p className="text-gray-600">Loading executions...</p>
+          <p className="text-gray-900">Loading executions...</p>
         </div>
       </div>
     );
@@ -164,7 +164,7 @@ export default function ExecutionMonitor() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Execution Monitor</h1>
-          <p className="text-gray-600 mt-1">Real-time workflow execution tracking</p>
+          <p className="text-gray-900 mt-1">Real-time workflow execution tracking</p>
         </div>
 
         {/* Auto-refresh toggle */}
@@ -223,7 +223,7 @@ export default function ExecutionMonitor() {
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-700" />
               <input
                 type="text"
                 placeholder="Search workflows..."
@@ -236,7 +236,7 @@ export default function ExecutionMonitor() {
 
           {/* Status Filter */}
           <div className="flex items-center space-x-2">
-            <Filter className="h-4 w-4 text-gray-500" />
+            <Filter className="h-4 w-4 text-gray-800" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
@@ -256,9 +256,9 @@ export default function ExecutionMonitor() {
       <div className="space-y-3">
         {filteredExecutions.length === 0 ? (
           <div className="card text-center py-12">
-            <Activity className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600">No executions found</p>
-            <p className="text-sm text-gray-500 mt-1">Try adjusting your filters or search query</p>
+            <Activity className="h-12 w-12 text-gray-700 mx-auto mb-3" />
+            <p className="text-gray-900">No executions found</p>
+            <p className="text-sm text-gray-800 mt-1">Try adjusting your filters or search query</p>
           </div>
         ) : (
           filteredExecutions.map((execution) => (
@@ -286,7 +286,7 @@ function StatCard({
     <div className="card">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-600">{label}</p>
+          <p className="text-sm text-gray-900">{label}</p>
           <p className={`text-2xl font-bold ${color}`}>{value}</p>
         </div>
         <div className={`p-2 bg-gray-50 rounded-lg ${color}`}>{icon}</div>
@@ -306,19 +306,19 @@ function ExecutionCard({ execution }: { execution: Execution }) {
     },
     running: {
       bg: 'bg-gray-100 dark:bg-gray-800',
-      text: 'text-gray-700 dark:text-gray-300',
+      text: 'text-gray-900 dark:text-gray-200',
       icon: <Loader2 className="h-4 w-4 animate-spin" />,
       label: 'Running',
     },
     completed: {
       bg: 'bg-gray-100 dark:bg-gray-800',
-      text: 'text-gray-700 dark:text-gray-300',
+      text: 'text-gray-900 dark:text-gray-200',
       icon: <CheckCircle2 className="h-4 w-4" />,
       label: 'Completed',
     },
     failed: {
       bg: 'bg-gray-100 dark:bg-gray-800',
-      text: 'text-gray-700 dark:text-gray-300',
+      text: 'text-gray-900 dark:text-gray-200',
       icon: <XCircle className="h-4 w-4" />,
       label: 'Failed',
     },
@@ -362,7 +362,7 @@ function ExecutionCard({ execution }: { execution: Execution }) {
                 });
                 alert('Stop execution - Coming soon!');
               }}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded"
+              className="p-2 text-gray-900 hover:bg-gray-100 rounded"
               title="Stop execution"
             >
               <Square className="h-4 w-4" />
@@ -378,7 +378,7 @@ function ExecutionCard({ execution }: { execution: Execution }) {
                 });
                 alert('Retry execution - Coming soon!');
               }}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded"
+              className="p-2 text-gray-900 hover:bg-gray-100 rounded"
               title="Retry execution"
             >
               <RotateCcw className="h-4 w-4" />
@@ -391,7 +391,7 @@ function ExecutionCard({ execution }: { execution: Execution }) {
       {execution.status === 'running' && (
         <div className="mb-3">
           <div className="flex items-center justify-between text-sm mb-1">
-            <span className="text-gray-600">Progress</span>
+            <span className="text-gray-900">Progress</span>
             <span className="font-medium">{Math.round(execution.progress)}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -404,7 +404,7 @@ function ExecutionCard({ execution }: { execution: Execution }) {
       )}
 
       {/* Details */}
-      <div className="flex items-center justify-between text-sm text-gray-600">
+      <div className="flex items-center justify-between text-sm text-gray-900">
         <div className="flex items-center space-x-4">
           <span>
             Tasks: {execution.tasksCompleted}/{execution.tasksTotal}

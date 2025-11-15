@@ -204,7 +204,7 @@ export default function ErrorLogs() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <AlertTriangle className="h-8 w-8 animate-pulse text-gray-800 dark:text-gray-200 mx-auto mb-2" />
-          <p className="text-gray-600">Loading error logs...</p>
+          <p className="text-gray-900">Loading error logs...</p>
         </div>
       </div>
     );
@@ -216,7 +216,7 @@ export default function ErrorLogs() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Error Logs</h1>
-          <p className="text-gray-600 mt-1">Debug failed workflows and track issues</p>
+          <p className="text-gray-900 mt-1">Debug failed workflows and track issues</p>
         </div>
 
         {/* Export Button */}
@@ -267,7 +267,7 @@ export default function ErrorLogs() {
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-700" />
               <input
                 type="text"
                 placeholder="Search errors..."
@@ -280,7 +280,7 @@ export default function ErrorLogs() {
 
           {/* Severity Filter */}
           <div className="flex items-center space-x-2">
-            <Filter className="h-4 w-4 text-gray-500" />
+            <Filter className="h-4 w-4 text-gray-800" />
             <select
               value={severityFilter}
               onChange={(e) => setSeverityFilter(e.target.value as SeverityFilter)}
@@ -296,7 +296,7 @@ export default function ErrorLogs() {
 
           {/* Status Filter */}
           <div className="flex items-center space-x-2">
-            <Filter className="h-4 w-4 text-gray-500" />
+            <Filter className="h-4 w-4 text-gray-800" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
@@ -315,8 +315,8 @@ export default function ErrorLogs() {
         {filteredErrors.length === 0 ? (
           <div className="card text-center py-12">
             <CheckCircle className="h-12 w-12 text-gray-900 dark:text-gray-100 mx-auto mb-3" />
-            <p className="text-gray-600 font-medium">No errors found</p>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-gray-900 font-medium">No errors found</p>
+            <p className="text-sm text-gray-800 mt-1">
               {searchQuery || severityFilter !== 'all' || statusFilter !== 'all'
                 ? 'Try adjusting your filters or search query'
                 : 'All systems running smoothly!'}
@@ -365,7 +365,7 @@ function StatCard({
     <div className="card">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-600">{label}</p>
+          <p className="text-sm text-gray-900">{label}</p>
           <p className={`text-2xl font-bold ${color}`}>{value}</p>
         </div>
         <div className={`p-2 bg-gray-50 rounded-lg ${color}`}>{icon}</div>
@@ -424,7 +424,7 @@ function ErrorCard({
             <span className={`px-2 py-1 rounded text-xs font-medium ${config.bg} ${config.text}`}>
               {config.label}
             </span>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-800">
               {error.errorType}
             </span>
             {error.resolved && (
@@ -464,7 +464,7 @@ function ErrorCard({
       </div>
 
       {/* Metadata */}
-      <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
+      <div className="flex items-center justify-between text-sm text-gray-900 mb-3">
         <div className="flex items-center space-x-4">
           {error.context.agent && <span>Agent: {error.context.agent}</span>}
           {error.context.task && <span>Task: {error.context.task}</span>}
@@ -492,11 +492,11 @@ function ErrorCard({
           {/* IDs */}
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <p className="text-gray-600">Error ID</p>
+              <p className="text-gray-900">Error ID</p>
               <p className="font-mono text-gray-900">{error.id}</p>
             </div>
             <div>
-              <p className="text-gray-600">Execution ID</p>
+              <p className="text-gray-900">Execution ID</p>
               <Link
                 to={`/monitor`}
                 className="font-mono text-primary-600 hover:underline"

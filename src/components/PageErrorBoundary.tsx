@@ -86,7 +86,7 @@ class PageErrorBoundary extends Component<Props, State> {
               Something went wrong
             </h2>
             
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-900 mb-6">
               We encountered an error loading this {pageName}. 
               The error has been logged and will be reviewed.
             </p>

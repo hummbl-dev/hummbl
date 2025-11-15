@@ -39,7 +39,7 @@ export default function MentalModels() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Mental Models</h1>
-        <p className="text-gray-600 mt-1">
+        <p className="text-gray-900 mt-1">
           Explore the HUMMBL Base120 framework of mental models
         </p>
       </div>
@@ -48,7 +48,7 @@ export default function MentalModels() {
       <div className="card space-y-4">
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-700" />
           <input
             type="text"
             placeholder="Search mental models..."
@@ -118,7 +118,7 @@ export default function MentalModels() {
       </div>
 
       {/* Results Count */}
-      <div className="text-sm text-gray-600">
+      <div className="text-sm text-gray-900">
         Showing {filteredModels.length} of {mentalModels.length} mental models
       </div>
 
@@ -128,8 +128,8 @@ export default function MentalModels() {
       {/* Models Grid */}
       {filteredModels.length === 0 ? (
         <div className="card text-center py-12">
-          <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600">No mental models match your filters</p>
+          <Brain className="h-12 w-12 text-gray-700 mx-auto mb-4" />
+          <p className="text-gray-900">No mental models match your filters</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -165,7 +165,7 @@ interface ModelCardProps {
 function ModelCard({ model }: ModelCardProps) {
   const transformation = transformations.find(t => t.code === model.transformation);
   const difficultyColors = {
-    beginner: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    beginner: 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200',
     intermediate: 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200',
     advanced: 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100',
   };
@@ -208,7 +208,7 @@ function ModelCard({ model }: ModelCardProps) {
       </p>
 
       <div className="bg-gray-50 p-3 rounded-lg mb-3">
-        <p className="text-xs font-medium text-gray-600 mb-1">Example:</p>
+        <p className="text-xs font-medium text-gray-900 mb-1">Example:</p>
         <p className="text-xs text-gray-700 italic">
           {model.example}
         </p>
@@ -219,7 +219,7 @@ function ModelCard({ model }: ModelCardProps) {
           {model.tags.map((tag) => (
             <span
               key={tag}
-              className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+              className="px-2 py-1 bg-gray-100 text-gray-900 text-xs rounded"
             >
               #{tag}
             </span>
@@ -229,7 +229,7 @@ function ModelCard({ model }: ModelCardProps) {
 
       {model.relatedModels.length > 0 && (
         <div className="border-t border-gray-200 pt-3">
-          <p className="text-xs font-medium text-gray-600 mb-1">
+          <p className="text-xs font-medium text-gray-900 mb-1">
             Related: {model.relatedModels.join(', ')}
           </p>
         </div>

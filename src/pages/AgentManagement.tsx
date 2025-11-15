@@ -105,7 +105,7 @@ export default function AgentManagement() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">Agent Management</h1>
-          <p className="text-gray-700 dark:text-gray-300 mt-2 text-base md:text-lg leading-relaxed">
+          <p className="text-gray-900 dark:text-gray-200 mt-2 text-base md:text-lg leading-relaxed">
             Configure and manage your AI agents
           </p>
         </div>
@@ -318,7 +318,7 @@ export default function AgentManagement() {
                     </div>
                   </div>
                   <p className="text-sm text-gray-700 mb-2">{agent.description}</p>
-                  <div className="text-xs text-gray-600 border-t border-gray-300 pt-2 mt-2">
+                  <div className="text-xs text-gray-900 border-t border-gray-300 pt-2 mt-2">
                     <div className="flex items-center justify-between">
                       <span>Workflow:</span>
                       <a
@@ -340,8 +340,8 @@ export default function AgentManagement() {
       {/* Global Agent List */}
       {agents.length === 0 && workflowAgents.length === 0 ? (
         <div className="card text-center py-12">
-          <p className="text-gray-600 mb-2">No agents configured yet</p>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-gray-900 mb-2">No agents configured yet</p>
+          <p className="text-sm text-gray-800 mb-4">
             Agents can be created globally here or embedded within workflows
           </p>
           <button
@@ -353,8 +353,8 @@ export default function AgentManagement() {
         </div>
       ) : agents.length === 0 ? (
         <div className="card text-center py-12">
-          <p className="text-gray-600 mb-2">No global agents configured yet</p>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-gray-900 mb-2">No global agents configured yet</p>
+          <p className="text-sm text-gray-800 mb-4">
             You have {workflowAgents.length} agent(s) embedded in workflows above
           </p>
           <button
@@ -381,7 +381,7 @@ export default function AgentManagement() {
                     className="p-2 hover:bg-gray-100 rounded"
                     title="Edit agent"
                   >
-                    <Edit className="h-4 w-4 text-gray-600" />
+                    <Edit className="h-4 w-4 text-gray-900" />
                   </button>
                   <button
                     onClick={() => handleDelete(agent.id)}
@@ -393,7 +393,7 @@ export default function AgentManagement() {
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600 mb-3">{agent.description}</p>
+              <p className="text-sm text-gray-900 mb-3">{agent.description}</p>
 
               {agent.capabilities.length > 0 && (
                 <div className="mb-3">
@@ -408,7 +408,7 @@ export default function AgentManagement() {
                       </span>
                     ))}
                     {agent.capabilities.length > 3 && (
-                      <span className="px-2 py-1 text-gray-500 text-xs">
+                      <span className="px-2 py-1 text-gray-800 text-xs">
                         +{agent.capabilities.length - 3}
                       </span>
                     )}
@@ -416,7 +416,7 @@ export default function AgentManagement() {
                 </div>
               )}
 
-              <div className="text-xs text-gray-500 border-t border-gray-200 pt-3 space-y-1">
+              <div className="text-xs text-gray-800 border-t border-gray-200 pt-3 space-y-1">
                 <div className="flex justify-between">
                   <span>Model:</span>
                   <span className="font-medium">{agent.model || 'N/A'}</span>

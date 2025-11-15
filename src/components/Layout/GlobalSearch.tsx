@@ -136,7 +136,7 @@ export default function GlobalSearch() {
   return (
     <div ref={searchRef} className="relative flex-1 max-w-lg">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-700" />
         <input
           ref={inputRef}
           type="text"
@@ -151,7 +151,7 @@ export default function GlobalSearch() {
             onClick={handleClear}
             aria-label="Clear search"
             title="Clear search"
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700 hover:text-gray-900 dark:hover:text-gray-300"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -176,12 +176,12 @@ export default function GlobalSearch() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2">
                   <span className="font-medium text-gray-900 dark:text-white truncate">{result.title}</span>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200">
                     {result.type}
                   </span>
                 </div>
                 {result.subtitle && (
-                  <p className="text-sm text-gray-500 truncate mt-0.5">{result.subtitle}</p>
+                  <p className="text-sm text-gray-800 truncate mt-0.5">{result.subtitle}</p>
                 )}
               </div>
             </button>
@@ -192,9 +192,9 @@ export default function GlobalSearch() {
       {/* No Results */}
       {showResults && query && results.length === 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 py-8 z-50 text-center">
-          <Search className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-sm text-gray-600">No results found for "{query}"</p>
-          <p className="text-xs text-gray-500 mt-1">Try searching for workflows, agents, or templates</p>
+          <Search className="h-8 w-8 text-gray-700 mx-auto mb-2" />
+          <p className="text-sm text-gray-900">No results found for "{query}"</p>
+          <p className="text-xs text-gray-800 mt-1">Try searching for workflows, agents, or templates</p>
         </div>
       )}
     </div>

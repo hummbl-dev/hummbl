@@ -161,7 +161,7 @@ export default function TeamMembers() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Users className="h-8 w-8 animate-pulse text-primary-600 mx-auto mb-2" />
-          <p className="text-gray-600">Loading team members...</p>
+          <p className="text-gray-900">Loading team members...</p>
         </div>
       </div>
     );
@@ -186,7 +186,7 @@ export default function TeamMembers() {
             
             <div className="bg-white rounded-lg p-6 mb-4">
               <h3 className="font-semibold text-gray-900 mb-3">Available Features:</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
+              <ul className="space-y-2 text-sm text-gray-900">
                 <li className="flex items-start space-x-2">
                   <CheckCircle className="h-5 w-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span><strong>Invite team members</strong> via email with role-based access</span>
@@ -237,7 +237,7 @@ export default function TeamMembers() {
         <div className="text-center">
           <XCircle className="h-8 w-8 text-black dark:text-white mx-auto mb-2" />
           <p className="text-black dark:text-white font-medium">Failed to load team members</p>
-          <p className="text-gray-600 text-sm mt-1">{error}</p>
+          <p className="text-gray-900 text-sm mt-1">{error}</p>
           <button
             onClick={loadData}
             className="btn-primary mt-4"
@@ -255,7 +255,7 @@ export default function TeamMembers() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Team Members</h1>
-          <p className="text-gray-600 mt-1">Manage team access and collaboration</p>
+          <p className="text-gray-900 mt-1">Manage team access and collaboration</p>
         </div>
 
         {/* Invite Button */}
@@ -300,7 +300,7 @@ export default function TeamMembers() {
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-700" />
               <input
                 type="text"
                 placeholder="Search members..."
@@ -344,9 +344,9 @@ export default function TeamMembers() {
       <div className="card">
         {filteredMembers.length === 0 ? (
           <div className="text-center py-12">
-            <Users className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600">No team members found</p>
-            <p className="text-sm text-gray-500 mt-1">Try adjusting your filters or invite new members</p>
+            <Users className="h-12 w-12 text-gray-700 mx-auto mb-3" />
+            <p className="text-gray-900">No team members found</p>
+            <p className="text-sm text-gray-800 mt-1">Try adjusting your filters or invite new members</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -423,7 +423,7 @@ export default function TeamMembers() {
           />
           <PermissionCard
             role="Viewer"
-            icon={<UserIcon className="h-5 w-5 text-gray-600" />}
+            icon={<UserIcon className="h-5 w-5 text-gray-900" />}
             permissions={['View workflows', 'View results', 'Read-only']}
           />
         </div>
@@ -434,7 +434,7 @@ export default function TeamMembers() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Edit Role</h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-900 mb-4">
               Change role for {selectedMember.name} ({selectedMember.email})
             </p>
             <div className="space-y-2 mb-6">
@@ -477,7 +477,7 @@ export default function TeamMembers() {
               <AlertTriangle className="h-6 w-6 text-black dark:text-white" />
               <h3 className="text-lg font-semibold text-gray-900">Remove User</h3>
             </div>
-            <p className="text-sm text-gray-600 mb-6">
+            <p className="text-sm text-gray-900 mb-6">
               Are you sure you want to remove {selectedMember.name} ({selectedMember.email})? This action cannot be undone.
             </p>
             <div className="flex space-x-3">
@@ -522,7 +522,7 @@ function StatCard({
     <div className="card">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-600">{label}</p>
+          <p className="text-sm text-gray-900">{label}</p>
           <p className={`text-2xl font-bold ${color}`}>{value}</p>
         </div>
         <div className={`p-2 bg-gray-50 rounded-lg ${color}`}>{icon}</div>
@@ -553,13 +553,13 @@ function MemberRow({
     owner: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-100', icon: <Crown className="h-4 w-4" /> },
     admin: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-100', icon: <Shield className="h-4 w-4" /> },
     member: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-100', icon: <UserIcon className="h-4 w-4" /> },
-    viewer: { bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300', icon: <UserIcon className="h-4 w-4" /> },
+    viewer: { bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-900 dark:text-gray-200', icon: <UserIcon className="h-4 w-4" /> },
   };
 
   const statusConfig = {
-    active: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <CheckCircle className="h-4 w-4" /> },
-    invited: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <Clock className="h-4 w-4" /> },
-    suspended: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <XCircle className="h-4 w-4" /> },
+    active: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-200', icon: <CheckCircle className="h-4 w-4" /> },
+    invited: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-200', icon: <Clock className="h-4 w-4" /> },
+    suspended: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-200', icon: <XCircle className="h-4 w-4" /> },
   };
 
   const roleStyle = roleConfig[member.role as keyof typeof roleConfig] || roleConfig.member;
@@ -575,7 +575,7 @@ function MemberRow({
           </div>
           <div>
             <p className="font-medium text-gray-900">{member.name}</p>
-            <p className="text-sm text-gray-500">{member.email}</p>
+            <p className="text-sm text-gray-800">{member.email}</p>
           </div>
         </div>
       </td>
@@ -604,12 +604,12 @@ function MemberRow({
       <td className="p-4">
         <div className="text-sm">
           {member.status === 'invited' ? (
-            <span className="text-gray-500">Pending</span>
+            <span className="text-gray-800">Pending</span>
           ) : (
             <>
               <p className="text-gray-900">Joined {member.joinedAt ? formatDate(member.joinedAt) : 'Unknown'}</p>
               {member.lastActiveAt && (
-                <p className="text-gray-500">Active {formatTimestamp(member.lastActiveAt)}</p>
+                <p className="text-gray-800">Active {formatTimestamp(member.lastActiveAt)}</p>
               )}
             </>
           )}
@@ -620,7 +620,7 @@ function MemberRow({
       <td className="p-4">
         <div className="text-sm">
           <p className="text-gray-900">{member.workflowsCreated} workflows</p>
-          <p className="text-gray-500">{member.executionsRun} executions</p>
+          <p className="text-gray-800">{member.executionsRun} executions</p>
         </div>
       </td>
 
@@ -639,7 +639,7 @@ function MemberRow({
           }}
           className="p-2 hover:bg-gray-100 rounded transition-colors"
         >
-          <MoreVertical className="h-4 w-4 text-gray-600" />
+          <MoreVertical className="h-4 w-4 text-gray-900" />
         </button>
 
         {/* Dropdown Menu */}
@@ -705,7 +705,7 @@ function InviteModal({
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Invite Team Member</h3>
-          <button onClick={onClose} aria-label="Close invite modal" className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} aria-label="Close invite modal" className="text-gray-700 hover:text-gray-900">
             ×
           </button>
         </div>
@@ -714,7 +714,7 @@ function InviteModal({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-700" />
               <input
                 type="email"
                 value={email}
@@ -775,7 +775,7 @@ function PermissionCard({
       </div>
       <ul className="space-y-1">
         {permissions.map((perm, index) => (
-          <li key={index} className="text-sm text-gray-600 flex items-center space-x-2">
+          <li key={index} className="text-sm text-gray-900 flex items-center space-x-2">
             <CheckCircle className="h-3 w-3 text-black dark:text-white" />
             <span>{perm}</span>
           </li>

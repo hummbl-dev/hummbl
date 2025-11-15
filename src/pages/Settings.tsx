@@ -44,7 +44,7 @@ export default function Settings() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-1">
+        <p className="text-gray-900 mt-1">
           Configure API keys for workflow execution
         </p>
       </div>
@@ -55,7 +55,7 @@ export default function Settings() {
             <Key className="h-5 w-5" />
             <span>API Keys</span>
           </h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-gray-900 mb-4">
             Configure your AI provider API keys to enable workflow execution. Keys are stored locally in your browser.
           </p>
         </div>
@@ -75,13 +75,13 @@ export default function Settings() {
             />
             <button
               onClick={() => setShowAnthropicKey(!showAnthropicKey)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700 hover:text-gray-900"
               aria-label={showAnthropicKey ? 'Hide Anthropic API key' : 'Show Anthropic API key'}
             >
               {showAnthropicKey ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-800 mt-1">
             Get your API key from{' '}
             <a
               href="https://console.anthropic.com/"
@@ -109,13 +109,13 @@ export default function Settings() {
             />
             <button
               onClick={() => setShowOpenaiKey(!showOpenaiKey)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700 hover:text-gray-900"
               aria-label={showOpenaiKey ? 'Hide OpenAI API key' : 'Show OpenAI API key'}
             >
               {showOpenaiKey ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-800 mt-1">
             Get your API key from{' '}
             <a
               href="https://platform.openai.com/api-keys"

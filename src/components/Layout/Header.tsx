@@ -21,7 +21,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
         {/* Mobile menu button */}
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+          className="lg:hidden p-2 text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
           aria-label="Open menu"
         >
           <Menu className="h-5 w-5" />
@@ -31,7 +31,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
         <div className="flex items-center space-x-2 md:space-x-4 ml-2 md:ml-4">
           <button
             onClick={toggleTheme}
-            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
           >
             {theme === 'light' ? (
@@ -42,7 +42,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           </button>
           <button
             onClick={() => navigate('/notifications')}
-            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors relative"
+            className="p-2 text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors relative"
             title="Notifications"
           >
             <Bell className="h-5 w-5" />
@@ -50,7 +50,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           </button>
           <button
             onClick={() => navigate('/settings')}
-            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             title="Settings"
           >
             <Settings className="h-5 w-5" />
@@ -74,14 +74,14 @@ export default function Header({ onMenuClick }: HeaderProps) {
                     <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-20">
                       <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
                         <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
+                        <p className="text-xs text-gray-800 dark:text-gray-700 truncate">{user?.email}</p>
                       </div>
                       <button
                         onClick={() => {
                           setShowUserMenu(false);
                           navigate('/team');
                         }}
-                        className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
+                        className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
                       >
                         <User className="h-4 w-4" />
                         <span>Profile & Team</span>
@@ -91,7 +91,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
                           setShowUserMenu(false);
                           navigate('/settings');
                         }}
-                        className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
+                        className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
                       >
                         <Settings className="h-4 w-4" />
                         <span>Settings</span>
@@ -103,7 +103,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
                           logout();
                           navigate('/login');
                         }}
-                        className="w-full px-4 py-2 text-left text-sm text-black dark:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
+                        className="w-full px-4 py-2 text-left text-sm text-black dark:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
                       >
                         <LogOut className="h-4 w-4" />
                         <span>Sign Out</span>

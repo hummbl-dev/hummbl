@@ -41,7 +41,7 @@ export default function WorkflowList() {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">Workflows</h1>
-          <p className="text-gray-700 dark:text-gray-300 mt-2 text-base md:text-lg leading-relaxed">
+          <p className="text-gray-900 dark:text-gray-200 mt-2 text-base md:text-lg leading-relaxed">
             Manage and monitor your agentic workflows
           </p>
         </div>
@@ -55,7 +55,7 @@ export default function WorkflowList() {
       <div className="card p-4">
         <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-700" />
             <input
               type="text"
               placeholder="Search workflows..."
@@ -65,7 +65,7 @@ export default function WorkflowList() {
             />
           </div>
           <div className="flex items-center space-x-2 flex-shrink-0">
-            <Filter className="h-4 w-4 md:h-5 md:w-5 text-gray-400" />
+            <Filter className="h-4 w-4 md:h-5 md:w-5 text-gray-700" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -86,7 +86,7 @@ export default function WorkflowList() {
       {/* Workflow Grid */}
       {filteredWorkflows.length === 0 ? (
         <div className="card text-center py-12">
-          <p className="text-gray-600">
+          <p className="text-gray-900">
             {searchTerm || statusFilter !== 'all'
               ? 'No workflows match your filters'
               : 'No workflows yet'}
@@ -116,14 +116,14 @@ export default function WorkflowList() {
                     className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                     aria-label="Open workflow menu"
                   >
-                    <MoreVertical className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                    <MoreVertical className="h-5 w-5 text-gray-900 dark:text-gray-700" />
                   </button>
                   {showMenu === workflow.id && (
                     <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
                       {workflow.status === 'draft' || workflow.status === 'paused' ? (
                         <button
                           onClick={() => handleStart(workflow.id)}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 text-gray-900 dark:text-gray-200"
                         >
                           <Play className="h-4 w-4" />
                           <span>Start</span>
@@ -132,7 +132,7 @@ export default function WorkflowList() {
                       {workflow.status === 'active' && (
                         <button
                           onClick={() => handlePause(workflow.id)}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 text-gray-900 dark:text-gray-200"
                         >
                           <Pause className="h-4 w-4" />
                           <span>Pause</span>
@@ -156,13 +156,13 @@ export default function WorkflowList() {
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+              <p className="text-sm text-gray-900 mb-4 line-clamp-2">
                 {workflow.description}
               </p>
 
               <div className="flex items-center justify-between mb-3">
                 <StatusBadge status={workflow.status} />
-                <div className="flex items-center space-x-3 text-sm text-gray-600">
+                <div className="flex items-center space-x-3 text-sm text-gray-900">
                   <span>{workflow.tasks.length} tasks</span>
                   <span>{workflow.agents.length} agents</span>
                 </div>
@@ -179,14 +179,14 @@ export default function WorkflowList() {
                     </span>
                   ))}
                   {workflow.tags.length > 3 && (
-                    <span className="px-2 py-1 text-gray-500 text-xs">
+                    <span className="px-2 py-1 text-gray-800 text-xs">
                       +{workflow.tags.length - 3}
                     </span>
                   )}
                 </div>
               )}
 
-              <div className="text-xs text-gray-500 border-t border-gray-200 pt-3">
+              <div className="text-xs text-gray-800 border-t border-gray-200 pt-3">
                 Updated {formatDate(workflow.updatedAt)}
               </div>
             </div>
@@ -201,7 +201,7 @@ function StatusBadge({ status }: { status: string }) {
   const colors = {
     draft: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200',
     active: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
-    paused: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    paused: 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200',
     completed: 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100',
     failed: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200',
   };

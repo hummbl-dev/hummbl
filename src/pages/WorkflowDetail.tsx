@@ -47,7 +47,7 @@ export default function WorkflowDetail() {
   if (!workflow) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">Workflow not found</p>
+        <p className="text-gray-900">Workflow not found</p>
         <Link to="/workflows" className="text-primary-600 hover:text-primary-700 mt-2 inline-block">
           Back to Workflows
         </Link>
@@ -86,7 +86,7 @@ export default function WorkflowDetail() {
           </button>
           <div>
             <h1 className="text-3xl font-bold text-gray-900">{workflow.name}</h1>
-            <p className="text-gray-600 mt-1">{workflow.description}</p>
+            <p className="text-gray-900 mt-1">{workflow.description}</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -135,7 +135,7 @@ export default function WorkflowDetail() {
       {/* Status and Progress */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="card">
-          <p className="text-sm text-gray-600 mb-1">Status</p>
+          <p className="text-sm text-gray-900 mb-1">Status</p>
           {execution ? (
             <StatusBadge status={execution.status} />
           ) : (
@@ -143,7 +143,7 @@ export default function WorkflowDetail() {
           )}
         </div>
         <div className="card">
-          <p className="text-sm text-gray-600 mb-1">Progress</p>
+          <p className="text-sm text-gray-900 mb-1">Progress</p>
           <div className="flex items-center space-x-3">
             <div className="flex-1 bg-gray-200 rounded-full h-2">
               <div
@@ -155,12 +155,12 @@ export default function WorkflowDetail() {
               {Math.round(progress)}%
             </span>
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-800 mt-1">
             {completedTasks} of {workflow?.tasks?.length || 0} tasks completed
           </p>
         </div>
         <div className="card">
-          <p className="text-sm text-gray-600 mb-1">Last Updated</p>
+          <p className="text-sm text-gray-900 mb-1">Last Updated</p>
           <p className="font-medium text-gray-900">
             {(() => {
               try {
@@ -180,7 +180,7 @@ export default function WorkflowDetail() {
       <div className="card">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Tasks</h2>
         {(workflow?.tasks?.length || 0) === 0 ? (
-          <div className="text-center py-8 text-gray-600">
+          <div className="text-center py-8 text-gray-900">
             No tasks configured yet
           </div>
         ) : (
@@ -207,19 +207,19 @@ export default function WorkflowDetail() {
                           <XCircle className="h-5 w-5 text-black dark:text-white" />
                         )}
                         {taskStatus === 'pending' && (
-                          <AlertCircle className="h-5 w-5 text-gray-400" />
+                          <AlertCircle className="h-5 w-5 text-gray-700" />
                         )}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-500">#{index + 1}</span>
+                          <span className="text-sm text-gray-800">#{index + 1}</span>
                           <h3 className="font-medium text-gray-900">{task.name}</h3>
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-gray-900 mt-1">
                           {task.description}
                         </p>
                         {task.dependencies.length > 0 && (
-                          <p className="text-xs text-gray-500 mt-2">
+                          <p className="text-xs text-gray-800 mt-2">
                             Depends on: {task.dependencies.join(', ')}
                           </p>
                         )}
@@ -251,7 +251,7 @@ export default function WorkflowDetail() {
                         
                         {/* Show timing info */}
                         {taskResult?.duration && (
-                          <p className="text-xs text-gray-500 mt-2">
+                          <p className="text-xs text-gray-800 mt-2">
                             Duration: {Math.round(taskResult.duration / 1000)}s
                           </p>
                         )}
@@ -270,7 +270,7 @@ export default function WorkflowDetail() {
       <div className="card">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Agents</h2>
         {workflow.agents.length === 0 ? (
-          <div className="text-center py-8 text-gray-600">
+          <div className="text-center py-8 text-gray-900">
             No agents assigned yet
           </div>
         ) : (
@@ -281,13 +281,13 @@ export default function WorkflowDetail() {
                 className="p-4 border border-gray-200 rounded-lg"
               >
                 <h3 className="font-medium text-gray-900">{agent.name}</h3>
-                <p className="text-sm text-gray-600 mt-1">{agent.description}</p>
+                <p className="text-sm text-gray-900 mt-1">{agent.description}</p>
                 <div className="flex items-center space-x-2 mt-2">
                   <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-xs rounded">
                     {agent.role}
                   </span>
                   {agent.model && (
-                    <span className="text-xs text-gray-500">{agent.model}</span>
+                    <span className="text-xs text-gray-800">{agent.model}</span>
                   )}
                 </div>
                 {agent.capabilities.length > 0 && (
@@ -301,7 +301,7 @@ export default function WorkflowDetail() {
                       </span>
                     ))}
                     {agent.capabilities.length > 3 && (
-                      <span className="px-2 py-1 text-gray-500 text-xs">
+                      <span className="px-2 py-1 text-gray-800 text-xs">
                         +{agent.capabilities.length - 3}
                       </span>
                     )}
@@ -333,7 +333,7 @@ export default function WorkflowDetail() {
               >
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-gray-900">{log.message}</span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-800">
                     {(() => {
                       try {
                         const date = log.timestamp instanceof Date 
@@ -376,7 +376,7 @@ function StatusBadge({ status }: { status: string }) {
   const colors = {
     draft: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200',
     active: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
-    paused: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    paused: 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200',
     completed: 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100',
     failed: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200',
   };

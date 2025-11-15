@@ -69,7 +69,7 @@ export default function TokenUsage() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Activity className="h-8 w-8 animate-spin text-primary-600 mx-auto mb-2" />
-          <p className="text-gray-600">Loading token usage...</p>
+          <p className="text-gray-900">Loading token usage...</p>
         </div>
       </div>
     );
@@ -79,9 +79,9 @@ export default function TokenUsage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-gray-700 dark:text-gray-300 mx-auto mb-4" />
+          <AlertCircle className="h-12 w-12 text-gray-900 dark:text-gray-200 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Token Usage</h3>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-gray-900 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="btn-primary"
@@ -97,9 +97,9 @@ export default function TokenUsage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <Zap className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <Zap className="h-12 w-12 text-gray-700 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">No Token Usage Data</h3>
-          <p className="text-gray-600 mb-4">Execute some workflows to start tracking token usage</p>
+          <p className="text-gray-900 mb-4">Execute some workflows to start tracking token usage</p>
           <Link to="/workflows" className="btn-primary">
             View Workflows
           </Link>
@@ -124,7 +124,7 @@ export default function TokenUsage() {
           </Link>
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Token Usage & Costs</h1>
-            <p className="text-gray-600 mt-1">Track AI API consumption and optimize spending</p>
+            <p className="text-gray-900 mt-1">Track AI API consumption and optimize spending</p>
           </div>
         </div>
 
@@ -196,7 +196,7 @@ export default function TokenUsage() {
                   <span className="font-medium">{formatModelName(model.model)}</span>
                   <div className="text-right">
                     <div className="text-sm font-medium">${model.cost.toFixed(2)}</div>
-                    <div className="text-xs text-gray-500">{model.tokens.toLocaleString()} tokens</div>
+                    <div className="text-xs text-gray-800">{model.tokens.toLocaleString()} tokens</div>
                   </div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -218,11 +218,11 @@ export default function TokenUsage() {
               <div key={agent.agent} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div>
                   <div className="font-medium">{agent.agent}</div>
-                  <div className="text-xs text-gray-500">{agent.executions} executions</div>
+                  <div className="text-xs text-gray-800">{agent.executions} executions</div>
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-medium">${agent.cost.toFixed(2)}</div>
-                  <div className="text-xs text-gray-500">{agent.tokens.toLocaleString()} tokens</div>
+                  <div className="text-xs text-gray-800">{agent.tokens.toLocaleString()} tokens</div>
                 </div>
               </div>
             ))}
@@ -334,7 +334,7 @@ function MetricCard({
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm font-medium text-gray-600">{title}</span>
+        <span className="text-sm font-medium text-gray-900">{title}</span>
         <div className="p-2 bg-primary-50 rounded-lg text-primary-600">{icon}</div>
       </div>
       <div className="mb-2">
@@ -360,9 +360,9 @@ function MetricCard({
 function CostStat({ label, value, cost }: { label: string; value: string; cost: number }) {
   return (
     <div className="text-center">
-      <p className="text-sm text-gray-600 mb-1">{label}</p>
+      <p className="text-sm text-gray-900 mb-1">{label}</p>
       <p className="text-2xl font-bold text-gray-900">{value}</p>
-      <p className="text-sm text-gray-500 mt-1">${cost.toFixed(2)}</p>
+      <p className="text-sm text-gray-800 mt-1">${cost.toFixed(2)}</p>
     </div>
   );
 }

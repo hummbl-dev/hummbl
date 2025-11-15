@@ -38,7 +38,7 @@ export default function Templates() {
     <div className="space-y-6 md:space-y-8">
       <div>
         <h1 className="text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">Workflow Templates</h1>
-        <p className="text-gray-700 dark:text-gray-300 mt-2 text-base md:text-lg leading-relaxed">
+        <p className="text-gray-900 dark:text-gray-200 mt-2 text-base md:text-lg leading-relaxed">
           Start quickly with pre-configured workflow templates
         </p>
       </div>
@@ -65,8 +65,8 @@ export default function Templates() {
       {/* Templates Grid */}
       {filteredTemplates.length === 0 ? (
         <div className="card text-center py-12">
-          <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600">No templates available</p>
+          <FileText className="h-12 w-12 text-gray-700 mx-auto mb-4" />
+          <p className="text-gray-900">No templates available</p>
         </div>
       ) : (
         <>
@@ -83,22 +83,22 @@ export default function Templates() {
                       <FileText className="h-5 w-5 text-black dark:text-white" />
                       <h3 className="font-bold text-gray-900 dark:text-white">{template.name}</h3>
                   </div>
-                  <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs rounded">
+                  <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200 text-xs rounded">
                     {template.category}
                   </span>
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-gray-900 mb-4">
                 {template.description}
               </p>
 
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-2 text-sm text-gray-900">
                   <ListTodo className="h-4 w-4" />
                   <span>{template.tasks.length} tasks</span>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-2 text-sm text-gray-900">
                   <Users className="h-4 w-4" />
                   <span>{template.agents.length} agents</span>
                 </div>
@@ -126,7 +126,7 @@ export default function Templates() {
                   <div className="mt-3 space-y-3">
                     <div>
                       <p className="font-medium text-gray-900 mb-1">Agents:</p>
-                      <ul className="list-disc list-inside text-gray-600 space-y-1">
+                      <ul className="list-disc list-inside text-gray-900 space-y-1">
                         {template.agents.map((agent, idx) => (
                           <li key={idx}>
                             {agent.name} ({agent.role})
@@ -136,7 +136,7 @@ export default function Templates() {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900 mb-1">Tasks:</p>
-                      <ul className="list-disc list-inside text-gray-600 space-y-1">
+                      <ul className="list-disc list-inside text-gray-900 space-y-1">
                         {template.tasks.map((task, idx) => (
                           <li key={idx}>{task.name}</li>
                         ))}

@@ -25,30 +25,30 @@ export function FormField({
     <div className="space-y-1">
       <label className="label">
         {label}
-        {required && <span className="text-gray-700 dark:text-gray-300 ml-1">*</span>}
+        {required && <span className="text-gray-900 dark:text-gray-200 ml-1">*</span>}
       </label>
       <div className="relative">
         {children}
         {hasSuccess && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <CheckCircle className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+            <CheckCircle className="h-5 w-5 text-gray-900 dark:text-gray-700" />
           </div>
         )}
       </div>
       {hint && !hasError && !hasSuccess && (
-        <p className="text-xs text-gray-500 dark:text-gray-400 flex items-start gap-1">
+        <p className="text-xs text-gray-800 dark:text-gray-700 flex items-start gap-1">
           <Info className="h-3 w-3 mt-0.5 flex-shrink-0" />
           <span>{hint}</span>
         </p>
       )}
       {hasError && (
-        <p className="text-xs text-black dark:text-white dark:text-gray-400 flex items-start gap-1 animate-fade-in">
+        <p className="text-xs text-black dark:text-white dark:text-gray-700 flex items-start gap-1 animate-fade-in">
           <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
           <span>{error}</span>
         </p>
       )}
       {hasSuccess && (
-        <p className="text-xs text-black dark:text-white dark:text-gray-400 flex items-start gap-1 animate-fade-in">
+        <p className="text-xs text-black dark:text-white dark:text-gray-700 flex items-start gap-1 animate-fade-in">
           <CheckCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
           <span>{success}</span>
         </p>

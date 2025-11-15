@@ -176,7 +176,7 @@ export default function Notifications() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Activity className="h-8 w-8 animate-spin text-primary-600 mx-auto mb-2" />
-          <p className="text-gray-600">Loading notifications...</p>
+          <p className="text-gray-900">Loading notifications...</p>
         </div>
       </div>
     );
@@ -186,9 +186,9 @@ export default function Notifications() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-gray-700 dark:text-gray-300 mx-auto mb-4" />
+          <AlertCircle className="h-12 w-12 text-gray-900 dark:text-gray-200 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Notifications</h3>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-gray-900 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="btn-primary"
@@ -206,7 +206,7 @@ export default function Notifications() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
-          <p className="text-gray-600 mt-1">Stay updated with alerts and system events</p>
+          <p className="text-gray-900 mt-1">Stay updated with alerts and system events</p>
         </div>
 
         {/* Actions */}
@@ -270,7 +270,7 @@ export default function Notifications() {
       {/* Filters */}
       <div className="card">
         <div className="flex items-center space-x-2 overflow-x-auto">
-          <Filter className="h-4 w-4 text-gray-500 flex-shrink-0" />
+          <Filter className="h-4 w-4 text-gray-800 flex-shrink-0" />
           {(['all', 'unread', 'workflow', 'system', 'team', 'billing'] as FilterType[]).map((f) => (
             <button
               key={f}
@@ -292,8 +292,8 @@ export default function Notifications() {
         {filteredNotifications.length === 0 ? (
           <div className="card text-center py-12">
             <CheckCircle2 className="h-12 w-12 text-black dark:text-white mx-auto mb-3" />
-            <p className="text-gray-600 font-medium">No notifications</p>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-gray-900 font-medium">No notifications</p>
+            <p className="text-sm text-gray-800 mt-1">
               {filter === 'unread'
                 ? 'All caught up! You have no unread notifications.'
                 : 'No notifications in this category.'}
@@ -330,7 +330,7 @@ function StatCard({
     <div className="card">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-600">{label}</p>
+          <p className="text-sm text-gray-900">{label}</p>
           <p className={`text-2xl font-bold ${color}`}>{value}</p>
         </div>
         <div className={`p-2 bg-gray-50 rounded-lg ${color}`}>{icon}</div>
@@ -373,10 +373,10 @@ function NotificationCard({
   };
 
   const categoryColors: Record<string, string> = {
-    workflow: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
-    system: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
-    team: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
-    billing: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    workflow: 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200',
+    system: 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200',
+    team: 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200',
+    billing: 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200',
   };
 
   const config = typeConfig[notification.type as keyof typeof typeConfig] || typeConfig.info;
@@ -402,7 +402,7 @@ function NotificationCard({
               </span>
             </div>
             <p className="text-sm text-gray-700">{notification.message}</p>
-            <p className="text-xs text-gray-500 mt-1">{formatTimestamp(notification.createdAt)}</p>
+            <p className="text-xs text-gray-800 mt-1">{formatTimestamp(notification.createdAt)}</p>
           </div>
         </div>
 
@@ -413,7 +413,7 @@ function NotificationCard({
               className="p-2 hover:bg-white rounded transition-colors"
               title="Mark as read"
             >
-              <Check className="h-4 w-4 text-gray-600" />
+              <Check className="h-4 w-4 text-gray-900" />
             </button>
           )}
           <button
@@ -421,7 +421,7 @@ function NotificationCard({
             className="p-2 hover:bg-white rounded transition-colors"
             title="Delete"
           >
-            <Trash2 className="h-4 w-4 text-gray-600" />
+            <Trash2 className="h-4 w-4 text-gray-900" />
           </button>
         </div>
       </div>

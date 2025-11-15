@@ -110,7 +110,7 @@ export default function APIKeys() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Key className="h-8 w-8 animate-pulse text-primary-600 mx-auto mb-2" />
-          <p className="text-gray-600">Loading API keys...</p>
+          <p className="text-gray-900">Loading API keys...</p>
         </div>
       </div>
     );
@@ -122,7 +122,7 @@ export default function APIKeys() {
         <div className="text-center">
           <AlertCircle className="h-8 w-8 text-gray-900 dark:text-gray-100 mx-auto mb-2" />
           <p className="text-gray-900 dark:text-gray-100 font-medium">Failed to load API keys</p>
-          <p className="text-gray-600 text-sm mt-1">{error}</p>
+          <p className="text-gray-900 text-sm mt-1">{error}</p>
           <button
             onClick={loadData}
             className="btn-primary mt-4"
@@ -140,7 +140,7 @@ export default function APIKeys() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">API Keys</h1>
-          <p className="text-gray-600 mt-1">Manage AI service integrations and authentication</p>
+          <p className="text-gray-900 mt-1">Manage AI service integrations and authentication</p>
         </div>
 
         {/* Add Key Button */}
@@ -185,7 +185,7 @@ export default function APIKeys() {
           <Shield className="h-5 w-5 text-black dark:text-white mt-0.5" />
           <div className="flex-1">
             <h3 className="font-medium text-black dark:text-white mb-1">Security Best Practices</h3>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="text-sm text-gray-900 dark:text-gray-200 space-y-1">
               <li>• Never share your API keys publicly or commit them to version control</li>
               <li>• Rotate keys regularly and delete unused keys immediately</li>
               <li>• Use separate keys for development and production environments</li>
@@ -199,9 +199,9 @@ export default function APIKeys() {
       <div className="space-y-3">
         {keys.length === 0 ? (
           <div className="card text-center py-12">
-            <Key className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600 font-medium">No API keys configured</p>
-            <p className="text-sm text-gray-500 mt-1">Add your first API key to start using AI services</p>
+            <Key className="h-12 w-12 text-gray-700 mx-auto mb-3" />
+            <p className="text-gray-900 font-medium">No API keys configured</p>
+            <p className="text-sm text-gray-800 mt-1">Add your first API key to start using AI services</p>
             <button
               onClick={() => setShowAddModal(true)}
               className="btn-primary mt-4 inline-flex items-center space-x-2"
@@ -275,7 +275,7 @@ function StatCard({
     <div className="card">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-600">{label}</p>
+          <p className="text-sm text-gray-900">{label}</p>
           <p className={`text-2xl font-bold ${color}`}>{value}</p>
         </div>
         <div className={`p-2 bg-gray-50 rounded-lg ${color}`}>{icon}</div>
@@ -293,14 +293,14 @@ function APIKeyCard({
   onDelete: () => void;
 }) {
   const serviceConfig = {
-    anthropic: { name: 'Anthropic Claude', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300' },
-    openai: { name: 'OpenAI GPT', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300' },
-    custom: { name: 'Custom API', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300' },
+    anthropic: { name: 'Anthropic Claude', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-900 dark:text-gray-200' },
+    openai: { name: 'OpenAI GPT', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-900 dark:text-gray-200' },
+    custom: { name: 'Custom API', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-900 dark:text-gray-200' },
   };
 
   const statusConfig = {
-    active: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <CheckCircle2 className="h-4 w-4" /> },
-    expired: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <Clock className="h-4 w-4" /> },
+    active: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-200', icon: <CheckCircle2 className="h-4 w-4" /> },
+    expired: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-200', icon: <Clock className="h-4 w-4" /> },
     revoked: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-100', icon: <AlertCircle className="h-4 w-4" /> },
   };
 
@@ -324,7 +324,7 @@ function APIKeyCard({
                 <span className="capitalize">{apiKey.status}</span>
               </span>
             </div>
-            <p className="text-sm text-gray-500">Created {formatDate(apiKey.createdAt)}</p>
+            <p className="text-sm text-gray-800">Created {formatDate(apiKey.createdAt)}</p>
           </div>
         </div>
       </div>
@@ -335,7 +335,7 @@ function APIKeyCard({
           <code className="text-sm font-mono text-gray-900 flex-1">
             •••••••••••••••••••••••••••• (encrypted)
           </code>
-          <div className="text-xs text-gray-500 ml-4">
+          <div className="text-xs text-gray-800 ml-4">
             Key is encrypted and secure
           </div>
         </div>
@@ -343,7 +343,7 @@ function APIKeyCard({
 
       {/* Stats & Actions */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-6 text-sm text-gray-600">
+        <div className="flex items-center space-x-6 text-sm text-gray-900">
           <div>
             <span className="font-medium">{apiKey.usageCount.toLocaleString()}</span> uses
           </div>
@@ -383,7 +383,7 @@ function AddKeyModal({
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Add API Key</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-gray-700 hover:text-gray-900">
             ×
           </button>
         </div>
@@ -422,7 +422,7 @@ function AddKeyModal({
               placeholder="sk-..."
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-sm"
             />
-            <p className="text-xs text-gray-500 mt-1">Your key is encrypted and stored securely</p>
+            <p className="text-xs text-gray-800 mt-1">Your key is encrypted and stored securely</p>
           </div>
 
           <div className="flex space-x-3 pt-4">
@@ -460,7 +460,7 @@ function ServiceGuide({
       </div>
       <ol className="space-y-2 mb-3">
         {steps.map((step, index) => (
-          <li key={index} className="text-sm text-gray-600">
+          <li key={index} className="text-sm text-gray-900">
             {index + 1}. {step}
           </li>
         ))}

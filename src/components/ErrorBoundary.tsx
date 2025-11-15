@@ -80,7 +80,7 @@ class ErrorBoundary extends Component<Props, State> {
                 </h1>
               </div>
 
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-900 mb-4">
                 We encountered an unexpected error. This has been logged and we'll look into it.
               </p>
 
@@ -94,7 +94,7 @@ class ErrorBoundary extends Component<Props, State> {
                       {this.state.error.toString()}
                     </p>
                     {this.state.errorInfo && (
-                      <pre className="text-xs text-gray-600 overflow-auto">
+                      <pre className="text-xs text-gray-900 overflow-auto">
                         {this.state.errorInfo.componentStack}
                       </pre>
                     )}
@@ -119,7 +119,7 @@ class ErrorBoundary extends Component<Props, State> {
                 </a>
               </div>
 
-              <p className="text-xs text-gray-500 mt-6">
+              <p className="text-xs text-gray-800 mt-6">
                 If this problem persists, please contact support with the error details above.
               </p>
             </div>

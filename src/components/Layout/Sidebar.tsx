@@ -66,7 +66,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               </div>
               <div>
                 <h1 className="text-xl font-bold tracking-tight">HUMMBL</h1>
-                <p className="text-xs text-gray-400 dark:text-gray-600 font-medium">Base120 Framework</p>
+                <p className="text-xs text-gray-700 dark:text-gray-900 font-medium">Base120 Framework</p>
               </div>
             </div>
             {/* Close button for mobile */}
@@ -89,7 +89,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                   isActive
                     ? 'bg-white dark:bg-black text-black dark:text-white'
-                    : 'text-gray-400 dark:text-gray-600 hover:bg-gray-900 dark:hover:bg-gray-100 hover:text-white dark:hover:text-black'
+                    : 'text-gray-700 dark:text-gray-900 hover:bg-gray-900 dark:hover:bg-gray-100 hover:text-white dark:hover:text-black'
                 }`
               }
             >

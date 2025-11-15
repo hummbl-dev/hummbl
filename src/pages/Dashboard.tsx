@@ -49,7 +49,7 @@ export default function Dashboard() {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">Dashboard</h1>
-          <p className="text-gray-700 dark:text-gray-300 mt-2 text-base md:text-lg leading-relaxed">
+          <p className="text-gray-900 dark:text-gray-200 mt-2 text-base md:text-lg leading-relaxed">
             Welcome to your agentic workflow management system
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function Dashboard() {
           >
             <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3">
               <div className="flex-1">
-                <p className="text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 tracking-wide">{stat.name}</p>
+                <p className="text-sm md:text-base font-semibold text-gray-900 dark:text-gray-200 mb-2 tracking-wide">{stat.name}</p>
                 <p className="text-3xl md:text-5xl font-bold text-black dark:text-white tracking-tight">
                   {stat.value}
                 </p>
@@ -90,15 +90,15 @@ export default function Dashboard() {
           <h2 className="text-xl font-bold text-black dark:text-white">Recent Workflows</h2>
           <Link
             to="/workflows"
-            className="text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-400 text-sm font-medium underline"
+            className="text-black dark:text-white hover:text-gray-900 dark:hover:text-gray-700 text-sm font-medium underline"
           >
             View All
           </Link>
         </div>
         {recentWorkflows.length === 0 ? (
           <div className="text-center py-12">
-            <Workflow className="h-12 w-12 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-600">No workflows yet</p>
+            <Workflow className="h-12 w-12 text-gray-700 dark:text-gray-900 mx-auto mb-4" />
+            <p className="text-gray-900">No workflows yet</p>
             <Link to="/workflows/new" className="text-primary-600 hover:text-primary-700 mt-2 inline-block">
               Create your first workflow
             </Link>
@@ -114,14 +114,14 @@ export default function Dashboard() {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-gray-900 dark:text-white truncate">{workflow.name}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                    <p className="text-sm text-gray-900 dark:text-gray-700 mt-1 line-clamp-2">
                       {workflow.description}
                     </p>
                     <div className="flex items-center space-x-3 md:space-x-4 mt-2">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-gray-800 dark:text-gray-700">
                         {workflow.tasks.length} tasks
                       </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-gray-800 dark:text-gray-700">
                         {workflow.agents.length} agents
                       </span>
                     </div>
@@ -142,15 +142,15 @@ export default function Dashboard() {
           <h2 className="text-xl font-bold text-gray-900 mb-4">Agent Overview</h2>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Total Agents</span>
+              <span className="text-gray-900">Total Agents</span>
               <span className="font-bold text-gray-900">{totalAgentCount}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">In Workflows</span>
+              <span className="text-gray-900">In Workflows</span>
               <span className="font-bold text-gray-900">{workflowAgents.length}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Global Agents</span>
+              <span className="text-gray-900">Global Agents</span>
               <span className="font-bold text-gray-900">{agents.length}</span>
             </div>
           </div>
@@ -185,7 +185,7 @@ function StatusBadge({ status }: { status: string }) {
   const colors = {
     draft: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200',
     active: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
-    paused: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    paused: 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200',
     completed: 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100',
     failed: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200',
   };

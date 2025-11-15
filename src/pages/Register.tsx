@@ -86,7 +86,7 @@ export default function Register() {
               <UserPlus className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
-            <p className="text-gray-600 mt-2">Join HUMMBL and start building workflows</p>
+            <p className="text-gray-900 mt-2">Join HUMMBL and start building workflows</p>
           </div>
 
           {/* Success Message */}
@@ -120,7 +120,7 @@ export default function Register() {
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-700" />
                 <input
                   id="name"
                   type="text"
@@ -139,7 +139,7 @@ export default function Register() {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-700" />
                 <input
                   id="email"
                   type="email"
@@ -158,7 +158,7 @@ export default function Register() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-700" />
                 <input
                   id="password"
                   type="password"
@@ -181,9 +181,9 @@ export default function Register() {
                         'w-full'
                       }`} />
                     </div>
-                    <span className="text-xs font-medium text-gray-600">{strength.label}</span>
+                    <span className="text-xs font-medium text-gray-900">{strength.label}</span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-800 mt-1">
                     Use 8+ characters with a mix of letters, numbers & symbols
                   </p>
                 </div>
@@ -195,7 +195,7 @@ export default function Register() {
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-700" />
                 <input
                   id="confirmPassword"
                   type="password"
@@ -207,7 +207,7 @@ export default function Register() {
                   disabled={isLoading}
                 />
                 {confirmPassword && password === confirmPassword && (
-                  <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-600 dark:text-gray-400" />
+                  <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-900 dark:text-gray-700" />
                 )}
               </div>
             </div>
@@ -233,7 +233,7 @@ export default function Register() {
 
           {/* Footer Links */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-900">
               Already have an account?{' '}
               <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
                 Sign in
@@ -243,7 +243,7 @@ export default function Register() {
 
           {/* Terms */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-500 text-center">
+            <p className="text-xs text-gray-800 text-center">
               By creating an account, you agree to our{' '}
               <a href="/terms" className="text-primary-600 hover:text-primary-700">Terms of Service</a>
               {' '}and{' '}
@@ -253,7 +253,7 @@ export default function Register() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-gray-600 mt-6">
+        <p className="text-center text-sm text-gray-900 mt-6">
           © 2024 HUMMBL. All rights reserved.
         </p>
       </div>

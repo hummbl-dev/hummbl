@@ -33,7 +33,7 @@ export default function Login() {
               <LogIn className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-            <p className="text-gray-600 mt-2">Sign in to your HUMMBL account</p>
+            <p className="text-gray-900 mt-2">Sign in to your HUMMBL account</p>
           </div>
 
           {/* Error Message */}
@@ -53,7 +53,7 @@ export default function Login() {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-700" />
                 <input
                   id="email"
                   type="email"
@@ -72,7 +72,7 @@ export default function Login() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-700" />
                 <input
                   id="password"
                   type="password"
@@ -107,13 +107,13 @@ export default function Login() {
 
           {/* Footer Links */}
           <div className="mt-6 text-center space-y-2">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-900">
               Don't have an account?{' '}
               <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
                 Sign up
               </Link>
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-900">
               <Link to="/forgot-password" className="text-primary-600 hover:text-primary-700">
                 Forgot password?
               </Link>
@@ -137,7 +137,7 @@ export default function Login() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-gray-600 mt-6">
+        <p className="text-center text-sm text-gray-900 mt-6">
           © 2024 HUMMBL. All rights reserved.
         </p>
       </main>
