@@ -6,6 +6,7 @@
  * @module AgentNode
  */
 
+/* eslint-disable react/forbid-dom-props */
 import React from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { Agent } from '../../../types/workflow';
@@ -35,7 +36,7 @@ const AgentNode: React.FC<NodeProps<AgentNodeData>> = ({ data }) => {
           <div style={{ fontSize: '11px', opacity: 0.9 }}>{agent.role}</div>
         </div>
       </div>
-      
+
       <div
         style={{
           fontSize: '11px',

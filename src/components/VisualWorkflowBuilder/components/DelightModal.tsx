@@ -9,6 +9,7 @@
  * @see https://hummbl.io/docs/visual-workflow-builder
  */
 
+/* eslint-disable react/forbid-dom-props */
 import React, { useState } from 'react';
 
 interface DelightModalProps {

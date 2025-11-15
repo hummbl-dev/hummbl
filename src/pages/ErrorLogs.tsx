@@ -285,6 +285,7 @@ export default function ErrorLogs() {
               value={severityFilter}
               onChange={(e) => setSeverityFilter(e.target.value as SeverityFilter)}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              aria-label="Filter by severity"
             >
               <option value="all">All Severity</option>
               <option value="low">Low</option>
@@ -301,6 +302,7 @@ export default function ErrorLogs() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              aria-label="Filter by status"
             >
               <option value="all">All Status</option>
               <option value="unresolved">Unresolved</option>

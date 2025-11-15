@@ -79,7 +79,7 @@ export default function WorkflowEditor() {
       {showPreviewNotice && (
         <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-4">
           <p className="text-sm text-black dark:text-white">
-            <strong>Preview Mode:</strong> Changes are stored in browser localStorage only and will not persist. 
+            <strong>Preview Mode:</strong> Changes are stored in browser localStorage only and will not persist.
             Full backend persistence coming in production release.
           </p>
         </div>
@@ -148,6 +148,7 @@ export default function WorkflowEditor() {
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
                     className="hover:text-primary-900"
+                    aria-label={`Remove ${tag} tag`}
                   >
                     <X className="h-3 w-3" />
                   </button>

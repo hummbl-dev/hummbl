@@ -15,7 +15,7 @@ export default function AgentManagement() {
   const [showWorkflowAgents, setShowWorkflowAgents] = useState(true);
 
   // Get all agents embedded in workflows
-  const workflowAgents = workflows.flatMap((w) => 
+  const workflowAgents = workflows.flatMap((w) =>
     (w.agents || []).map(agent => ({
       ...agent,
       workflowName: w.name,
@@ -130,6 +130,7 @@ export default function AgentManagement() {
               type="button"
               onClick={resetForm}
               className="p-2 hover:bg-gray-100 rounded"
+              aria-label="Close form"
             >
               <X className="h-5 w-5" />
             </button>
@@ -201,6 +202,7 @@ export default function AgentManagement() {
                 type="button"
                 onClick={handleAddCapability}
                 className="btn-secondary"
+                aria-label="Add capability"
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -380,6 +382,7 @@ export default function AgentManagement() {
                     onClick={() => handleEdit(agent.id)}
                     className="p-2 hover:bg-gray-100 rounded"
                     title="Edit agent"
+                    aria-label="Edit agent"
                   >
                     <Edit className="h-4 w-4 text-gray-900" />
                   </button>
@@ -387,6 +390,7 @@ export default function AgentManagement() {
                     onClick={() => handleDelete(agent.id)}
                     className="p-2 hover:bg-gray-100 rounded"
                     title="Delete agent"
+                    aria-label="Delete agent"
                   >
                     <Trash2 className="h-4 w-4 text-black dark:text-white" />
                   </button>

@@ -58,13 +58,13 @@ export default function ExecutionMonitor() {
     const fetchExecutions = async () => {
       try {
         const response = await listExecutions(20, 0);
-        
+
         // Transform API response to match component interface
         const transformedExecutions: Execution[] = response.executions.map((exec) => {
           const startedAt = new Date(exec.started_at).getTime();
           const completedAt = exec.completed_at ? new Date(exec.completed_at).getTime() : null;
           const duration = completedAt ? completedAt - startedAt : null;
-          
+
           return {
             id: exec.id,
             workflowId: exec.workflow_id,
@@ -102,7 +102,7 @@ export default function ExecutionMonitor() {
           const startedAt = new Date(exec.started_at).getTime();
           const completedAt = exec.completed_at ? new Date(exec.completed_at).getTime() : null;
           const duration = completedAt ? completedAt - startedAt : null;
-          
+
           return {
             id: exec.id,
             workflowId: exec.workflow_id,
@@ -241,6 +241,7 @@ export default function ExecutionMonitor() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              aria-label="Filter by status"
             >
               <option value="all">All Status</option>
               <option value="running">Running</option>
@@ -395,6 +396,7 @@ function ExecutionCard({ execution }: { execution: Execution }) {
             <span className="font-medium">{Math.round(execution.progress)}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
+            {/* eslint-disable-next-line react/forbid-dom-props */}
             <div
               className="bg-primary-600 h-2 rounded-full transition-all duration-500"
               style={{ width: `${execution.progress}%` }}

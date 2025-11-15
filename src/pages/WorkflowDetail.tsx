@@ -67,7 +67,7 @@ export default function WorkflowDetail() {
 
   // Calculate progress from execution or workflow state
   const progress = execution ? execution.progress : 0;
-  
+
   // Calculate completed tasks count - handle undefined arrays
   const completedTasks = execution?.taskResults
     ? execution.taskResults.filter(r => r.status === 'completed').length
@@ -81,6 +81,7 @@ export default function WorkflowDetail() {
           <button
             onClick={() => navigate('/workflows')}
             className="p-2 hover:bg-gray-100 rounded-lg"
+            aria-label="Back to workflows"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
@@ -146,6 +147,7 @@ export default function WorkflowDetail() {
           <p className="text-sm text-gray-900 mb-1">Progress</p>
           <div className="flex items-center space-x-3">
             <div className="flex-1 bg-gray-200 rounded-full h-2">
+              {/* eslint-disable-next-line react/forbid-dom-props */}
               <div
                 className="bg-primary-600 h-2 rounded-full transition-all"
                 style={{ width: `${progress}%` }}
@@ -164,8 +166,8 @@ export default function WorkflowDetail() {
           <p className="font-medium text-gray-900">
             {(() => {
               try {
-                const date = workflow.updatedAt instanceof Date 
-                  ? workflow.updatedAt 
+                const date = workflow.updatedAt instanceof Date
+                  ? workflow.updatedAt
                   : new Date(workflow.updatedAt);
                 return date.toLocaleString();
               } catch {
@@ -188,7 +190,7 @@ export default function WorkflowDetail() {
             {workflow?.tasks?.map((task, index) => {
               const taskResult = execution?.taskResults?.find(r => r.taskId === task.id);
               const taskStatus = taskResult?.status || task.status;
-              
+
               return (
                 <div
                   key={task.id}
@@ -223,7 +225,7 @@ export default function WorkflowDetail() {
                             Depends on: {task.dependencies.join(', ')}
                           </p>
                         )}
-                        
+
                         {/* Show execution result */}
                         {taskResult && taskResult.status === 'completed' && taskResult.output !== undefined && (
                           <div className="mt-3 p-3 bg-gray-50 border border-gray-300 rounded">
@@ -241,14 +243,14 @@ export default function WorkflowDetail() {
                             </pre>
                           </div>
                         )}
-                        
+
                         {/* Show execution error */}
                         {(taskResult?.error || task.error) && (
                           <div className="mt-2 p-2 bg-gray-50 border border-gray-300 rounded text-sm text-gray-900 dark:text-gray-100">
                             {taskResult?.error || task.error}
                           </div>
                         )}
-                        
+
                         {/* Show timing info */}
                         {taskResult?.duration && (
                           <p className="text-xs text-gray-800 mt-2">
@@ -318,6 +320,7 @@ export default function WorkflowDetail() {
         <div className="card">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Execution Logs</h2>
           <div className="space-y-2 max-h-96 overflow-y-auto">
+            {/* eslint-disable-next-line react/forbid-dom-props */}
             {logs.map((log) => (
               <div
                 key={log.id}
@@ -327,8 +330,8 @@ export default function WorkflowDetail() {
                     log.level === 'error'
                       ? '#ef4444'
                       : log.level === 'warning'
-                      ? '#f59e0b'
-                      : '#3b82f6',
+                        ? '#f59e0b'
+                        : '#3b82f6',
                 }}
               >
                 <div className="flex items-center justify-between">
@@ -336,8 +339,8 @@ export default function WorkflowDetail() {
                   <span className="text-xs text-gray-800">
                     {(() => {
                       try {
-                        const date = log.timestamp instanceof Date 
-                          ? log.timestamp 
+                        const date = log.timestamp instanceof Date
+                          ? log.timestamp
                           : new Date(log.timestamp);
                         return date.toLocaleTimeString();
                       } catch {

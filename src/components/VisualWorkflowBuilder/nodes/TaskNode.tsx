@@ -6,6 +6,7 @@
  * @module TaskNode
  */
 
+/* eslint-disable react/forbid-dom-props */
 import React from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { Task, Agent } from '../../../types/workflow';
@@ -17,10 +18,10 @@ interface TaskNodeData {
 
 const TaskNode: React.FC<NodeProps<TaskNodeData>> = ({ data }) => {
   const { task, agents } = data;
-  
+
   // Find assigned agent
   const assignedAgent = agents.find((a) => a.id === task.agentId);
-  
+
   // Truncate prompt for display
   const promptPreview = (task.input as { prompt?: string })?.prompt
     ? ((task.input as { prompt: string }).prompt.substring(0, 60) + '...')
