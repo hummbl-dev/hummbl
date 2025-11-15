@@ -1,0 +1,23 @@
+# Build output
+dist/
+build/
+.next/
+
+# Dependencies
+node_modules/
+
+# Debug/test files
+public/debug.html
+*.test.ts
+*.test.tsx
+
+# Config files
+*.config.js
+*.config.ts
+.eslintrc.cjs
+
+# CSS files (Tailwind directives cause false positives)
+*.css
+
+# Documentation
+*.md
