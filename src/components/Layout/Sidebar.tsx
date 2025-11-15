@@ -41,7 +41,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const visibleNavigation = navigation.filter(
     (item) => !item.adminOnly || isAdmin
   );
-  
+
   return (
     <>
       {/* Mobile overlay */}
@@ -51,7 +51,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           onClick={onClose}
         />
       )}
-      
+
       {/* Sidebar */}
       <div className={`
         fixed lg:static inset-y-0 left-0 z-50
@@ -86,10 +86,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               to={item.href}
               onClick={() => onClose()}
               className={({ isActive }) =>
-                `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                  isActive
-                    ? 'bg-white dark:bg-black text-black dark:text-white'
-                    : 'text-gray-700 dark:text-gray-900 hover:bg-gray-900 dark:hover:bg-gray-100 hover:text-white dark:hover:text-black'
+                `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive
+                  ? 'bg-white dark:bg-black text-black dark:text-white'
+                  : 'text-gray-300 dark:text-gray-700 hover:bg-gray-900 dark:hover:bg-gray-100 hover:text-white dark:hover:text-black'
                 }`
               }
             >
