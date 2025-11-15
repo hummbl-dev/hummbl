@@ -55,24 +55,24 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <div className={`
         fixed lg:static inset-y-0 left-0 z-50
-        w-64 bg-gray-900 dark:bg-black text-white transition-transform duration-300
+        w-64 bg-black dark:bg-white text-white dark:text-black border-r border-gray-800 dark:border-gray-200 transition-transform duration-300
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <div className="p-4 border-b border-gray-800" role="complementary" aria-label="Application branding">
+        <div className="p-4 border-b border-gray-800 dark:border-gray-200" role="complementary" aria-label="Application branding">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg">
-                <Brain className="h-6 w-6 text-white" />
+              <div className="w-10 h-10 rounded-lg bg-black dark:bg-white border border-gray-700 dark:border-gray-300 flex items-center justify-center">
+                <Brain className="h-6 w-6 text-white dark:text-black" />
               </div>
               <div>
                 <h1 className="text-xl font-bold tracking-tight">HUMMBL</h1>
-                <p className="text-xs text-gray-400 font-medium">Base120 Framework</p>
+                <p className="text-xs text-gray-400 dark:text-gray-600 font-medium">Base120 Framework</p>
               </div>
             </div>
             {/* Close button for mobile */}
             <button
               onClick={onClose}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-800 transition-colors"
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors"
               aria-label="Close menu"
             >
               <X className="h-5 w-5" />
@@ -88,8 +88,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               className={({ isActive }) =>
                 `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                   isActive
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    ? 'bg-white dark:bg-black text-black dark:text-white'
+                    : 'text-gray-400 dark:text-gray-600 hover:bg-gray-900 dark:hover:bg-gray-100 hover:text-white dark:hover:text-black'
                 }`
               }
             >

@@ -72,12 +72,12 @@ export default function Dashboard() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3">
               <div className="flex-1">
                 <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 md:mb-2">{stat.name}</p>
-                <p className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
+                <p className="text-2xl md:text-4xl font-bold text-black dark:text-white tracking-tight">
                   {stat.value}
                 </p>
               </div>
-              <div className={`${stat.color} p-2 md:p-3 rounded-lg md:rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-white" />
+              <div className="bg-black dark:bg-white p-2 md:p-3 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-800 group-hover:scale-110 transition-transform duration-300">
+                <stat.icon className="h-5 w-5 md:h-6 md:w-6 text-white dark:text-black" />
               </div>
             </div>
           </div>
@@ -87,17 +87,17 @@ export default function Dashboard() {
       {/* Recent Workflows */}
       <div className="card">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Recent Workflows</h2>
+          <h2 className="text-xl font-bold text-black dark:text-white">Recent Workflows</h2>
           <Link
             to="/workflows"
-            className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+            className="text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-400 text-sm font-medium underline"
           >
             View All
           </Link>
         </div>
         {recentWorkflows.length === 0 ? (
           <div className="text-center py-12">
-            <Workflow className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <Workflow className="h-12 w-12 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
             <p className="text-gray-600">No workflows yet</p>
             <Link to="/workflows/new" className="text-primary-600 hover:text-primary-700 mt-2 inline-block">
               Create your first workflow
