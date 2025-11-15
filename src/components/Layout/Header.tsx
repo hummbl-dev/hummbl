@@ -10,7 +10,7 @@ export default function Header() {
   const { user, isAuthenticated, logout } = useAuthStore();
 
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-4" role="banner">
+    <header className="bg-white border-b border-gray-100 px-6 py-4 shadow-sm" role="banner">
       <div className="flex items-center justify-between">
         <GlobalSearch />
         <div className="flex items-center space-x-4 ml-4">

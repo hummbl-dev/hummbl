@@ -62,17 +62,21 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat) => (
-          <div key={stat.name} className="card">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
+        {stats.map((stat, index) => (
+          <div 
+            key={stat.name} 
+            className="card group"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">{stat.name}</p>
-                <p className="text-3xl font-bold text-gray-900 mt-1">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-2">{stat.name}</p>
+                <p className="text-4xl font-bold text-gray-900 tracking-tight">
                   {stat.value}
                 </p>
               </div>
-              <div className={`${stat.color} p-3 rounded-lg`}>
+              <div className={`${stat.color} p-3 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                 <stat.icon className="h-6 w-6 text-white" />
               </div>
             </div>

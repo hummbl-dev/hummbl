@@ -170,8 +170,18 @@ function ModelCard({ model }: ModelCardProps) {
     advanced: 'bg-red-100 text-red-800',
   };
 
+  // Map transformation to Tailwind color
+  const transformationColorClass = {
+    P: 'border-t-transformation-perspective',
+    IN: 'border-t-transformation-inversion',
+    CO: 'border-t-transformation-composition',
+    DE: 'border-t-transformation-decomposition',
+    RE: 'border-t-transformation-recursion',
+    SY: 'border-t-transformation-systems',
+  }[model.transformation] || 'border-t-gray-300';
+
   return (
-    <div className="card hover:shadow-lg transition-shadow">
+    <div className={`card group relative border-t-4 ${transformationColorClass} hover:shadow-xl`}>
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="flex items-center space-x-2 mb-1">
