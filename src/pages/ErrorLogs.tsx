@@ -245,13 +245,13 @@ export default function ErrorLogs() {
           label="Critical"
           value={stats.critical}
           icon={<AlertTriangle className="h-5 w-5" />}
-          color="text-purple-600"
+          color="text-black dark:text-white"
         />
         <StatCard
           label="High Priority"
           value={stats.high}
           icon={<AlertTriangle className="h-5 w-5" />}
-          color="text-orange-600"
+          color="text-black dark:text-white"
         />
         <StatCard
           label="Resolved (24h)"

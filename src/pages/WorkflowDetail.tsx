@@ -374,11 +374,11 @@ export default function WorkflowDetail() {
 
 function StatusBadge({ status }: { status: string }) {
   const colors = {
-    draft: 'bg-gray-100 text-gray-800',
-    active: 'bg-green-100 text-green-800',
-    paused: 'bg-yellow-100 text-yellow-800',
-    completed: 'bg-blue-100 text-blue-800',
-    failed: 'bg-red-100 text-red-800',
+    draft: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200',
+    active: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+    paused: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    completed: 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100',
+    failed: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200',
   };
 
   return (

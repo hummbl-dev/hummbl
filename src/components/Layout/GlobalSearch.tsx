@@ -170,21 +170,13 @@ export default function GlobalSearch() {
                 index === selectedIndex ? 'bg-primary-50' : ''
               }`}
             >
-              <div className={`mt-1 ${
-                result.type === 'workflow' ? 'text-blue-600' :
-                result.type === 'agent' ? 'text-green-600' :
-                'text-purple-600'
-              }`}>
+              <div className="mt-1 text-black dark:text-white">
                 {result.icon}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2">
-                  <span className="font-medium text-gray-900 truncate">{result.title}</span>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                    result.type === 'workflow' ? 'bg-blue-100 text-blue-700' :
-                    result.type === 'agent' ? 'bg-green-100 text-green-700' :
-                    'bg-purple-100 text-purple-700'
-                  }`}>
+                  <span className="font-medium text-gray-900 dark:text-white truncate">{result.title}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
                     {result.type}
                   </span>
                 </div>

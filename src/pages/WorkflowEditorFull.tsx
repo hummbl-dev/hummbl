@@ -407,7 +407,7 @@ export default function WorkflowEditorFull() {
                   ))}
                 </div>
                 <p className="text-xs text-gray-500 mt-3 italic">
-                  💡 Each preset includes optimized model, temperature, and capabilities
+                  Each preset includes optimized model, temperature, and capabilities
                 </p>
               </div>
             </div>
@@ -530,7 +530,7 @@ export default function WorkflowEditorFull() {
                 <span>Add Task</span>
               </button>
               {agents.length === 0 && (
-                <p className="text-sm text-amber-600">⚠️ Add at least one agent before creating tasks</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Add at least one agent before creating tasks</p>
               )}
             </div>
           )}

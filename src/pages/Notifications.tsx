@@ -251,19 +251,19 @@ export default function Notifications() {
           label="Unread"
           value={stats.unread}
           icon={<AlertCircle className="h-5 w-5" />}
-          color="text-red-600"
+          color="text-black dark:text-white"
         />
         <StatCard
           label="Workflow"
           value={stats.workflow}
           icon={<Settings className="h-5 w-5" />}
-          color="text-blue-600"
+          color="text-black dark:text-white"
         />
         <StatCard
           label="System"
           value={stats.system}
           icon={<Info className="h-5 w-5" />}
-          color="text-purple-600"
+          color="text-black dark:text-white"
         />
       </div>
 
@@ -351,32 +351,32 @@ function NotificationCard({
 }) {
   const typeConfig = {
     success: {
-      bg: 'bg-green-50',
-      border: 'border-green-200',
-      icon: <CheckCircle2 className="h-5 w-5 text-green-600" />,
+      bg: 'bg-gray-50 dark:bg-gray-900',
+      border: 'border-gray-200 dark:border-gray-700',
+      icon: <CheckCircle2 className="h-5 w-5 text-black dark:text-white" />,
     },
     error: {
-      bg: 'bg-red-50',
-      border: 'border-red-200',
-      icon: <XCircle className="h-5 w-5 text-red-600" />,
+      bg: 'bg-gray-50 dark:bg-gray-900',
+      border: 'border-gray-200 dark:border-gray-700',
+      icon: <XCircle className="h-5 w-5 text-black dark:text-white" />,
     },
     warning: {
-      bg: 'bg-amber-50',
-      border: 'border-amber-200',
-      icon: <AlertCircle className="h-5 w-5 text-amber-600" />,
+      bg: 'bg-gray-50 dark:bg-gray-900',
+      border: 'border-gray-200 dark:border-gray-700',
+      icon: <AlertCircle className="h-5 w-5 text-black dark:text-white" />,
     },
     info: {
-      bg: 'bg-blue-50',
-      border: 'border-blue-200',
-      icon: <Info className="h-5 w-5 text-blue-600" />,
+      bg: 'bg-gray-50 dark:bg-gray-900',
+      border: 'border-gray-200 dark:border-gray-700',
+      icon: <Info className="h-5 w-5 text-black dark:text-white" />,
     },
   };
 
   const categoryColors: Record<string, string> = {
-    workflow: 'bg-blue-100 text-blue-700',
-    system: 'bg-purple-100 text-purple-700',
-    team: 'bg-green-100 text-green-700',
-    billing: 'bg-amber-100 text-amber-700',
+    workflow: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    system: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    team: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    billing: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
   };
 
   const config = typeConfig[notification.type as keyof typeof typeConfig] || typeConfig.info;

@@ -278,19 +278,19 @@ export default function TeamMembers() {
           label="Active"
           value={stats.activeUsers}
           icon={<CheckCircle className="h-5 w-5" />}
-          color="text-green-600"
+          color="text-black dark:text-white"
         />
         <StatCard
           label="Pending Invites"
           value={invites.length}
           icon={<Clock className="h-5 w-5" />}
-          color="text-amber-600"
+          color="text-black dark:text-white"
         />
         <StatCard
           label="Admins"
           value={stats.owners + stats.admins}
           icon={<Shield className="h-5 w-5" />}
-          color="text-purple-600"
+          color="text-black dark:text-white"
         />
       </div>
 
@@ -550,16 +550,16 @@ function MemberRow({
   handleToggleStatus: (member: User) => void;
 }) {
   const roleConfig = {
-    owner: { bg: 'bg-amber-50', text: 'text-amber-700', icon: <Crown className="h-4 w-4" /> },
-    admin: { bg: 'bg-purple-50', text: 'text-purple-700', icon: <Shield className="h-4 w-4" /> },
-    member: { bg: 'bg-blue-50', text: 'text-blue-700', icon: <UserIcon className="h-4 w-4" /> },
-    viewer: { bg: 'bg-gray-50', text: 'text-gray-700', icon: <UserIcon className="h-4 w-4" /> },
+    owner: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-100', icon: <Crown className="h-4 w-4" /> },
+    admin: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-100', icon: <Shield className="h-4 w-4" /> },
+    member: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-900 dark:text-gray-100', icon: <UserIcon className="h-4 w-4" /> },
+    viewer: { bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300', icon: <UserIcon className="h-4 w-4" /> },
   };
 
   const statusConfig = {
-    active: { bg: 'bg-green-50', text: 'text-green-700', icon: <CheckCircle className="h-4 w-4" /> },
-    invited: { bg: 'bg-amber-50', text: 'text-amber-700', icon: <Clock className="h-4 w-4" /> },
-    suspended: { bg: 'bg-red-50', text: 'text-red-700', icon: <XCircle className="h-4 w-4" /> },
+    active: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <CheckCircle className="h-4 w-4" /> },
+    invited: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <Clock className="h-4 w-4" /> },
+    suspended: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <XCircle className="h-4 w-4" /> },
   };
 
   const roleStyle = roleConfig[member.role as keyof typeof roleConfig] || roleConfig.member;

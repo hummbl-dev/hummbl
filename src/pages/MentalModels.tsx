@@ -165,9 +165,9 @@ interface ModelCardProps {
 function ModelCard({ model }: ModelCardProps) {
   const transformation = transformations.find(t => t.code === model.transformation);
   const difficultyColors = {
-    beginner: 'bg-green-100 text-green-800',
-    intermediate: 'bg-yellow-100 text-yellow-800',
-    advanced: 'bg-red-100 text-red-800',
+    beginner: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+    intermediate: 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200',
+    advanced: 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100',
   };
 
   // Map transformation to Tailwind color

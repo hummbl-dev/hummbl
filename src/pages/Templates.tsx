@@ -80,10 +80,10 @@ export default function Templates() {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-1">
-                      <FileText className="h-5 w-5 text-primary-600" />
-                      <h3 className="font-bold text-gray-900">{template.name}</h3>
+                      <FileText className="h-5 w-5 text-black dark:text-white" />
+                      <h3 className="font-bold text-gray-900 dark:text-white">{template.name}</h3>
                   </div>
-                  <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">
+                  <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs rounded">
                     {template.category}
                   </span>
                 </div>

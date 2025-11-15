@@ -19,7 +19,6 @@ import {
   XCircle,
   Loader2,
   AlertCircle,
-  Play,
   Square,
   RotateCcw,
   Filter,
@@ -196,20 +195,20 @@ export default function ExecutionMonitor() {
         <StatCard
           label="Running"
           value={stats.running}
-          icon={<Play className="h-5 w-5" />}
-          color="text-blue-600"
+          icon={<Activity className="h-5 w-5" />}
+          color="text-black dark:text-white"
         />
         <StatCard
           label="Completed"
           value={stats.completed}
           icon={<CheckCircle2 className="h-5 w-5" />}
-          color="text-green-600"
+          color="text-black dark:text-white"
         />
         <StatCard
           label="Failed"
           value={stats.failed}
           icon={<XCircle className="h-5 w-5" />}
-          color="text-red-600"
+          color="text-black dark:text-white"
         />
         <StatCard
           label="Avg Duration"
@@ -306,20 +305,20 @@ function ExecutionCard({ execution }: { execution: Execution }) {
       label: 'Pending',
     },
     running: {
-      bg: 'bg-blue-50',
-      text: 'text-blue-700',
+      bg: 'bg-gray-100 dark:bg-gray-800',
+      text: 'text-gray-700 dark:text-gray-300',
       icon: <Loader2 className="h-4 w-4 animate-spin" />,
       label: 'Running',
     },
     completed: {
-      bg: 'bg-green-50',
-      text: 'text-green-700',
+      bg: 'bg-gray-100 dark:bg-gray-800',
+      text: 'text-gray-700 dark:text-gray-300',
       icon: <CheckCircle2 className="h-4 w-4" />,
       label: 'Completed',
     },
     failed: {
-      bg: 'bg-red-50',
-      text: 'text-red-700',
+      bg: 'bg-gray-100 dark:bg-gray-800',
+      text: 'text-gray-700 dark:text-gray-300',
       icon: <XCircle className="h-4 w-4" />,
       label: 'Failed',
     },

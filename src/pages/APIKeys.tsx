@@ -175,17 +175,17 @@ export default function APIKeys() {
           label="Services"
           value={stats.services}
           icon={<Shield className="h-5 w-5" />}
-          color="text-purple-600"
+          color="text-black dark:text-white"
         />
       </div>
 
       {/* Security Notice */}
-      <div className="card bg-amber-50 border-amber-200">
+      <div className="card bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700">
         <div className="flex items-start space-x-3">
-          <Shield className="h-5 w-5 text-amber-600 mt-0.5" />
+          <Shield className="h-5 w-5 text-black dark:text-white mt-0.5" />
           <div className="flex-1">
-            <h3 className="font-medium text-amber-900 mb-1">Security Best Practices</h3>
-            <ul className="text-sm text-amber-700 space-y-1">
+            <h3 className="font-medium text-black dark:text-white mb-1">Security Best Practices</h3>
+            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
               <li>• Never share your API keys publicly or commit them to version control</li>
               <li>• Rotate keys regularly and delete unused keys immediately</li>
               <li>• Use separate keys for development and production environments</li>
@@ -295,14 +295,14 @@ function APIKeyCard({
   onDelete: () => void;
 }) {
   const serviceConfig = {
-    anthropic: { name: 'Anthropic Claude', bg: 'bg-purple-50', text: 'text-purple-700', logo: '🤖' },
-    openai: { name: 'OpenAI GPT', bg: 'bg-green-50', text: 'text-green-700', logo: '🧠' },
-    custom: { name: 'Custom API', bg: 'bg-blue-50', text: 'text-blue-700', logo: '⚙️' },
+    anthropic: { name: 'Anthropic Claude', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300', logo: 'A' },
+    openai: { name: 'OpenAI GPT', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300', logo: 'O' },
+    custom: { name: 'Custom API', bg: 'bg-gray-50 dark:bg-gray-900', text: 'text-gray-700 dark:text-gray-300', logo: 'C' },
   };
 
   const statusConfig = {
-    active: { bg: 'bg-green-50', text: 'text-green-700', icon: <CheckCircle2 className="h-4 w-4" /> },
-    expired: { bg: 'bg-amber-50', text: 'text-amber-700', icon: <Clock className="h-4 w-4" /> },
+    active: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <CheckCircle2 className="h-4 w-4" /> },
+    expired: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', icon: <Clock className="h-4 w-4" /> },
     revoked: { bg: 'bg-red-50', text: 'text-red-700', icon: <AlertCircle className="h-4 w-4" /> },
   };
 
