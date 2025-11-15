@@ -114,14 +114,14 @@ export default function Dashboard() {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-gray-900 dark:text-white truncate">{workflow.name}</h3>
-                    <p className="text-sm text-gray-900 dark:text-gray-700 mt-1 line-clamp-2">
+                    <p className="text-sm text-gray-900 dark:text-gray-200 mt-1 line-clamp-2">
                       {workflow.description}
                     </p>
                     <div className="flex items-center space-x-3 md:space-x-4 mt-2">
-                      <span className="text-xs text-gray-800 dark:text-gray-700">
+                      <span className="text-xs text-gray-800 dark:text-gray-200">
                         {workflow.tasks.length} tasks
                       </span>
-                      <span className="text-xs text-gray-800 dark:text-gray-700">
+                      <span className="text-xs text-gray-800 dark:text-gray-200">
                         {workflow.agents.length} agents
                       </span>
                     </div>

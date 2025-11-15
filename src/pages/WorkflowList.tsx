@@ -116,7 +116,7 @@ export default function WorkflowList() {
                     className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                     aria-label="Open workflow menu"
                   >
-                    <MoreVertical className="h-5 w-5 text-gray-900 dark:text-gray-700" />
+                    <MoreVertical className="h-5 w-5 text-gray-900 dark:text-gray-200" />
                   </button>
                   {showMenu === workflow.id && (
                     <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">

@@ -530,7 +530,7 @@ export default function WorkflowEditorFull() {
                 <span>Add Task</span>
               </button>
               {agents.length === 0 && (
-                <p className="text-sm text-gray-900 dark:text-gray-700">Add at least one agent before creating tasks</p>
+                <p className="text-sm text-gray-900 dark:text-gray-200">Add at least one agent before creating tasks</p>
               )}
             </div>
           )}
