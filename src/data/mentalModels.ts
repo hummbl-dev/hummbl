@@ -59,8 +59,8 @@ export const transformations: Transformation[] = [
     code: 'DE',
     name: 'Decomposition',
     description: 'Break down, modularize, separate',
-    color: 'orange',
-    icon: '📦',
+    color: 'gray',
+    icon: 'D',
   },
   {
     code: 'RE',
