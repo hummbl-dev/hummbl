@@ -260,7 +260,7 @@ export default function Analytics() {
       </div>
 
       {/* Quick Actions */}
-      <div className="card bg-gradient-to-r from-primary-50 to-blue-50">
+      <div className="card bg-gradient-to-r from-gray-50 to-gray-100">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold mb-1">Ready for more insights?</h3>

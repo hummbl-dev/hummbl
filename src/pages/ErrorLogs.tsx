@@ -390,25 +390,25 @@ function ErrorCard({
     low: {
       bg: 'bg-gray-100 dark:bg-gray-800',
       text: 'text-gray-900 dark:text-gray-100',
-      border: 'border-blue-200',
+      border: 'border border-gray-300 dark:border-gray-600',  // Thin, light border
       label: 'Low',
     },
     medium: {
       bg: 'bg-gray-100 dark:bg-gray-800',
       text: 'text-gray-900 dark:text-gray-100',
-      border: 'border-yellow-200',
+      border: 'border-2 border-gray-400 dark:border-gray-500',  // Medium thickness
       label: 'Medium',
     },
     high: {
       bg: 'bg-gray-100 dark:bg-gray-800',
       text: 'text-gray-900 dark:text-gray-100',
-      border: 'border-orange-200',
+      border: 'border-2 border-gray-600 dark:border-gray-400 shadow-md',  // Thicker, darker with shadow
       label: 'High',
     },
     critical: {
       bg: 'bg-gray-100 dark:bg-gray-800',
       text: 'text-gray-900 dark:text-gray-100',
-      border: 'border-red-200',
+      border: 'border-4 border-gray-900 dark:border-gray-200 shadow-lg',  // Thickest, darkest with strong shadow
       label: 'Critical',
     },
   };

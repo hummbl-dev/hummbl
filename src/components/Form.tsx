@@ -64,12 +64,16 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export function Input({ error, success, className = '', ...props }: InputProps) {
   const baseClasses = 'input-field';
-  const errorClasses = error ? 'border-red-300 dark:border-red-700 focus:ring-red-500' : '';
-  const successClasses = success ? 'border-green-300 dark:border-green-700 focus:ring-green-500' : '';
+  // Monochrome validation states with thickness and shadow variations
+  const errorClasses = error ? 'border-2 border-gray-600 dark:border-gray-400 focus:ring-gray-700 focus:ring-2 shadow-md bg-gray-100 dark:bg-gray-800' : '';
+  const successClasses = success ? 'border-2 border-gray-500 dark:border-gray-500 focus:ring-gray-600 focus:ring-1 bg-gray-50 dark:bg-gray-850' : '';
+  
+  const ariaInvalid = error ? ('true' as const) : ('false' as const);
   
   return (
     <input
       className={`${baseClasses} ${errorClasses} ${successClasses} ${className}`}
+      aria-invalid={ariaInvalid}
       {...props}
     />
   );
@@ -82,12 +86,16 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 
 export function TextArea({ error, success, className = '', ...props }: TextAreaProps) {
   const baseClasses = 'input-field';
-  const errorClasses = error ? 'border-red-300 dark:border-red-700 focus:ring-red-500' : '';
-  const successClasses = success ? 'border-green-300 dark:border-green-700 focus:ring-green-500' : '';
+  // Monochrome validation states with thickness and shadow variations
+  const errorClasses = error ? 'border-2 border-gray-600 dark:border-gray-400 focus:ring-gray-700 focus:ring-2 shadow-md bg-gray-100 dark:bg-gray-800' : '';
+  const successClasses = success ? 'border-2 border-gray-500 dark:border-gray-500 focus:ring-gray-600 focus:ring-1 bg-gray-50 dark:bg-gray-850' : '';
+  
+  const ariaInvalid = error ? ('true' as const) : ('false' as const);
   
   return (
     <textarea
       className={`${baseClasses} ${errorClasses} ${successClasses} ${className}`}
+      aria-invalid={ariaInvalid}
       {...props}
     />
   );
@@ -100,12 +108,16 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 
 export function Select({ error, success, className = '', children, ...props }: SelectProps) {
   const baseClasses = 'input-field';
-  const errorClasses = error ? 'border-red-300 dark:border-red-700 focus:ring-red-500' : '';
-  const successClasses = success ? 'border-green-300 dark:border-green-700 focus:ring-green-500' : '';
+  // Monochrome validation states with thickness and shadow variations
+  const errorClasses = error ? 'border-2 border-gray-600 dark:border-gray-400 focus:ring-gray-700 focus:ring-2 shadow-md bg-gray-100 dark:bg-gray-800' : '';
+  const successClasses = success ? 'border-2 border-gray-500 dark:border-gray-500 focus:ring-gray-600 focus:ring-1 bg-gray-50 dark:bg-gray-850' : '';
+  
+  const ariaInvalid = error ? ('true' as const) : ('false' as const);
   
   return (
     <select
       className={`${baseClasses} ${errorClasses} ${successClasses} ${className}`}
+      aria-invalid={ariaInvalid}
       {...props}
     >
       {children}

@@ -22,11 +22,11 @@ const AgentNode: React.FC<NodeProps<AgentNodeData>> = ({ data }) => {
       style={{
         padding: '16px',
         borderRadius: '8px',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #6b7280 0%, #374151 100%)',  // Gray-500 to Gray-700
         color: 'white',
         minWidth: '200px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        border: '2px solid #5a67d8',
+        border: '2px solid #4b5563',  // Gray-600
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>

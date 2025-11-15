@@ -78,30 +78,56 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
     warning: AlertTriangle,
   };
 
+  // Monochrome toast styles with varying intensity for differentiation
   const styles = {
-    success: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200',
-    error: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200',
-    info: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200',
-    warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200',
+    success: 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100',
+    error: 'bg-gray-200 dark:bg-gray-700 border-gray-500 dark:border-gray-500 text-gray-900 dark:text-gray-100 shadow-lg',
+    info: 'bg-gray-50 dark:bg-gray-850 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200',
+    warning: 'bg-gray-150 dark:bg-gray-750 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-gray-100 border-2',
   };
 
+  // Grayscale icon emphasis with varying darkness
   const iconStyles = {
-    success: 'text-green-500',
-    error: 'text-red-500',
-    info: 'text-blue-500',
-    warning: 'text-yellow-500',
+    success: 'text-gray-700 dark:text-gray-300',
+    error: 'text-gray-900 dark:text-gray-100',
+    info: 'text-gray-600 dark:text-gray-400',
+    warning: 'text-gray-800 dark:text-gray-200',
+  };
+
+  // Accessible text labels for semantic meaning
+  const labels = {
+    success: '[OK]',
+    error: '[!]',
+    info: '[i]',
+    warning: '[⚠]',
   };
 
   const Icon = icons[toast.type];
+  const label = labels[toast.type];
+
+  // ARIA attributes for screen reader accessibility
+  const ariaLabel = {
+    success: 'Success notification',
+    error: 'Error notification',
+    info: 'Information notification',
+    warning: 'Warning notification',
+  }[toast.type];
+
+  const ariaLive: 'assertive' | 'polite' = toast.type === 'error' ? 'assertive' : 'polite';
 
   return (
     <div
       className={`${styles[toast.type]} border rounded-lg shadow-lg p-4 flex items-start space-x-3 animate-slide-in-right`}
       role="alert"
+      aria-live={ariaLive}
+      aria-label={ariaLabel}
     >
-      <Icon className={`h-5 w-5 ${iconStyles[toast.type]} flex-shrink-0 mt-0.5`} />
+      <Icon className={`h-5 w-5 ${iconStyles[toast.type]} flex-shrink-0 mt-0.5`} aria-hidden="true" />
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-sm">{toast.message}</p>
+        <p className="font-semibold text-sm">
+          <span className="font-mono mr-1" aria-hidden="true">{label}</span>
+          {toast.message}
+        </p>
         {toast.description && (
           <p className="text-xs mt-1 opacity-90">{toast.description}</p>
         )}

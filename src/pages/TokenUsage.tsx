@@ -253,7 +253,7 @@ export default function TokenUsage() {
       </div>
 
       {/* Optimization Tips */}
-      <div className="card bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
+      <div className="card bg-gradient-to-r from-gray-50 to-gray-100 border-gray-300">
         <div className="flex items-start space-x-4">
           <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg">
             <Lightbulb className="h-6 w-6 text-gray-800 dark:text-gray-200" />

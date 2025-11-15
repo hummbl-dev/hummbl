@@ -31,11 +31,11 @@ const TaskNode: React.FC<NodeProps<TaskNodeData>> = ({ data }) => {
       style={{
         padding: '16px',
         borderRadius: '8px',
-        background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+        background: 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)',  // Gray-400 to Gray-500
         color: 'white',
         minWidth: '220px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        border: '2px solid #ec4899',
+        border: '2px solid #6b7280',  // Gray-500
       }}
     >
       {/* Input handles for agent assignment and dependencies */}

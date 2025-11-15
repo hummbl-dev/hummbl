@@ -197,7 +197,7 @@ const VisualWorkflowBuilder: React.FC<VisualWorkflowBuilderProps> = ({
           onClick={handleAddAgent}
           style={{
             padding: '8px 16px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #6b7280 0%, #374151 100%)',  // Gray-500 to Gray-700
             color: 'white',
             border: 'none',
             borderRadius: '6px',
@@ -216,8 +216,8 @@ const VisualWorkflowBuilder: React.FC<VisualWorkflowBuilderProps> = ({
           style={{
             padding: '8px 16px',
             background: agents.length === 0
-              ? '#9ca3af'
-              : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              ? '#9ca3af'  // Gray-400 (disabled)
+              : 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)',  // Gray-400 to Gray-500
             color: 'white',
             border: 'none',
             borderRadius: '6px',

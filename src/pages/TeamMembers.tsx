@@ -403,7 +403,7 @@ export default function TeamMembers() {
       )}
 
       {/* Permissions Guide */}
-      <div className="card bg-gradient-to-r from-blue-50 to-indigo-50 border-gray-200">
+      <div className="card bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200">
         <h3 className="text-lg font-semibold mb-3">Role Permissions</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <PermissionCard
@@ -570,7 +570,7 @@ function MemberRow({
       {/* Member */}
       <td className="p-4">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-medium">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-700 flex items-center justify-center text-white font-medium">
             {member.name.charAt(0)}
           </div>
           <div>
