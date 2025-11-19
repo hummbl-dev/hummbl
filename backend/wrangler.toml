@@ -1,0 +1,9 @@
+name = "hummbl-backend"
+main = "src/worker.ts"
+compatibility_date = "2024-05-01"
+
+[vars]
+
+[[kv_namespaces]]
+binding = "CONTACT_LOG"
+id = "278ce3bcf00a428296a39da7414af316"
