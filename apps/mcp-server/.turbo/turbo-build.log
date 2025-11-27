@@ -1,0 +1,61 @@
+
+> @hummbl/mcp-server@1.0.0-beta.2 build /Users/others/hummbl/apps/mcp-server
+> tsc
+
+src/__tests__/server-version.test.ts(2,30): error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+src/__tests__/server-version.test.ts(7,58): error TS2339: Property 'url' does not exist on type 'ImportMeta'.
+src/__tests__/server-version.test.ts(23,73): error TS2339: Property 'url' does not exist on type 'ImportMeta'.
+src/api.ts(24,16): error TS7030: Not all code paths return a value.
+src/api.ts(56,18): error TS2304: Cannot find name 'getModelByCode'.
+src/api.ts(57,8): error TS2304: Cannot find name 'isOk'.
+src/api.ts(62,40): error TS2552: Cannot find name 'TRANSFORMATIONS'. Did you mean 'transformation'?
+src/api.ts(63,5): error TS18046: 't' is of type 'unknown'.
+src/api.ts(63,20): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/api.ts(67,14): error TS2304: Cannot find name 'createD1Client'.
+src/api.ts(70,8): error TS2304: Cannot find name 'isOk'.
+src/api.ts(77,39): error TS2339: Property 'key' does not exist on type '{}'.
+src/api.ts(88,16): error TS2304: Cannot find name 'getAllModels'.
+src/api.ts(91,20): error TS2304: Cannot find name 'getModelsByTransformation'.
+src/api.ts(92,10): error TS2304: Cannot find name 'isOk'.
+src/api.ts(98,32): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/api.ts(99,33): error TS2304: Cannot find name 'TRANSFORMATIONS'.
+src/api.ts(100,7): error TS18046: 't' is of type 'unknown'.
+src/api.ts(100,22): error TS7006: Parameter 'model' implicitly has an 'any' type.
+src/api.ts(108,30): error TS2339: Property 'key' does not exist on type '{}'.
+src/api.ts(126,18): error TS2304: Cannot find name 'searchModels'.
+src/api.ts(127,8): error TS2304: Cannot find name 'isOk'.
+src/api.ts(131,38): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/api.ts(132,33): error TS2304: Cannot find name 'TRANSFORMATIONS'.
+src/api.ts(133,7): error TS18046: 't' is of type 'unknown'.
+src/api.ts(133,22): error TS7006: Parameter 'model' implicitly has an 'any' type.
+src/api.ts(140,30): error TS2339: Property 'key' does not exist on type '{}'.
+src/api.ts(155,18): error TS2304: Cannot find name 'getTransformationByKey'.
+src/api.ts(156,8): error TS2304: Cannot find name 'isOk'.
+src/api.ts(172,41): error TS2304: Cannot find name 'TRANSFORMATIONS'.
+src/api.ts(173,10): error TS18046: 't' is of type 'unknown'.
+src/api.ts(174,11): error TS18046: 't' is of type 'unknown'.
+src/api.ts(175,18): error TS18046: 't' is of type 'unknown'.
+src/api.ts(176,17): error TS18046: 't' is of type 'unknown'.
+src/api.ts(195,27): error TS2304: Cannot find name 'PROBLEM_PATTERNS'.
+src/api.ts(195,52): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/api.ts(197,31): error TS7006: Parameter 'word' implicitly has an 'any' type.
+src/api.ts(200,74): error TS2304: Cannot find name 'PROBLEM_PATTERNS'.
+src/api.ts(202,56): error TS7006: Parameter 'rec' implicitly has an 'any' type.
+src/api.ts(204,47): error TS7006: Parameter 'tKey' implicitly has an 'any' type.
+src/api.ts(205,17): error TS2304: Cannot find name 'TRANSFORMATIONS'.
+src/api.ts(213,13): error TS7006: Parameter 'code' implicitly has an 'any' type.
+src/api.ts(214,24): error TS2304: Cannot find name 'getModelByCode'.
+src/api.ts(215,14): error TS2304: Cannot find name 'isOk'.
+src/api.ts(226,16): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/index.ts(24,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/tools/methodology.test.ts(27,57): error TS2345: Argument of type '(name: never, _config: never, handler: never) => McpServer' is not assignable to parameter of type '(...args: never) => RegisteredTool'.
+  Type 'McpServer' is missing the following properties from type 'RegisteredTool': callback, enabled, enable, disable, and 2 more.
+src/tools/methodology.test.ts(32,35): error TS2339: Property 'mockReset' does not exist on type '() => Result<DialecticalMethodology, DomainError>'.
+src/tools/methodology.test.ts(33,21): error TS2339: Property 'mockReset' does not exist on type '(items: AuditInputItem[]) => Result<MethodologyAuditResult, DomainError>'.
+src/tools/methodology.test.ts(39,35): error TS2339: Property 'mockReturnValue' does not exist on type '() => Result<DialecticalMethodology, DomainError>'.
+src/tools/methodology.test.ts(49,35): error TS2339: Property 'mockReturnValue' does not exist on type '() => Result<DialecticalMethodology, DomainError>'.
+src/tools/methodology.test.ts(66,21): error TS2339: Property 'mockReturnValue' does not exist on type '(items: AuditInputItem[]) => Result<MethodologyAuditResult, DomainError>'.
+src/tools/methodology.test.ts(75,21): error TS2339: Property 'mockReturnValue' does not exist on type '(items: AuditInputItem[]) => Result<MethodologyAuditResult, DomainError>'.
+src/tools/methodology.test.ts(85,21): error TS2339: Property 'mockReturnValue' does not exist on type '(items: AuditInputItem[]) => Result<MethodologyAuditResult, DomainError>'.
+src/tools/methodology.test.ts(95,21): error TS2339: Property 'mockReturnValue' does not exist on type '(items: AuditInputItem[]) => Result<MethodologyAuditResult, DomainError>'.
+ ELIFECYCLE  Command failed with exit code 2.

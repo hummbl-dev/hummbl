@@ -1,0 +1,98 @@
+{
+  "name": "@hummbl/mcp-server",
+  "version": "1.0.0-beta.2",
+  "description": "Model Context Protocol server for HUMMBL Base120 mental models framework",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "hummbl-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:api": "tsc --outDir dist --target es2022 --module es2022 --moduleResolution bundler src/api.ts",
+    "dev": "tsx src/index.ts",
+    "dev:api": "wrangler dev src/api.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "prepare": "husky",
+    "validate": "npm run typecheck && npm run lint && npm run test",
+    "deploy": "npm run build:api && wrangler deploy",
+    "deploy:staging": "npm run build:api && wrangler deploy --env staging",
+    "provision": "node scripts/provision-infra.js",
+    "seed": "wrangler d1 execute hummbl-api --file=seed.sql",
+    "create-key": "tsx scripts/create-api-key.ts",
+    "ship": "node scripts/deploy.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "mental-models",
+    "hummbl",
+    "cognitive-framework",
+    "problem-solving"
+  ],
+  "author": "Reuben <reuben@hummbl.io>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hummbl-dev/mcp-server.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@hummbl/core": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/core": "^2.2.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.208.0",
+    "@opentelemetry/resources": "^2.2.0",
+    "@opentelemetry/sdk-trace-node": "^2.2.0",
+    "@opentelemetry/semantic-conventions": "^1.38.0",
+    "@upstash/redis": "^1.35.6",
+    "hono": "^4.6.12",
+    "nanoid": "^5.1.6",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251117.0",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.47.0",
+    "@typescript-eslint/parser": "^8.47.0",
+    "@vitest/coverage-v8": "^4.0.10",
+    "@vitest/ui": "^4.0.9",
+    "eslint": "^9.15.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.0.10"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/hummbl-dev/mcp-server/issues"
+  },
+  "homepage": "https://github.com/hummbl-dev/mcp-server#readme"
+}
