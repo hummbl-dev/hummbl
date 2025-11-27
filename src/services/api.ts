@@ -716,3 +716,66 @@ export async function getWorkflowSharing(workflowId: string): Promise<{ sharing:
 
   return response.json();
 }
+
+
+// ============================================
+// NOTIFICATIONS API (Stub - Backend TBD)
+// ============================================
+
+export interface Notification {
+  id: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+  category: 'workflow' | 'system' | 'team' | 'billing';
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: number;
+  actionUrl?: string;
+  actionLabel?: string;
+}
+
+/**
+ * Get user notifications
+ * @param unreadOnly - Filter to unread notifications only
+ * @param category - Filter by category
+ */
+export async function getNotifications(
+  unreadOnly?: boolean,
+  category?: string
+): Promise<{ notifications: Notification[]; unreadCount: number }> {
+  // Stub implementation - returns empty array until backend is ready
+  console.log('getNotifications stub called:', { unreadOnly, category });
+  return { notifications: [], unreadCount: 0 };
+}
+
+/**
+ * Mark notification as read
+ */
+export async function markNotificationRead(id: string): Promise<{ success: boolean }> {
+  console.log('markNotificationRead stub called:', id);
+  return { success: true };
+}
+
+/**
+ * Mark all notifications as read
+ */
+export async function markAllNotificationsRead(): Promise<{ success: boolean }> {
+  console.log('markAllNotificationsRead stub called');
+  return { success: true };
+}
+
+/**
+ * Delete a notification
+ */
+export async function deleteNotification(id: string): Promise<{ success: boolean }> {
+  console.log('deleteNotification stub called:', id);
+  return { success: true };
+}
+
+/**
+ * Clear all read notifications
+ */
+export async function clearReadNotifications(): Promise<{ success: boolean }> {
+  console.log('clearReadNotifications stub called');
+  return { success: true };
+}

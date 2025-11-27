@@ -329,6 +329,7 @@ ${Object.keys(context).length > 0 ? `\nYou have access to outputs from previous 
   return { ok: true, output: aiResult.value.content };
 }
 
+<<<<<<< HEAD
 /**
  * Share workflow with team member
  * POST /api/workflows/:id/share
