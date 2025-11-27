@@ -2,6 +2,7 @@ name = "hummbl-api"
 main = "src/api.ts"
 compatibility_date = "2025-11-08"
 compatibility_flags = ["nodejs_compat"]
+workers_dev = true
 
 account_id = "9e594f1cde6d3f71abb954efa5c717b4"
 
@@ -17,6 +18,11 @@ database_id = "870ee612-4d12-4d1f-9ffe-58858cba51d3"
 [[kv_namespaces]]
 binding = "CACHE"
 id = "ef29c21b2cbc46ed9ea3eddd6c5488d1"
+
+# Custom domain routing (enable after adding hummbl.io zone to Cloudflare)
+# [[routes]]
+# pattern = "api.hummbl.io/*"
+# zone_name = "hummbl.io"
 
 [env.staging]
 name = "hummbl-api-staging"
