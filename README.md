@@ -1,85 +1,84 @@
 # HUMMBL
 
-> Foundational AI orchestration platform. Solo project.
+Foundational AI orchestration platform owned and operated as a solo project.
 
-## What This Is
+## Scope
 
-HUMMBL is the core platform for building agent-based systems. It provides:
+- `hummbl` is the platform workspace for reusable AI system primitives.
+- Founder Mode is a related but independent Dan-led collaboration.
+- Founder Mode may consume selected HUMMBL patterns, but it is not a HUMMBL product line.
 
-- **Core primitives** for agent lifecycle, memory, and coordination
-- **Shared cognition** layer (agents, avatars, memory stores)
-- **Platform services** (governance, MCP, infrastructure)
-- **Governance patterns** for safe, observable, cost-controlled AI systems
+Cross-project dependencies and code transfers are tracked in `ecosystem/founder-mode.md`.
 
-## Relationship to Other Projects
-
-**HUMMBL and Founder Mode are related but independent.**
-
-- **HUMMBL** (`hummbl/`) — This repo. Solo platform project.
-- **Founder Mode** (`founder_mode/`) — Dan Matha leads; you are Founding Architect. Incorporates selected HUMMBL patterns but is **not a HUMMBL product**.
-
-Code/pattern transfers between projects are intentional and logged.
-
-## Directory Structure
-
-```
-hummbl/
-├── core/                    # Platform primitives
-│   ├── agent-lifecycle/
-│   ├── memory-management/
-│   └── coordination/
-│
-├── shared/                  # Shared cognition layer
-│   ├── agents/              # Agent definitions
-│   ├── avatars/             # Avatar configurations
-│   └── memory/              # Shared memory stores
-│
-├── platform/                # Platform services
-│   ├── gaas/                # Governance/Graph as a Service
-│   ├── mcp/                 # Model Context Protocol
-│   └── infra/               # Infrastructure primitives
-│
-├── ecosystem/               # Related independent initiatives
-│   └── founder-mode.md      # Relationship documentation
-│
-├── governance/              # Platform governance
-├── docs/                    # Documentation
-└── tests/                   # Test suite
-```
-
-## Principles
-
-1. **Zero third-party runtime dependencies** — Core uses Python stdlib only
-2. **Contract-driven** — All interfaces are versioned and validated
-3. **Cost governance** — Budget tracking and kill switches built-in
-4. **Observable** — Everything emits structured telemetry
-5. **Safe by default** — Graceful degradation, typed errors, circuit breakers
-
-## Getting Started
+## Quick Start
 
 ```bash
-# Setup
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[test]"
+git clone git@github.com:hummbl-dev/hummbl.git
+cd hummbl
+./scripts/bootstrap.sh
+```
+
+This creates `.venv`, installs test/dev tooling, verifies repository layout, and runs lint/type/test checks.
+
+## Operator Commands
+
+```bash
+# Install/update local environment
+make bootstrap
+
+# Validate repository structure
+make verify
+
+# Lint and type-check
+make lint
+make typecheck
 
 # Run tests
-python -m pytest tests/ -v
+make test
 
-# Validate structure
-./scripts/verify-layout.sh
+# Run full local gate
+make check
 ```
+
+## Repository Layout
+
+```text
+hummbl/
+├── core/              # Platform primitives
+├── shared/            # Shared cognition assets (agents, avatars, memory)
+├── platform/          # Platform infrastructure surfaces (gaas, mcp, infra)
+├── ecosystem/         # Relationship and dependency boundaries
+├── governance/        # Policies, interfaces, and decision records
+├── docs/              # Setup and operating documentation
+├── scripts/           # Bootstrap and verification scripts
+├── tests/             # Test suite for repository tooling
+└── hummbl/            # Python package (CLI and platform modules)
+```
+
+## Compatibility
+
+- Python 3.11+
+- macOS and Linux shell environments
+- Zero third-party runtime dependencies in core package paths
+
+## Security Baseline
+
+- Never commit secrets, API keys, certificates, or private tokens.
+- Keep local runtime state out of git (`_state/`, logs, pid files).
+- Validate changes with `make check` before push.
 
 ## Agent Access
 
-This repo is accessible to all terminal agents:
-- **Claude Code** — Primary architect
-- **Codex** — Audit and verification
-- **Kimi** — Implementation
-- **Gemini** — Analysis and research
+Any terminal agent (Claude, Codex, Kimi, Gemini) can operate on this repo when they:
 
-See `AGENTS.md` for coordination conventions.
+1. Clone the same remote.
+2. Run `./scripts/bootstrap.sh`.
+3. Follow `AGENTS.md` conventions.
+
+## Status
+
+Current baseline release: `0.1.0`
 
 ## License
 
-Private — See `LICENSE`
+Private. See `LICENSE`.
