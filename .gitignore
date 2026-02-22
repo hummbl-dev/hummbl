@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.local
+secrets/
+credentials/
+*.pem
+*.key
+
+# Operational state (ephemeral)
+_state/
+*.log
+*.pid
+
+# Local data (user-facing, may be committed selectively)
+# state/  <- intentionally not ignored — user data may be committed

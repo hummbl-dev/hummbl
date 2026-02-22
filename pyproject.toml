@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hummbl"
+version = "0.1.0"
+description = "Foundational AI orchestration platform"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "PRIVATE"}
+authors = [
+    {name = "Founder"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    # Zero third-party runtime dependencies
+    # Core uses only Python stdlib
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "pytest-asyncio>=0.21",
+]
+dev = [
+    "ruff>=0.1.0",
+    "mypy>=1.0",
+]
+
+[project.scripts]
+hummbl = "hummbl.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["hummbl*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["hummbl"]
+
+[tool.coverage.report]
+fail_under = 80
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
