@@ -1,0 +1,110 @@
+{
+  "$schema": "HUMMBL namespace reservation ledger. Every package name must have a reservation attestation before publication. Enforced by scripts/check_namespace_ledger.py → B_NAMESPACE_LEAK.",
+  "version": "1.0.0",
+  "pypi": {
+    "hummbl-eal": {
+      "status": "reserved",
+      "registered_on": "2026-02-15",
+      "attester": "reuben",
+      "notes": "AAA kernel package. Not yet published to PyPI."
+    },
+    "hummbl-base120": {
+      "status": "reserved",
+      "registered_on": "2026-02-15",
+      "attester": "reuben",
+      "notes": "Base120 governance canon package. Not yet published to PyPI."
+    },
+    "hummbl-governance-bus": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Append-only governance audit bus. libs/governance-bus/"
+    },
+    "hummbl-delegation": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "IDP delegation tokens and context. libs/delegation/"
+    },
+    "hummbl-resilience": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Circuit breaker and kill switch. libs/resilience/"
+    },
+    "hummbl-security": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Security scanning adapters. libs/security/"
+    },
+    "hummbl-federation": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Multi-agent federation. libs/federation/"
+    },
+    "hummbl-agent-runtime": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Agent lifecycle runtime. libs/agent-runtime/"
+    },
+    "hummbl-agent-os": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Agent OS layer. Separate repo: hummbl-dev/agent-os"
+    }
+  },
+  "npm": {
+    "@hummbl/kernel": {
+      "status": "reserved",
+      "registered_on": "2026-02-15",
+      "attester": "reuben",
+      "notes": "TypeScript kernel types. packages/kernel/"
+    },
+    "@hummbl/control-plane": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Control plane client. packages/control-plane/"
+    },
+    "@hummbl/router": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Request router. packages/router/"
+    },
+    "@hummbl/runners": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Task runners. packages/runners/"
+    },
+    "@hummbl/adapters": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Service adapters. packages/adapters/"
+    },
+    "@hummbl/governance": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Governance types. packages/governance/"
+    },
+    "@hummbl/hybrid-inference": {
+      "status": "planned",
+      "registered_on": "2026-02-21",
+      "attester": "reuben",
+      "notes": "Hybrid inference engine. packages/hybrid-inference/"
+    },
+    "@hummbl/mcp-server": {
+      "status": "reserved",
+      "registered_on": "2026-02-15",
+      "attester": "reuben",
+      "notes": "MCP server. apps/mcp/"
+    }
+  }
+}

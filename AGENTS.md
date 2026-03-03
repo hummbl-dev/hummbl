@@ -35,7 +35,7 @@ python -m pytest tests/ -v --cov=hummbl
 Read `ARCHITECTURE.md` for the full model. The key rule: **dependencies point upward, execution flows downward.**
 
 - L4 `base120` -- Governance canon (separate repo)
-- L3 `aaa` -- Deterministic kernel (separate repo)
+- L3.5 `aaa` -- Deterministic kernel (separate repo)
 - L2 `libs/`, `packages/` -- Platform libraries (this repo)
 - L1 `apps/`, `skills/` -- Applications (this repo)
 - L0 `.github/`, `tools/`, `shared/`, `data/` -- Infrastructure (this repo)
@@ -83,4 +83,4 @@ See `REPO_BOUNDARY_POLICY.md` for the 10 CI failure codes. The critical ones:
 2. **Preserve graceful failures** -- All adapters must fail safely.
 3. **Log all cross-project transfers** -- Update `ecosystem/founder-mode.md`.
 4. **Test before pushing** -- Keep CI green.
-5. **Never point dependencies downward** -- L2 cannot import L1. L3 cannot import L2.
+5. **Never point dependencies downward** -- L2 cannot import L1. L3.5 cannot import L2.

@@ -1,0 +1,90 @@
+{
+  "$schema": "HUMMBL layer classification map. Every committed path maps to exactly one layer (INV-7). Enforced by scripts/check_layer_map.py → B_LAYER_UNCLASSIFIED.",
+  "version": "1.0.0",
+  "layers": {
+    "L4": {
+      "description": "Governance Canon — base120 mental models, CAES spec, MRCC schema",
+      "paths": [
+        "data/base120/"
+      ],
+      "note": "Canonical L4 lives in hummbl-dev/base120. These are pinned derived copies."
+    },
+    "L3.5": {
+      "description": "Deterministic Kernel — AAA validation, kernel types",
+      "paths": [
+        "packages/kernel/"
+      ],
+      "note": "Canonical L3.5 lives in hummbl-dev/aaa. packages/kernel/ is a typed TS mirror that MUST conform to AAA spec."
+    },
+    "L2": {
+      "description": "Platform Libraries — publishable Python and TypeScript packages",
+      "paths": [
+        "libs/",
+        "packages/"
+      ],
+      "note": "packages/kernel/ is also L2 (typed mirror, not authoritative L3.5). All packages/ are L2."
+    },
+    "L1": {
+      "description": "Applications — deployable products",
+      "paths": [
+        "apps/",
+        "skills/"
+      ]
+    },
+    "L0": {
+      "description": "Infrastructure — CI, tooling, scripts, dev setup, shared data, agent identities",
+      "paths": [
+        ".github/",
+        "governance/",
+        "shared/",
+        "tools/",
+        "scripts/",
+        "docs/",
+        "ecosystem/",
+        "discovery/",
+        "tests/",
+        "hummbl/"
+      ]
+    }
+  },
+  "root_files": {
+    "description": "Files at repo root are classified as L0 (infrastructure/governance)",
+    "layer": "L0",
+    "examples": [
+      "README.md",
+      "ARCHITECTURE.md",
+      "AGENTS.md",
+      "REPO_BOUNDARY_POLICY.md",
+      "REPO_PERMISSIONS_MODEL.md",
+      "pyproject.toml",
+      "dependency_pins.json",
+      "layer_map.json",
+      "namespace_ledger.json",
+      "Makefile",
+      "LICENSE"
+    ]
+  },
+  "exclusions": {
+    "description": "Paths excluded from layer classification. These are build outputs, caches, or tooling artifacts — never committed.",
+    "patterns": [
+      "dist/",
+      "build/",
+      ".venv/",
+      "node_modules/",
+      "__pycache__/",
+      ".git/",
+      "*.egg-info/",
+      ".mypy_cache/",
+      ".pytest_cache/",
+      ".ruff_cache/",
+      ".turbo/",
+      ".next/",
+      "coverage/"
+    ]
+  },
+  "resolution_order": [
+    "Longest prefix match wins (e.g., packages/kernel/ matches L3.5 note before packages/ matches L2).",
+    "Root files match the root_files rule.",
+    "Anything not matching any rule triggers B_LAYER_UNCLASSIFIED."
+  ]
+}

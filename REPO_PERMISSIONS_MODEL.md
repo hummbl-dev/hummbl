@@ -6,8 +6,8 @@ Access control, branch protection, and review requirements for each canonical HU
 
 | Team | Scope | Members |
 |------|-------|---------|
-| `@hummbl-dev/governance` | L4 canon, L3 spec, CI pipelines, policy docs | Maintainer (Reuben) |
-| `@hummbl-dev/kernel-team` | L3 kernel code and fixtures | Core team (2-3) |
+| `@hummbl-dev/governance` | L4 canon, L3.5 spec, CI pipelines, policy docs | Maintainer (Reuben) |
+| `@hummbl-dev/kernel-team` | L3.5 kernel code and fixtures | Core team (2-3) |
 | `@hummbl-dev/core` | L2 Python libs, L1 founder-mode, L1 GaaS | Core team |
 | `@hummbl-dev/platform` | L2 TS packages, L1 apps, L0 infra | Team + approved contributors |
 
@@ -26,7 +26,7 @@ Access control, branch protection, and review requirements for each canonical HU
 | Direct push to main | Disallowed |
 | Merge method | Maintainer-only merge |
 
-### aaa (L3 Deterministic Kernel)
+### aaa (L3.5 Deterministic Kernel)
 
 | Rule | Setting |
 |------|---------|

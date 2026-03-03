@@ -17,8 +17,8 @@ HUMMBL solves this by separating governance definition (what agents may do) from
   |      CAES spec, 120 mental models, MRCC schema.
   |      The constitution. Change rate: epoch-level.
   |
-  |  L3  aaa               Deterministic Kernel
-  |      EAL-AAA validator. 13 failure codes, 47 fixtures.
+  |  L3.5 aaa              Deterministic Kernel
+  |      EAL-AAA validator. 13 failure codes, 32 fixtures.
   |      The judge. Change rate: compiler-like (monthly).
   |
   |  L2  hummbl/libs/      Platform Libraries (Python)
@@ -43,20 +43,20 @@ HUMMBL solves this by separating governance definition (what agents may do) from
 Code dependencies MUST point upward toward higher-authority layers:
 
 - L1 apps import L2 libs.
-- L2 libs import L3 kernel (via `dependency_pins.json`).
-- L3 kernel references L4 canon (documentary only, never at runtime).
+- L2 libs import L3.5 kernel (via `dependency_pins.json`).
+- L3.5 kernel references L4 canon (documentary only, never at runtime).
 - L0 infrastructure serves all layers but cannot override governance decisions.
 
 **No import may point downward.** If `aaa` imports from `hummbl`, CI rejects the build. If `base120` imports from `aaa`, CI rejects the build.
 
-Execution calls flow in the opposite direction: L1 apps call L2 libs, which call L3 kernel functions (validate, classify compatibility).
+Execution calls flow in the opposite direction: L1 apps call L2 libs, which call L3.5 kernel functions (validate, classify compatibility).
 
 ## Three Repositories
 
 | Repo | Layer | Purpose | Forcing Function |
 |------|-------|---------|-----------------|
 | `hummbl-dev/base120` | L4 | Governance canon | Different trust boundary, epoch-level change rate, single maintainer |
-| `hummbl-dev/aaa` | L3 | Deterministic kernel | Constructive/adjudicative separation (EAL-AAA SPEC.md SS3), no-network constraint |
+| `hummbl-dev/aaa` | L3.5 | Deterministic kernel | Constructive/adjudicative separation (EAL-AAA SPEC.md SS3), no-network constraint |
 | `hummbl-dev/hummbl` | L2+L1+L0 | Product platform | Ships the product. Three layers coexist, separated by directory structure and CODEOWNERS |
 
 ## Directory-to-Layer Mapping

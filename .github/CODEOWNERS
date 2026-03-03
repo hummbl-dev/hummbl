@@ -19,8 +19,9 @@
 
 # Applications
 /apps/founder-mode/                  @hummbl-dev/core
-/apps/mcp-server/                    @hummbl-dev/platform
-/apps/gaas-api/                      @hummbl-dev/core
+/apps/mcp/                           @hummbl-dev/platform
+/apps/gaas/                          @hummbl-dev/core
+/apps/infra/                         @hummbl-dev/platform
 
 # Shared cognition layer
 /shared/                             @hummbl-dev/platform

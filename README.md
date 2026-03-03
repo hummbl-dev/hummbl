@@ -8,7 +8,7 @@ HUMMBL is the governance platform for autonomous AI systems. It provides the men
 
 ```
 L4  base120     Governance Canon     (120 mental models, CAES spec)
-L3  aaa         Deterministic Kernel (validation-only, no network)
+L3.5 aaa        Deterministic Kernel (validation-only, no network)
 L2  libs/       Platform Libraries   (governance-bus, delegation, resilience)
 L1  apps/       Applications         (founder-mode, GaaS API, MCP server)
 L0  .github/    Infrastructure       (CI, tooling, agent identities)
@@ -61,7 +61,7 @@ make check             # Full local gate (lint + test + boundaries)
 | Repo | Layer | Role |
 |------|-------|------|
 | [`base120`](https://github.com/hummbl-dev/base120) | L4 | Governance canon. The constitution. |
-| [`aaa`](https://github.com/hummbl-dev/aaa) | L3 | Deterministic kernel. The judge. |
+| [`aaa`](https://github.com/hummbl-dev/aaa) | L3.5 | Deterministic kernel. The judge. |
 | **`hummbl`** (this repo) | L2+L1+L0 | Product platform. The builder. |
 
 ## Key Documents

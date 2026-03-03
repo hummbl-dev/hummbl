@@ -6,7 +6,7 @@
       "version": "1.0.2",
       "git_sha": "f12fc4b76572f0c9683a463c01abbe344022c173",
       "install": "git+https://github.com/hummbl-dev/aaa.git@v1.0.2",
-      "layer": "L3"
+      "layer": "L3.5"
     },
     "hummbl-base120": {
       "repo": "hummbl-dev/base120",

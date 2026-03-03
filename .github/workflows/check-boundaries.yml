@@ -1,0 +1,80 @@
+name: boundary-checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  boundaries:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+
+      - name: B_LAYER_UNCLASSIFIED
+        run: python3 scripts/check_layer_map.py
+
+      - name: B_PIN_MISMATCH
+        run: python3 scripts/check_pins.py
+
+      - name: B_VALIDATOR_OVERRIDE
+        run: python3 scripts/check_kernel_imports.py
+
+      - name: B_CAES_STALE_COPY
+        run: python3 scripts/check_caes_hash.py
+
+      - name: B_NAMESPACE_LEAK
+        run: python3 scripts/check_namespace_ledger.py
+
+      - name: B_SHA_UNPIN
+        run: |
+          # Check that all GitHub Actions are SHA-pinned
+          violations=0
+          for f in .github/workflows/*.yml; do
+            while IFS= read -r line; do
+              # Skip comments
+              [[ "$line" =~ ^[[:space:]]*# ]] && continue
+              # Match uses: owner/action@ref where ref is NOT a 40-char hex SHA
+              if echo "$line" | grep -qE 'uses:\s+[a-zA-Z0-9_-]+/[a-zA-Z0-9_.-]+@' ; then
+                ref=$(echo "$line" | sed -E 's/.*uses:\s+[a-zA-Z0-9_-]+\/[a-zA-Z0-9_.-]+@([^ ]+).*/\1/')
+                if ! echo "$ref" | grep -qE '^[0-9a-f]{40}$'; then
+                  echo "B_SHA_UNPIN: $f: $line"
+                  violations=$((violations + 1))
+                fi
+              fi
+            done < "$f"
+          done
+          if [ "$violations" -gt 0 ]; then
+            echo "B_SHA_UNPIN: $violations action(s) not pinned to commit SHA"
+            exit 1
+          fi
+          echo "OK: All GitHub Actions are SHA-pinned."
+
+      - name: B_UPWARD_DEPENDENCY
+        run: |
+          # Check that no L0/L1 code imports from higher-authority layers
+          # (This is a basic grep check; adapter-based check is more thorough)
+          violations=0
+          # libs/ (L2) must not import from apps/ (L1) or tools/ (L0)
+          for f in $(git ls-files 'libs/**/*.py'); do
+            if grep -qE 'from\s+(apps|tools|scripts)\.' "$f" 2>/dev/null; then
+              echo "B_UPWARD_DEPENDENCY: $f imports from lower layer"
+              violations=$((violations + 1))
+            fi
+          done
+          if [ "$violations" -gt 0 ]; then
+            exit 1
+          fi
+          echo "OK: No upward dependency violations."

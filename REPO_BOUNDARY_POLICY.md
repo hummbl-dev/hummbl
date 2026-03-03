@@ -7,7 +7,7 @@ What may and may not live in each repository. Enforced by CI.
 This policy applies to the three canonical HUMMBL repositories:
 
 - `hummbl-dev/base120` (L4 Governance Canon)
-- `hummbl-dev/aaa` (L3 Deterministic Kernel)
+- `hummbl-dev/aaa` (L3.5 Deterministic Kernel)
 - `hummbl-dev/hummbl` (L2+L1+L0 Product Platform)
 
 ## What Belongs Where
@@ -27,7 +27,7 @@ This policy applies to the three canonical HUMMBL repositories:
 - Product application logic
 - Dependencies on `aaa` or `hummbl`
 
-### aaa (L3)
+### aaa (L3.5)
 
 **Allowed:**
 - EAL-AAA kernel modules (`aaa_eal/`)
