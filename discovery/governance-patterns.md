@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This report catalogs the governance structures across the HUMMBL ecosystem, identifying patterns from CAES (Canonical Agent Execution Specification), IDP (Intelligent Delegation Profile), founder_mode governance services, and hummbl-gaas-platform compliance frameworks.
+This report catalogs the governance structures across the HUMMBL ecosystem, identifying patterns from CAES (Coordination and Execution Standard), IDP (Intelligent Delegation Profile), founder_mode governance services, and hummbl-gaas-platform compliance frameworks.
 
 ### Key Findings
 
@@ -20,7 +20,7 @@ This report catalogs the governance structures across the HUMMBL ecosystem, iden
 
 ---
 
-## 1. CAES (Canonical Agent Execution Specification)
+## 1. CAES (Coordination and Execution Standard)
 
 ### Overview
 CAES defines minimum interoperability rules for humans, cloud models, local models, and deterministic scripts.

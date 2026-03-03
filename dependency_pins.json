@@ -1,0 +1,42 @@
+{
+  "$schema": "Internal dependency pin manifest. CI checks B_PIN_MISMATCH against this file.",
+  "pins": {
+    "hummbl-eal": {
+      "repo": "hummbl-dev/aaa",
+      "version": "1.0.2",
+      "git_sha": "f12fc4b76572f0c9683a463c01abbe344022c173",
+      "install": "git+https://github.com/hummbl-dev/aaa.git@v1.0.2",
+      "layer": "L3"
+    },
+    "hummbl-base120": {
+      "repo": "hummbl-dev/base120",
+      "version": "1.0.0",
+      "git_sha": "7fdb874f2a30335285b0b9a63dfb2dd8eceddf2e",
+      "install": "git+https://github.com/hummbl-dev/base120.git@v1.0.0",
+      "layer": "L4"
+    }
+  },
+  "registrations": {
+    "pypi": [
+      "hummbl-eal",
+      "hummbl-base120",
+      "hummbl-governance-bus",
+      "hummbl-delegation",
+      "hummbl-resilience",
+      "hummbl-security",
+      "hummbl-federation",
+      "hummbl-agent-runtime",
+      "hummbl-agent-os"
+    ],
+    "npm": [
+      "@hummbl/kernel",
+      "@hummbl/control-plane",
+      "@hummbl/router",
+      "@hummbl/runners",
+      "@hummbl/adapters",
+      "@hummbl/governance",
+      "@hummbl/hybrid-inference",
+      "@hummbl/mcp-server"
+    ]
+  }
+}

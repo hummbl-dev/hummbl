@@ -67,7 +67,7 @@ This discovery exercise comprehensively mapped the HUMMBL ecosystem across four 
 ### 3. Governance Patterns
 
 **Core Specifications:**
-- **CAES** (Canonical Agent Execution Specification v1.0.0)
+- **CAES** (Coordination and Execution Standard v1.0.0)
   - TSV append-only coordination bus
   - UTC timestamps, receipts-first policy
   

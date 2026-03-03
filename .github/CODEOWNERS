@@ -1,0 +1,30 @@
+# HUMMBL CODEOWNERS
+# Last match wins. Broad rules first, specific overrides later.
+
+# Default: platform team reviews all unmatched files
+*                                    @hummbl-dev/platform
+
+# Governance -- requires maintainer approval (INV-1)
+/governance/                         @hummbl-dev/governance
+/REPO_BOUNDARY_POLICY.md             @hummbl-dev/governance
+/REPO_PERMISSIONS_MODEL.md           @hummbl-dev/governance
+/dependency_pins.json                @hummbl-dev/governance
+
+# Python libraries (extractable packages)
+/libs/                               @hummbl-dev/core
+
+# TypeScript packages (kernel types need security review)
+/packages/                           @hummbl-dev/platform
+/packages/kernel/                    @hummbl-dev/governance @hummbl-dev/core
+
+# Applications
+/apps/founder-mode/                  @hummbl-dev/core
+/apps/mcp-server/                    @hummbl-dev/platform
+/apps/gaas-api/                      @hummbl-dev/core
+
+# Shared cognition layer
+/shared/                             @hummbl-dev/platform
+
+# CI/CD -- must be reviewed by governance (supply chain protection)
+/.github/workflows/                  @hummbl-dev/governance @hummbl-dev/platform
+/.github/CODEOWNERS                  @hummbl-dev/governance

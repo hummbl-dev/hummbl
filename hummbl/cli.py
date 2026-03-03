@@ -9,34 +9,45 @@ from typing import Sequence
 from hummbl import __version__
 
 REQUIRED_DIRS = (
-    "core",
+    # L2: Platform Libraries
+    "libs",
+    "packages",
+    # L1: Applications
+    "apps",
+    "skills",
+    # L0: Infrastructure
     "shared",
     "shared/agents",
     "shared/avatars",
     "shared/memory",
-    "platform",
-    "platform/gaas",
-    "platform/mcp",
-    "platform/infra",
+    "data",
+    "data/base120",
     "ecosystem",
     "governance",
+    "tools",
     "docs",
     "tests",
     "scripts",
+    # Python package
     "hummbl",
-    "hummbl/core",
+    # CI
+    ".github",
 )
 
 REQUIRED_FILES = (
     "README.md",
+    "ARCHITECTURE.md",
     "AGENTS.md",
+    "REPO_BOUNDARY_POLICY.md",
+    "REPO_PERMISSIONS_MODEL.md",
     "LICENSE",
     "pyproject.toml",
+    "dependency_pins.json",
     ".gitignore",
+    ".github/CODEOWNERS",
     "ecosystem/founder-mode.md",
     "scripts/verify-layout.sh",
     "hummbl/__init__.py",
-    "hummbl/core/__init__.py",
 )
 
 
