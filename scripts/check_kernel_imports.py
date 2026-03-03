@@ -33,6 +33,7 @@ KERNEL_IMPORT_PATTERNS = [
 ALLOWED_DIRS = [
     "libs/kernel_client/",
     "tests/",
+    "scripts/",  # boundary check scripts are L0 infrastructure
 ]
 
 # Kernel validation function signatures that must not be redefined
