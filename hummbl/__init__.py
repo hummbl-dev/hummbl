@@ -19,3 +19,4 @@ from hummbl.protocols import (
     QualityAssessment,
 )
 from hummbl.capture import AutoresearchCapture
+from hummbl.analyzer import TraceAnalyzer

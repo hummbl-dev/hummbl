@@ -1,0 +1,1358 @@
+{
+  "source": "autoresearch-mlx (nodezero)",
+  "trace_count": 16,
+  "summary": {
+    "total": 16,
+    "keeps": 1,
+    "discards": 12,
+    "crashes": 0,
+    "keep_rate": 0.0625,
+    "best_val_bpb": 1.507228
+  },
+  "traces": [
+    {
+      "id": "7704ccbf",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "864e9f4a",
+          "type": "hypothesis",
+          "content": "Experiment 0: baseline (depth=4, AdamW, M4 Pro)",
+          "parent_id": null,
+          "children_ids": [
+            "9899da43"
+          ],
+          "metadata": {
+            "experiment_num": 0
+          },
+          "timestamp": 1773593123.8468692,
+          "confidence": null
+        },
+        {
+          "id": "9899da43",
+          "type": "action",
+          "content": "Modified train.py and committed as \\",
+          "parent_id": "864e9f4a",
+          "children_ids": [
+            "1c850e75"
+          ],
+          "metadata": {
+            "commit_hash": "\\"
+          },
+          "timestamp": 1773593123.8468778,
+          "confidence": null
+        },
+        {
+          "id": "1c850e75",
+          "type": "observation",
+          "content": "val_bpb=1.964129, peak_vram=21.2 GB",
+          "parent_id": "9899da43",
+          "children_ids": [
+            "bca6236e"
+          ],
+          "metadata": {
+            "val_bpb": 1.964129,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8468914,
+          "confidence": null
+        },
+        {
+          "id": "bca6236e",
+          "type": "evaluation",
+          "content": "Baseline establishment: val_bpb=1.964129",
+          "parent_id": "1c850e75",
+          "children_ids": [
+            "7ae73448"
+          ],
+          "metadata": {
+            "baseline_bpb": null,
+            "delta_bpb": null
+          },
+          "timestamp": 1773593123.8468983,
+          "confidence": null
+        },
+        {
+          "id": "7ae73448",
+          "type": "decision",
+          "content": "Decision: keep",
+          "parent_id": "bca6236e",
+          "children_ids": [],
+          "metadata": {
+            "status": "keep"
+          },
+          "timestamp": 1773593123.8469033,
+          "confidence": null
+        }
+      ],
+      "outcome": "keep",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8468566,
+      "tags": [
+        "experiment_0",
+        "keep"
+      ]
+    },
+    {
+      "id": "30fc71d6",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "9bafb279",
+          "type": "hypothesis",
+          "content": "Experiment 1: HEAD_DIM 128->64 (worse, fewer steps)",
+          "parent_id": null,
+          "children_ids": [
+            "b8586717"
+          ],
+          "metadata": {
+            "experiment_num": 1
+          },
+          "timestamp": 1773593123.8469267,
+          "confidence": null
+        },
+        {
+          "id": "b8586717",
+          "type": "action",
+          "content": "Modified train.py and committed as 5c2cf4b",
+          "parent_id": "9bafb279",
+          "children_ids": [
+            "b96b51e8"
+          ],
+          "metadata": {
+            "commit_hash": "5c2cf4b"
+          },
+          "timestamp": 1773593123.8469317,
+          "confidence": null
+        },
+        {
+          "id": "b96b51e8",
+          "type": "observation",
+          "content": "val_bpb=2.079140, peak_vram=21.2 GB",
+          "parent_id": "b8586717",
+          "children_ids": [
+            "262e6af2"
+          ],
+          "metadata": {
+            "val_bpb": 2.07914,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.846938,
+          "confidence": null
+        },
+        {
+          "id": "262e6af2",
+          "type": "evaluation",
+          "content": "Delta from best: +0.115011 (worse). Best was 1.964129, this is 2.079140.",
+          "parent_id": "b96b51e8",
+          "children_ids": [
+            "cfe4918d"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": 0.1150110000000002
+          },
+          "timestamp": 1773593123.8469453,
+          "confidence": null
+        },
+        {
+          "id": "cfe4918d",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "262e6af2",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.84695,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8469198,
+      "tags": [
+        "experiment_1",
+        "discard"
+      ]
+    },
+    {
+      "id": "a52d2b6c",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "2da3850b",
+          "type": "hypothesis",
+          "content": "Experiment 2: WEIGHT_DECAY 0.2->0.0 (worse)",
+          "parent_id": null,
+          "children_ids": [
+            "2ab3bd9e"
+          ],
+          "metadata": {
+            "experiment_num": 2
+          },
+          "timestamp": 1773593123.846966,
+          "confidence": null
+        },
+        {
+          "id": "2ab3bd9e",
+          "type": "action",
+          "content": "Modified train.py and committed as 1ec5967",
+          "parent_id": "2da3850b",
+          "children_ids": [
+            "c0172601"
+          ],
+          "metadata": {
+            "commit_hash": "1ec5967"
+          },
+          "timestamp": 1773593123.84697,
+          "confidence": null
+        },
+        {
+          "id": "c0172601",
+          "type": "observation",
+          "content": "val_bpb=2.059356, peak_vram=21.2 GB",
+          "parent_id": "2ab3bd9e",
+          "children_ids": [
+            "112ad44a"
+          ],
+          "metadata": {
+            "val_bpb": 2.059356,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8469756,
+          "confidence": null
+        },
+        {
+          "id": "112ad44a",
+          "type": "evaluation",
+          "content": "Delta from best: +0.095227 (worse). Best was 1.964129, this is 2.059356.",
+          "parent_id": "c0172601",
+          "children_ids": [
+            "82fe94aa"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": 0.09522700000000017
+          },
+          "timestamp": 1773593123.8469815,
+          "confidence": null
+        },
+        {
+          "id": "82fe94aa",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "112ad44a",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.8469858,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8469608,
+      "tags": [
+        "experiment_2",
+        "discard"
+      ]
+    },
+    {
+      "id": "63973524",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "2ac8db1e",
+          "type": "hypothesis",
+          "content": "Experiment 3: ADAM_BETAS (0.8,0.95)->(0.9,0.99) (worse)",
+          "parent_id": null,
+          "children_ids": [
+            "b168d06d"
+          ],
+          "metadata": {
+            "experiment_num": 3
+          },
+          "timestamp": 1773593123.8470016,
+          "confidence": null
+        },
+        {
+          "id": "b168d06d",
+          "type": "action",
+          "content": "Modified train.py and committed as 6223e27",
+          "parent_id": "2ac8db1e",
+          "children_ids": [
+            "99d17373"
+          ],
+          "metadata": {
+            "commit_hash": "6223e27"
+          },
+          "timestamp": 1773593123.8470054,
+          "confidence": null
+        },
+        {
+          "id": "99d17373",
+          "type": "observation",
+          "content": "val_bpb=2.141635, peak_vram=21.2 GB",
+          "parent_id": "b168d06d",
+          "children_ids": [
+            "dc01d0c3"
+          ],
+          "metadata": {
+            "val_bpb": 2.141635,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8470118,
+          "confidence": null
+        },
+        {
+          "id": "dc01d0c3",
+          "type": "evaluation",
+          "content": "Delta from best: +0.177506 (worse). Best was 1.964129, this is 2.141635.",
+          "parent_id": "99d17373",
+          "children_ids": [
+            "3022480b"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": 0.17750599999999994
+          },
+          "timestamp": 1773593123.8470178,
+          "confidence": null
+        },
+        {
+          "id": "3022480b",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "dc01d0c3",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.8470216,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.846997,
+      "tags": [
+        "experiment_3",
+        "discard"
+      ]
+    },
+    {
+      "id": "b0e94196",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "efcb95e7",
+          "type": "hypothesis",
+          "content": "Experiment 4: GELU instead of ReLU-squared (BIG WIN)",
+          "parent_id": null,
+          "children_ids": [
+            "e7aee0c1"
+          ],
+          "metadata": {
+            "experiment_num": 4
+          },
+          "timestamp": 1773593123.8470354,
+          "confidence": null
+        },
+        {
+          "id": "e7aee0c1",
+          "type": "action",
+          "content": "Modified train.py and committed as 115688f",
+          "parent_id": "efcb95e7",
+          "children_ids": [
+            "08025463"
+          ],
+          "metadata": {
+            "commit_hash": "115688f"
+          },
+          "timestamp": 1773593123.8470395,
+          "confidence": null
+        },
+        {
+          "id": "08025463",
+          "type": "observation",
+          "content": "val_bpb=1.796905, peak_vram=21.2 GB",
+          "parent_id": "e7aee0c1",
+          "children_ids": [
+            "69d164dd"
+          ],
+          "metadata": {
+            "val_bpb": 1.796905,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8470447,
+          "confidence": null
+        },
+        {
+          "id": "69d164dd",
+          "type": "evaluation",
+          "content": "Delta from best: -0.167224 (better). Best was 1.964129, this is 1.796905.",
+          "parent_id": "08025463",
+          "children_ids": [
+            "f11e7ae9"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.16722400000000004
+          },
+          "timestamp": 1773593123.84705,
+          "confidence": null
+        },
+        {
+          "id": "f11e7ae9",
+          "type": "decision",
+          "content": "Decision: KEEP",
+          "parent_id": "69d164dd",
+          "children_ids": [],
+          "metadata": {
+            "status": "KEEP"
+          },
+          "timestamp": 1773593123.8470533,
+          "confidence": null
+        }
+      ],
+      "outcome": "KEEP",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8470309,
+      "tags": [
+        "experiment_4",
+        "KEEP"
+      ]
+    },
+    {
+      "id": "d1e027ab",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "188d0ce2",
+          "type": "hypothesis",
+          "content": "Experiment 5: GELU + batch 2^15 (389 steps, HUGE WIN)",
+          "parent_id": null,
+          "children_ids": [
+            "77abef9d"
+          ],
+          "metadata": {
+            "experiment_num": 5
+          },
+          "timestamp": 1773593123.847116,
+          "confidence": null
+        },
+        {
+          "id": "77abef9d",
+          "type": "action",
+          "content": "Modified train.py and committed as a0707cc",
+          "parent_id": "188d0ce2",
+          "children_ids": [
+            "a3543fcb"
+          ],
+          "metadata": {
+            "commit_hash": "a0707cc"
+          },
+          "timestamp": 1773593123.847121,
+          "confidence": null
+        },
+        {
+          "id": "a3543fcb",
+          "type": "observation",
+          "content": "val_bpb=1.600018, peak_vram=21.2 GB",
+          "parent_id": "77abef9d",
+          "children_ids": [
+            "34a01dba"
+          ],
+          "metadata": {
+            "val_bpb": 1.600018,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8471265,
+          "confidence": null
+        },
+        {
+          "id": "34a01dba",
+          "type": "evaluation",
+          "content": "Delta from best: -0.364111 (better). Best was 1.964129, this is 1.600018.",
+          "parent_id": "a3543fcb",
+          "children_ids": [
+            "7a982265"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.3641110000000001
+          },
+          "timestamp": 1773593123.847135,
+          "confidence": null
+        },
+        {
+          "id": "7a982265",
+          "type": "decision",
+          "content": "Decision: KEEP",
+          "parent_id": "34a01dba",
+          "children_ids": [],
+          "metadata": {
+            "status": "KEEP"
+          },
+          "timestamp": 1773593123.8471386,
+          "confidence": null
+        }
+      ],
+      "outcome": "KEEP",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8471105,
+      "tags": [
+        "experiment_5",
+        "KEEP"
+      ]
+    },
+    {
+      "id": "993c6ab5",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "cbf0be8d",
+          "type": "hypothesis",
+          "content": "Experiment 6: GELU + batch 2^14 + devbatch 8 (775 steps)",
+          "parent_id": null,
+          "children_ids": [
+            "86d2d8df"
+          ],
+          "metadata": {
+            "experiment_num": 6
+          },
+          "timestamp": 1773593123.8471518,
+          "confidence": null
+        },
+        {
+          "id": "86d2d8df",
+          "type": "action",
+          "content": "Modified train.py and committed as d211d72",
+          "parent_id": "cbf0be8d",
+          "children_ids": [
+            "b6a0bf05"
+          ],
+          "metadata": {
+            "commit_hash": "d211d72"
+          },
+          "timestamp": 1773593123.8471558,
+          "confidence": null
+        },
+        {
+          "id": "b6a0bf05",
+          "type": "observation",
+          "content": "val_bpb=1.507228, peak_vram=21.2 GB",
+          "parent_id": "86d2d8df",
+          "children_ids": [
+            "168c9863"
+          ],
+          "metadata": {
+            "val_bpb": 1.507228,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8471618,
+          "confidence": null
+        },
+        {
+          "id": "168c9863",
+          "type": "evaluation",
+          "content": "Delta from best: -0.456901 (better). Best was 1.964129, this is 1.507228.",
+          "parent_id": "b6a0bf05",
+          "children_ids": [
+            "d019276c"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.456901
+          },
+          "timestamp": 1773593123.8471675,
+          "confidence": null
+        },
+        {
+          "id": "d019276c",
+          "type": "decision",
+          "content": "Decision: KEEP",
+          "parent_id": "168c9863",
+          "children_ids": [],
+          "metadata": {
+            "status": "KEEP"
+          },
+          "timestamp": 1773593123.8471715,
+          "confidence": null
+        }
+      ],
+      "outcome": "KEEP",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8471475,
+      "tags": [
+        "experiment_6",
+        "KEEP"
+      ]
+    },
+    {
+      "id": "470f3f34",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "7665affd",
+          "type": "hypothesis",
+          "content": "Experiment 7: GELU + batch 2^13 (too small, worse)",
+          "parent_id": null,
+          "children_ids": [
+            "2e9e40c0"
+          ],
+          "metadata": {
+            "experiment_num": 7
+          },
+          "timestamp": 1773593123.8471842,
+          "confidence": null
+        },
+        {
+          "id": "2e9e40c0",
+          "type": "action",
+          "content": "Modified train.py and committed as 91d5b77",
+          "parent_id": "7665affd",
+          "children_ids": [
+            "f5b88531"
+          ],
+          "metadata": {
+            "commit_hash": "91d5b77"
+          },
+          "timestamp": 1773593123.8471894,
+          "confidence": null
+        },
+        {
+          "id": "f5b88531",
+          "type": "observation",
+          "content": "val_bpb=1.615870, peak_vram=21.2 GB",
+          "parent_id": "2e9e40c0",
+          "children_ids": [
+            "9cabb059"
+          ],
+          "metadata": {
+            "val_bpb": 1.61587,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8471942,
+          "confidence": null
+        },
+        {
+          "id": "9cabb059",
+          "type": "evaluation",
+          "content": "Delta from best: -0.348259 (better). Best was 1.964129, this is 1.615870.",
+          "parent_id": "f5b88531",
+          "children_ids": [
+            "0419b33c"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.3482590000000001
+          },
+          "timestamp": 1773593123.8471992,
+          "confidence": null
+        },
+        {
+          "id": "0419b33c",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "9cabb059",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.847203,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8471804,
+      "tags": [
+        "experiment_7",
+        "discard"
+      ]
+    },
+    {
+      "id": "889755fc",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "ff40b9e6",
+          "type": "hypothesis",
+          "content": "Experiment 8: GELU + batch 2^14 + MLP 8x (more params fewer steps, worse)",
+          "parent_id": null,
+          "children_ids": [
+            "775a81d1"
+          ],
+          "metadata": {
+            "experiment_num": 8
+          },
+          "timestamp": 1773593123.847215,
+          "confidence": null
+        },
+        {
+          "id": "775a81d1",
+          "type": "action",
+          "content": "Modified train.py and committed as 6b6fb72",
+          "parent_id": "ff40b9e6",
+          "children_ids": [
+            "9297c47f"
+          ],
+          "metadata": {
+            "commit_hash": "6b6fb72"
+          },
+          "timestamp": 1773593123.8472188,
+          "confidence": null
+        },
+        {
+          "id": "9297c47f",
+          "type": "observation",
+          "content": "val_bpb=1.636902, peak_vram=23.2 GB",
+          "parent_id": "775a81d1",
+          "children_ids": [
+            "1bfd47b5"
+          ],
+          "metadata": {
+            "val_bpb": 1.636902,
+            "peak_vram_gb": 23.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8472233,
+          "confidence": null
+        },
+        {
+          "id": "1bfd47b5",
+          "type": "evaluation",
+          "content": "Delta from best: -0.327227 (better). Best was 1.964129, this is 1.636902.",
+          "parent_id": "9297c47f",
+          "children_ids": [
+            "b933bcf8"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.32722699999999993
+          },
+          "timestamp": 1773593123.8472285,
+          "confidence": null
+        },
+        {
+          "id": "b933bcf8",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "1bfd47b5",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.8472326,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8472111,
+      "tags": [
+        "experiment_8",
+        "discard"
+      ]
+    },
+    {
+      "id": "1df14b88",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "caea7d63",
+          "type": "hypothesis",
+          "content": "Experiment 9: GELU + batch 2^14 + FINAL_LR_FRAC 0.02 + WARMDOWN 0.7 (worse)",
+          "parent_id": null,
+          "children_ids": [
+            "cbe11ebc"
+          ],
+          "metadata": {
+            "experiment_num": 9
+          },
+          "timestamp": 1773593123.8472443,
+          "confidence": null
+        },
+        {
+          "id": "cbe11ebc",
+          "type": "action",
+          "content": "Modified train.py and committed as 06e192b",
+          "parent_id": "caea7d63",
+          "children_ids": [
+            "ceaf5e60"
+          ],
+          "metadata": {
+            "commit_hash": "06e192b"
+          },
+          "timestamp": 1773593123.847248,
+          "confidence": null
+        },
+        {
+          "id": "ceaf5e60",
+          "type": "observation",
+          "content": "val_bpb=1.582900, peak_vram=21.2 GB",
+          "parent_id": "cbe11ebc",
+          "children_ids": [
+            "8110f948"
+          ],
+          "metadata": {
+            "val_bpb": 1.5829,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.847253,
+          "confidence": null
+        },
+        {
+          "id": "8110f948",
+          "type": "evaluation",
+          "content": "Delta from best: -0.381229 (better). Best was 1.964129, this is 1.582900.",
+          "parent_id": "ceaf5e60",
+          "children_ids": [
+            "9328f56a"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.38122900000000004
+          },
+          "timestamp": 1773593123.847258,
+          "confidence": null
+        },
+        {
+          "id": "9328f56a",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "8110f948",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.8472614,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8472402,
+      "tags": [
+        "experiment_9",
+        "discard"
+      ]
+    },
+    {
+      "id": "65646ed5",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "9502655a",
+          "type": "hypothesis",
+          "content": "Experiment 10: GELU + batch 2^14 + DEPTH 6 (too slow, fewer steps)",
+          "parent_id": null,
+          "children_ids": [
+            "7c256ff2"
+          ],
+          "metadata": {
+            "experiment_num": 10
+          },
+          "timestamp": 1773593123.847274,
+          "confidence": null
+        },
+        {
+          "id": "7c256ff2",
+          "type": "action",
+          "content": "Modified train.py and committed as b216b53",
+          "parent_id": "9502655a",
+          "children_ids": [
+            "aa0333e6"
+          ],
+          "metadata": {
+            "commit_hash": "b216b53"
+          },
+          "timestamp": 1773593123.8472774,
+          "confidence": null
+        },
+        {
+          "id": "aa0333e6",
+          "type": "observation",
+          "content": "val_bpb=1.732689, peak_vram=23.8 GB",
+          "parent_id": "7c256ff2",
+          "children_ids": [
+            "026aa4ac"
+          ],
+          "metadata": {
+            "val_bpb": 1.732689,
+            "peak_vram_gb": 23.8,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8472817,
+          "confidence": null
+        },
+        {
+          "id": "026aa4ac",
+          "type": "evaluation",
+          "content": "Delta from best: -0.231440 (better). Best was 1.964129, this is 1.732689.",
+          "parent_id": "aa0333e6",
+          "children_ids": [
+            "0aec322a"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.2314400000000001
+          },
+          "timestamp": 1773593123.8472867,
+          "confidence": null
+        },
+        {
+          "id": "0aec322a",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "026aa4ac",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.84729,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8472693,
+      "tags": [
+        "experiment_10",
+        "discard"
+      ]
+    },
+    {
+      "id": "9ed13f43",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "47164aa6",
+          "type": "hypothesis",
+          "content": "Experiment 11: GELU + batch 2^14 + WEIGHT_DECAY 0.0 (worse)",
+          "parent_id": null,
+          "children_ids": [
+            "51366f61"
+          ],
+          "metadata": {
+            "experiment_num": 11
+          },
+          "timestamp": 1773593123.8473024,
+          "confidence": null
+        },
+        {
+          "id": "51366f61",
+          "type": "action",
+          "content": "Modified train.py and committed as 098ade6",
+          "parent_id": "47164aa6",
+          "children_ids": [
+            "14eb524f"
+          ],
+          "metadata": {
+            "commit_hash": "098ade6"
+          },
+          "timestamp": 1773593123.847306,
+          "confidence": null
+        },
+        {
+          "id": "14eb524f",
+          "type": "observation",
+          "content": "val_bpb=1.646107, peak_vram=21.2 GB",
+          "parent_id": "51366f61",
+          "children_ids": [
+            "e81d1905"
+          ],
+          "metadata": {
+            "val_bpb": 1.646107,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8473108,
+          "confidence": null
+        },
+        {
+          "id": "e81d1905",
+          "type": "evaluation",
+          "content": "Delta from best: -0.318022 (better). Best was 1.964129, this is 1.646107.",
+          "parent_id": "14eb524f",
+          "children_ids": [
+            "61666555"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.318022
+          },
+          "timestamp": 1773593123.847316,
+          "confidence": null
+        },
+        {
+          "id": "61666555",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "e81d1905",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.8473194,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8472981,
+      "tags": [
+        "experiment_11",
+        "discard"
+      ]
+    },
+    {
+      "id": "073fd7af",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "e038a8a1",
+          "type": "hypothesis",
+          "content": "Experiment 12: GELU + batch 2^14 + halved LRs (worse than default LRs)",
+          "parent_id": null,
+          "children_ids": [
+            "1492cd28"
+          ],
+          "metadata": {
+            "experiment_num": 12
+          },
+          "timestamp": 1773593123.8473337,
+          "confidence": null
+        },
+        {
+          "id": "1492cd28",
+          "type": "action",
+          "content": "Modified train.py and committed as 7d38336",
+          "parent_id": "e038a8a1",
+          "children_ids": [
+            "cf6e672e"
+          ],
+          "metadata": {
+            "commit_hash": "7d38336"
+          },
+          "timestamp": 1773593123.8473377,
+          "confidence": null
+        },
+        {
+          "id": "cf6e672e",
+          "type": "observation",
+          "content": "val_bpb=1.552611, peak_vram=21.2 GB",
+          "parent_id": "1492cd28",
+          "children_ids": [
+            "56ce9fbe"
+          ],
+          "metadata": {
+            "val_bpb": 1.552611,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.847342,
+          "confidence": null
+        },
+        {
+          "id": "56ce9fbe",
+          "type": "evaluation",
+          "content": "Delta from best: -0.411518 (better). Best was 1.964129, this is 1.552611.",
+          "parent_id": "cf6e672e",
+          "children_ids": [
+            "ec2817c4"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.41151800000000005
+          },
+          "timestamp": 1773593123.8473468,
+          "confidence": null
+        },
+        {
+          "id": "ec2817c4",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "56ce9fbe",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.8473504,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8473272,
+      "tags": [
+        "experiment_12",
+        "discard"
+      ]
+    },
+    {
+      "id": "572db9e3",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "8d8359cf",
+          "type": "hypothesis",
+          "content": "Experiment 13: GELU + batch 2^14 + LRs*0.7 (still worse)",
+          "parent_id": null,
+          "children_ids": [
+            "a1f92d75"
+          ],
+          "metadata": {
+            "experiment_num": 13
+          },
+          "timestamp": 1773593123.8473613,
+          "confidence": null
+        },
+        {
+          "id": "a1f92d75",
+          "type": "action",
+          "content": "Modified train.py and committed as 4c0412f",
+          "parent_id": "8d8359cf",
+          "children_ids": [
+            "2baca917"
+          ],
+          "metadata": {
+            "commit_hash": "4c0412f"
+          },
+          "timestamp": 1773593123.8473651,
+          "confidence": null
+        },
+        {
+          "id": "2baca917",
+          "type": "observation",
+          "content": "val_bpb=1.524863, peak_vram=21.2 GB",
+          "parent_id": "a1f92d75",
+          "children_ids": [
+            "d2c97bbe"
+          ],
+          "metadata": {
+            "val_bpb": 1.524863,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8473692,
+          "confidence": null
+        },
+        {
+          "id": "d2c97bbe",
+          "type": "evaluation",
+          "content": "Delta from best: -0.439266 (better). Best was 1.964129, this is 1.524863.",
+          "parent_id": "2baca917",
+          "children_ids": [
+            "ff56d1e8"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.43926599999999993
+          },
+          "timestamp": 1773593123.8473737,
+          "confidence": null
+        },
+        {
+          "id": "ff56d1e8",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "d2c97bbe",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.847379,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8473577,
+      "tags": [
+        "experiment_13",
+        "discard"
+      ]
+    },
+    {
+      "id": "0e9be062",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "6a56bfe8",
+          "type": "hypothesis",
+          "content": "Experiment 14: GELU + batch 2^14 + ASPECT_RATIO 96 (fewer steps)",
+          "parent_id": null,
+          "children_ids": [
+            "74149ac6"
+          ],
+          "metadata": {
+            "experiment_num": 14
+          },
+          "timestamp": 1773593123.84739,
+          "confidence": null
+        },
+        {
+          "id": "74149ac6",
+          "type": "action",
+          "content": "Modified train.py and committed as 74256ff",
+          "parent_id": "6a56bfe8",
+          "children_ids": [
+            "cd678ccf"
+          ],
+          "metadata": {
+            "commit_hash": "74256ff"
+          },
+          "timestamp": 1773593123.8473933,
+          "confidence": null
+        },
+        {
+          "id": "cd678ccf",
+          "type": "observation",
+          "content": "val_bpb=1.673776, peak_vram=23.8 GB",
+          "parent_id": "74149ac6",
+          "children_ids": [
+            "1b03fb4f"
+          ],
+          "metadata": {
+            "val_bpb": 1.673776,
+            "peak_vram_gb": 23.8,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8473978,
+          "confidence": null
+        },
+        {
+          "id": "1b03fb4f",
+          "type": "evaluation",
+          "content": "Delta from best: -0.290353 (better). Best was 1.964129, this is 1.673776.",
+          "parent_id": "cd678ccf",
+          "children_ids": [
+            "70b16795"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.2903530000000001
+          },
+          "timestamp": 1773593123.8474033,
+          "confidence": null
+        },
+        {
+          "id": "70b16795",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "1b03fb4f",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.8474066,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8473861,
+      "tags": [
+        "experiment_14",
+        "discard"
+      ]
+    },
+    {
+      "id": "f5b63601",
+      "topology": "chain",
+      "steps": [
+        {
+          "id": "88801017",
+          "type": "hypothesis",
+          "content": "Experiment 15: GELU + batch 2^14 + WARMUP_RATIO 0.05 (worse)",
+          "parent_id": null,
+          "children_ids": [
+            "c2cc89b7"
+          ],
+          "metadata": {
+            "experiment_num": 15
+          },
+          "timestamp": 1773593123.8474176,
+          "confidence": null
+        },
+        {
+          "id": "c2cc89b7",
+          "type": "action",
+          "content": "Modified train.py and committed as 7784c68",
+          "parent_id": "88801017",
+          "children_ids": [
+            "8c0ca0c5"
+          ],
+          "metadata": {
+            "commit_hash": "7784c68"
+          },
+          "timestamp": 1773593123.8474228,
+          "confidence": null
+        },
+        {
+          "id": "8c0ca0c5",
+          "type": "observation",
+          "content": "val_bpb=1.542455, peak_vram=21.2 GB",
+          "parent_id": "c2cc89b7",
+          "children_ids": [
+            "5a954812"
+          ],
+          "metadata": {
+            "val_bpb": 1.542455,
+            "peak_vram_gb": 21.2,
+            "crashed": false
+          },
+          "timestamp": 1773593123.8474271,
+          "confidence": null
+        },
+        {
+          "id": "5a954812",
+          "type": "evaluation",
+          "content": "Delta from best: -0.421674 (better). Best was 1.964129, this is 1.542455.",
+          "parent_id": "8c0ca0c5",
+          "children_ids": [
+            "79cdc192"
+          ],
+          "metadata": {
+            "baseline_bpb": 1.964129,
+            "delta_bpb": -0.4216740000000001
+          },
+          "timestamp": 1773593123.8474317,
+          "confidence": null
+        },
+        {
+          "id": "79cdc192",
+          "type": "decision",
+          "content": "Decision: discard",
+          "parent_id": "5a954812",
+          "children_ids": [],
+          "metadata": {
+            "status": "discard"
+          },
+          "timestamp": 1773593123.847435,
+          "confidence": null
+        }
+      ],
+      "outcome": "discard",
+      "domain": "autoresearch",
+      "created_at": 1773593123.8474138,
+      "tags": [
+        "experiment_15",
+        "discard"
+      ]
+    }
+  ]
+}
