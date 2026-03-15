@@ -18,5 +18,13 @@ from hummbl.protocols import (
     ScientificMethod,
     QualityAssessment,
 )
+from hummbl.peptide_protocol import PeptideQualityProtocol
+from hummbl.peptide_rules import (
+    PEPTIDE_SPECS,
+    VENDOR_TRUST_TIERS,
+    GRADE_RECOMMENDATIONS,
+    PeptideSpec,
+)
 from hummbl.capture import AutoresearchCapture
 from hummbl.analyzer import TraceAnalyzer
+from hummbl.planner import TracePlanner, ExperimentPlan, PlannedExperiment
